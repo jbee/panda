@@ -1,0 +1,70 @@
+vs JSPs
+
+- Alias wird im Template definiert
+- Zugriffe gehen immer auf Strings oder Alias-"Funtionenen", im Java keine Bean zugriff -> Refactoringsave
+- Methoden als Funktionen durch Coede vorgegeben
+- Alles ist definiert
+- Es sind Zusicherung leicht möglich
+	ala: in mind. einem href steht der Wert hinter <path> 
+- Das Markup entscheidet, welche Funktion um einen Wert gewickelt wird, indem ein entsprechender 
+  Alias gebunden wird. Alle Bedingungen etc. gehen dann über die Aliasse.
+	-> Code muss keine Zusatzwerte für spezielles Markup bereithalten -> Grandios
+- Namespaces: Jedes Tag stellt einen Namespace dar, der wie in Java auch in inneren Tags verdeckt
+  werden kann (Name-shadowing)
+  
+Matcher:
+Findet im 'case' attribut statt
+
+		<alias>?		leer/nicht definiert ?
+exists	<alias>		same as above - exists hat den operator '?'
+(indexIn)	<alias>#1..3	match elemente 1-3 einer Listen-Property - die funktion indexIn hat den operator '#'
+		<alias>#2		match element #2 
+		<alias>#..2		match alle bis inkl. dem 2.
+		<alias>#2..		match alle ab inkl. dem 2.
+odd		<alias>		match alle ungeraden indices
+even		<alias>		match alle geraden indices
+<name>	<alias>		match über die funktion <name>
+else/otherwise			match wenn alle muster auf selber ebene vorher nicht gemacht haben
+	
+Accessor:	
+::<alias>			der wert (String) den der alias aktuell hat (bei Listen der des aktuellen elements)
+::<alias>#			der index des aktuellen elements (beginnend mit 1 [default])
+::<alias>#0			der index (beginnend mit 0)
+
+::<alias>[x]		das element auf index x
+::<alias>[+n]		das n'te element vor dem aktuellen
+::<alias>[-n]		das n'te element nach dem aktuellen
+::<alias>[foo]		das element mit dem key/namen 'foo'
+
+::<alias>{..4}		Die ersten 4 zeichen des werts
+::<alias>{2..4}		Die Zeichen 2-4 des Werts
+::<alias>{2..}		Alle zeichen ab inkl. dem 2. des Werts
+
+::<alias>[x]{4}		beispiel-kombination: die ersten 4 zeichen von element auf X
+
+
+Globals (Environment):
+env is a predefined alias.
+::env.now
+::env.today
+
+Properties:
+Berechnete Werte werden im Java Properties zugeordnet. Diese sind ebenso global und unter 'data' vordefiniert. 
+
+Binds:
+Findet im 'let' attribut statt
+
+<alias> <functor> (<alias>|<property>)
+X each Y
+X each data.property
+X be data.propery
+
+
+Werte:
+1. einfache Strings
+2. Listen von Strings
+3. objekte (bestehen wiederrum aus 1-3)
+
+
+
+OPEN datumsformate ?
