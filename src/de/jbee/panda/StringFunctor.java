@@ -11,13 +11,13 @@ public final class StringFunctor
 	}
 
 	@Override
-	public Functor invoke( Instruction arg, ExecutionEnv env ) {
-		if ( arg.length() == 0 ) {
+	public Functor invoke( Selector sel, ExecutionEnv env ) {
+		if ( sel.length() == 0 ) {
 			return this;
 		}
-		if ( arg.startsWith( "{" ) ) {
-			if ( arg.charAt( 1 ) == '.' ) {
-				return new StringFunctor( value.substring( 0, arg.skip( 2 ).parseInt(
+		if ( sel.startsWith( "{" ) ) {
+			if ( sel.charAt( 1 ) == '.' ) {
+				return new StringFunctor( value.substring( 0, sel.skip( 2 ).parseInt(
 						value.length() ) ) );
 			}
 			//TODO others
@@ -26,7 +26,7 @@ public final class StringFunctor
 	}
 
 	@Override
-	public String value( ExecutionEnv nev ) {
+	public String value( ExecutionEnv env ) {
 		return value;
 	}
 

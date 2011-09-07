@@ -3,17 +3,24 @@ package de.jbee.panda;
 public class EachFunctor
 		implements Functor {
 
-	private int index;
+	private final Alias list;
+	private final int index;
+
+	EachFunctor( Alias list, int index ) {
+		super();
+		this.list = list;
+		this.index = index;
+	}
 
 	@Override
-	public Functor invoke( Instruction arg, ExecutionEnv env ) {
-		if ( arg.isNone() ) {
-			//TODO return functor of current index
+	public Functor invoke( Selector sel, ExecutionEnv env ) {
+		if ( sel.isNone() ) {
+			return currentElement( env );
 		}
-		if ( arg.startsWith( "#" ) ) {
-			return env.invoke( new IntegerFunctor( index ), arg.skip( 1 ) );
+		if ( sel.startsWith( "#" ) ) {
+			return env.invoke( new IntegerFunctor( index ), sel.skip( 1 ) );
 		}
-		if ( arg.startsWith( "[" ) ) {
+		if ( sel.startsWith( "[" ) ) {
 			// if its a range build a sub-each functor
 
 			// if it is a single index delegate to the ListFunctor refered by this
@@ -23,9 +30,12 @@ public class EachFunctor
 	}
 
 	@Override
-	public String value( ExecutionEnv nev ) {
-		// TODO Auto-generated method stub
-		return null;
+	public String value( ExecutionEnv env ) {
+		return currentElement( env ).value( env );
+	}
+
+	private Functor currentElement( ExecutionEnv env ) {
+		return env.invoke( env.functorFor( list ), Selector.of( "[" + index + "]" ) );
 	}
 
 	private static class EvenCase

@@ -11,18 +11,18 @@ public class IntegerFunctor
 	}
 
 	@Override
-	public Functor invoke( Instruction arg, ExecutionEnv env ) {
-		if ( arg.isNone() ) {
+	public Functor invoke( Selector sel, ExecutionEnv env ) {
+		if ( sel.isNone() ) {
 			return this;
 		}
-		char op = arg.charAt( 0 );
+		char op = sel.charAt( 0 );
 		if ( "+-*/".indexOf( op ) >= 0 ) {
-			if ( arg.length() == 1 ) {
+			if ( sel.length() == 1 ) {
 				if ( op == '-' ) {
 					return new IntegerFunctor( -value );
 				}
 			}
-			int operand = arg.skip( 1 ).parseInt( 0 );
+			int operand = sel.skip( 1 ).parseInt( 0 );
 			switch ( op ) {
 				case '+':
 					return new IntegerFunctor( value + operand );
@@ -38,7 +38,7 @@ public class IntegerFunctor
 	}
 
 	@Override
-	public String value( ExecutionEnv nev ) {
+	public String value( ExecutionEnv env ) {
 		return String.valueOf( value );
 	}
 

@@ -6,5 +6,5 @@ public interface ExecutionEnv {
 
 	void let( Alias a, Functor f );
 
-	Functor invoke( Functor f, Instruction arg );
+	Functor invoke( Functor f, Selector s );
 }
