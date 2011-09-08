@@ -38,11 +38,10 @@ public class IntegerFunctor
 			Range r = sel.parseRange( Integer.MIN_VALUE, Integer.MAX_VALUE );
 			if ( r.length() == 1 ) {
 				return new BooleanFunctor( value == r.min() );
-			} else {
-				return new BooleanFunctor( value >= r.min() && value <= r.max() );
 			}
+			return new BooleanFunctor( value >= r.min() && value <= r.max() );
 		}
-		return this;
+		return env.invoke( Functor.NOTHING, sel );
 	}
 
 	@Override

@@ -2,6 +2,8 @@ package de.jbee.panda;
 
 public interface Functor {
 
+	Functor NOTHING = NothingFunctor.INSTANCE;
+
 	/**
 	 * This method is always called for a <code>let</code> expression even in case there is no
 	 * selector expression present. The simple reason is that a {@link Functor} might expect a
