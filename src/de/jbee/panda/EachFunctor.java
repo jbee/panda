@@ -1,19 +1,21 @@
 package de.jbee.panda;
 
-public class EachFunctor
-		implements Functor {
+import static de.jbee.panda.Selector.elemAt;
 
-	private final Alias list;
+public class EachFunctor
+		implements Functor, TextNature {
+
+	private final Functor list;
 	private final int index;
 
-	EachFunctor( Alias list, int index ) {
+	EachFunctor( Functor list, int index ) {
 		super();
 		this.list = list;
 		this.index = index;
 	}
 
 	@Override
-	public Functor invoke( Selector sel, ExecutionEnv env ) {
+	public Functor invoke( Selector sel, Environment env ) {
 		if ( sel.isNone() ) {
 			return currentElement( env );
 		}
@@ -25,36 +27,20 @@ public class EachFunctor
 
 			// if it is a single index delegate to the ListFunctor refered by this
 		}
-		// TODO Auto-generated method stub
-		return null;
+		//TODO warning about unknown selector
+		return this;
 	}
 
 	@Override
-	public String value( ExecutionEnv env ) {
-		return currentElement( env ).value( env );
+	public String text( Environment env ) {
+		Functor e = currentElement( env );
+		return e instanceof TextNature
+			? ( (TextNature) e ).text( env )
+			: "";
 	}
 
-	private Functor currentElement( ExecutionEnv env ) {
-		return env.invoke( env.functorFor( list ), Selector.of( "[" + index + "]" ) );
+	private Functor currentElement( Environment env ) {
+		return env.invoke( list, elemAt( index ) );
 	}
 
-	private static class EvenCase
-			implements Case {
-
-		private final Alias alias;
-
-		EvenCase( Alias alias ) {
-			super();
-			this.alias = alias;
-		}
-
-		@Override
-		public boolean matchesIn( ExecutionEnv env ) {
-			Functor f = env.functorFor( alias );
-			if ( f instanceof EachFunctor ) {
-
-			}
-			return false;
-		}
-	}
 }

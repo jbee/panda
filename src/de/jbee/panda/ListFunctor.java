@@ -1,20 +1,36 @@
 package de.jbee.panda;
 
+import de.jbee.lang.List;
+
 public class ListFunctor
-		implements Functor {
+		implements Functor, ListNature {
 
-	// regelt die listen zugriffsfunktionen: [x] usw.
+	private final List<Functor> elems;
 
-	@Override
-	public Functor invoke( Selector sel, ExecutionEnv env ) {
-		// TODO Auto-generated method stub
-		return null;
+	ListFunctor( List<Functor> elems ) {
+		super();
+		this.elems = elems;
 	}
 
 	@Override
-	public String value( ExecutionEnv env ) {
+	public Functor invoke( Selector sel, Environment env ) {
+		if ( sel.isNone() ) {
+			return this;
+		}
+		// regelt die listen zugriffsfunktionen: [x] usw.
+		if ( sel.startsWith( "[" ) ) {
+			sel = sel.skip( 1 );
+			if ( sel.startsWith( "." ) ) {
+				sel.skip( '.' );
+
+			}
+		}
 		// TODO Auto-generated method stub
-		return null;
+		return this;
 	}
 
+	@Override
+	public List<Functor> elements( Environment env ) {
+		return elems;
+	}
 }

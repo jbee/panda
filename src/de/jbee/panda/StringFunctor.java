@@ -1,7 +1,7 @@
 package de.jbee.panda;
 
 public final class StringFunctor
-		implements Functor {
+		implements Functor, TextNature {
 
 	private final String value;
 
@@ -11,7 +11,7 @@ public final class StringFunctor
 	}
 
 	@Override
-	public Functor invoke( Selector sel, ExecutionEnv env ) {
+	public Functor invoke( Selector sel, Environment env ) {
 		if ( sel.length() == 0 ) {
 			return this;
 		}
@@ -26,7 +26,7 @@ public final class StringFunctor
 	}
 
 	@Override
-	public String value( ExecutionEnv env ) {
+	public String text( Environment env ) {
 		return value;
 	}
 

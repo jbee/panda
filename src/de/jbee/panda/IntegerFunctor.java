@@ -1,7 +1,7 @@
 package de.jbee.panda;
 
 public class IntegerFunctor
-		implements Functor {
+		implements Functor, IntegerNature, TextNature, BooleanNature {
 
 	private final int value;
 
@@ -11,7 +11,7 @@ public class IntegerFunctor
 	}
 
 	@Override
-	public Functor invoke( Selector sel, ExecutionEnv env ) {
+	public Functor invoke( Selector sel, Environment env ) {
 		if ( sel.isNone() ) {
 			return this;
 		}
@@ -34,12 +34,29 @@ public class IntegerFunctor
 					return new IntegerFunctor( value / operand );
 			}
 		}
+		if ( sel.startsWithDigit() ) { // that is a test 
+			Range r = sel.parseRange( Integer.MIN_VALUE, Integer.MAX_VALUE );
+			if ( r.length() == 1 ) {
+				return new BooleanFunctor( value == r.min() );
+			} else {
+				return new BooleanFunctor( value >= r.min() && value <= r.max() );
+			}
+		}
 		return this;
 	}
 
 	@Override
-	public String value( ExecutionEnv env ) {
+	public String text( Environment env ) {
 		return String.valueOf( value );
 	}
 
+	@Override
+	public int integer( Environment ent ) {
+		return value;
+	}
+
+	@Override
+	public boolean bool( Environment env ) {
+		return value != 0;
+	}
 }

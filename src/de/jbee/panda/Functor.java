@@ -2,10 +2,12 @@ package de.jbee.panda;
 
 public interface Functor {
 
-	// wird immer aufgerufen bevor value() aufgerufen wird- im zweifel dann mit "" wenn keine weiteren angaben vorhanden sind
-	// das kann nämlich auch falsch sein (arg erwartet) und dann wird ein Fehler-Functor geliefert
+	/**
+	 * This method is always called for a <code>let</code> expression even in case there is no
+	 * selector expression present. The simple reason is that a {@link Functor} might expect a
+	 * selector. In such a case he can respond accordingly to the invocation with a none-
+	 * {@link Selector}.
+	 */
+	Functor invoke( Selector sel, Environment env );
 
-	Functor invoke( Selector sel, ExecutionEnv env );
-
-	String value( ExecutionEnv env );
 }
