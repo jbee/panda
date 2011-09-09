@@ -56,6 +56,11 @@ public class Selector
 		return new Range( minDefault, maxDefault );
 	}
 
+	public String readPattern( String regex ) {
+
+		return "";
+	}
+
 	public int parseInt( int def ) {
 		if ( !startsWithDigit() ) {
 			return def;

@@ -1,6 +1,9 @@
 package de.jbee.panda;
 
-public interface Functor {
+import de.jbee.panda.functor.NothingFunctor;
+
+public interface Functor
+		extends TextNature {
 
 	Functor NOTHING = NothingFunctor.INSTANCE;
 

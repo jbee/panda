@@ -6,5 +6,5 @@ public interface Environment {
 
 	void let( Var var, Functor f );
 
-	Functor invoke( Functor f, Selector s );
+	Functor invoke( Functor f, Selector sel );
 }
