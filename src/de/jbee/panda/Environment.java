@@ -4,7 +4,9 @@ public interface Environment {
 
 	Functor access( Var var );
 
+	Functor invoke( Functor f, Selector arg );
+
 	void let( Var var, Functor f );
 
-	Functor invoke( Functor f, Selector sel );
+	void renderFrom( int pos );
 }

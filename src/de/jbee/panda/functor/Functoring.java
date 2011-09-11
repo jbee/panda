@@ -6,6 +6,7 @@ import de.jbee.panda.Functor;
 public class Functoring {
 
 	public static final Functor NOTHING = NothingFunctor.INSTANCE;
+	public static final Functor JUST = JustFunctor.INSTANCE;
 	public static final Functor TRUE = BooleanFunctor.TRUE_INSTANCE;
 	public static final Functor FALSE = BooleanFunctor.FALSE_INSTANCE;
 

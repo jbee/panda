@@ -2,8 +2,10 @@ package de.jbee.panda.functor;
 
 import static de.jbee.panda.Selector.elemAt;
 import static de.jbee.panda.functor.Functoring.a;
+import de.jbee.lang.List;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
+import de.jbee.panda.ListNature;
 import de.jbee.panda.Selector;
 import de.jbee.panda.Var;
 
@@ -50,9 +52,16 @@ public class EachFunctor
 	}
 
 	@Override
-	public void bind( Var var, Environment env ) {
-		// TODO Auto-generated method stub
-
+	public void renderedAs( Var var, Environment env ) {
+		if ( list instanceof ListNature ) {
+			ListNature l = (ListNature) list;
+			List<Functor> elems = l.elements( env );
+			int idx = index + 1;
+			if ( idx < elems.length() ) {
+				env.let( var, new EachFunctor( list, idx ) );
+				env.renderFrom( 0 ); // zero of the current block
+			}
+		}
 	}
 
 }

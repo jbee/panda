@@ -41,7 +41,7 @@ public class ObjectFunctor
 		if ( m.path.startsWith( property ) ) {
 			return new ObjectFunctor( property, members );
 		}
-		return env.invoke( Functor.NOTHING, arg );
+		return env.invoke( Functor.JUST, arg );
 	}
 
 	@Override

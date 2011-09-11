@@ -26,7 +26,7 @@ final class BooleanFunctor
 			return env.invoke( Functoring.a( !value ), arg );
 		}
 		//TODO support more logic ops
-		return env.invoke( NOTHING, arg );
+		return env.invoke( JUST, arg );
 	}
 
 	@Override

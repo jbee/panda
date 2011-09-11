@@ -8,7 +8,7 @@ public abstract class ValueFunctor
 		implements Functor {
 
 	@Override
-	public final void bind( Var var, Environment env ) {
+	public final void renderedAs( Var var, Environment env ) {
 		// nothing to do
 	}
 }

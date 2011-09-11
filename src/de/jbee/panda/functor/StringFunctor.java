@@ -26,7 +26,7 @@ final class StringFunctor
 			//*xyz -> prefix
 			//xyz -> equals/==
 			//'pattern' -> regex in ''
-			return Functor.TRUE;
+			return TRUE;
 		}
 		if ( arg.after( '{' ) ) {
 			int start = arg.integer( 0 );
@@ -36,7 +36,7 @@ final class StringFunctor
 			}
 			return env.invoke( a( value.charAt( start ) ), arg.skip( '}' ) );
 		}
-		return env.invoke( NOTHING, arg );
+		return env.invoke( JUST, arg );
 	}
 
 	@Override

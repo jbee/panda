@@ -6,6 +6,7 @@ public interface Functor
 		extends TextNature {
 
 	Functor NOTHING = Functoring.NOTHING;
+	Functor JUST = Functoring.JUST;
 	Functor TRUE = Functoring.TRUE;
 	Functor FALSE = Functoring.FALSE;
 
@@ -17,5 +18,5 @@ public interface Functor
 	 */
 	Functor invoke( Selector arg, Environment env );
 
-	void bind( Var var, Environment env );
+	void renderedAs( Var var, Environment env );
 }

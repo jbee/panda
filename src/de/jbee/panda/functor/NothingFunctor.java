@@ -20,6 +20,9 @@ final class NothingFunctor
 
 	@Override
 	public Functor invoke( Selector arg, Environment env ) {
+		if ( arg.after( '?' ) ) {
+			return env.invoke( FALSE, arg );
+		}
 		// TODO tell env about invocation on nothing
 		return this;
 	}

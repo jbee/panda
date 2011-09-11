@@ -51,7 +51,7 @@ final class IntegerFunctor
 			}
 			return env.invoke( a( value == min ), arg );
 		}
-		return env.invoke( NOTHING, arg );
+		return env.invoke( JUST, arg );
 	}
 
 	@Override

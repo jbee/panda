@@ -34,7 +34,7 @@ final class ListFunctor
 		}
 		//TODO support .1..4. notation for list as part of objects
 
-		return env.invoke( NOTHING, arg );
+		return env.invoke( JUST, arg );
 	}
 
 	@Override
