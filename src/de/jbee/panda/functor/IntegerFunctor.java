@@ -4,11 +4,11 @@ import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
-import de.jbee.panda.Range;
 import de.jbee.panda.Selector;
 
-public class IntegerFunctor
-		implements Functor, IntegralNature, PredicateNature {
+final class IntegerFunctor
+		extends ValueFunctor
+		implements IntegralNature, PredicateNature {
 
 	private final int value;
 
@@ -18,37 +18,39 @@ public class IntegerFunctor
 	}
 
 	@Override
-	public Functor invoke( Selector sel, Environment env ) {
-		if ( sel.isNone() ) {
+	public Functor invoke( Selector arg, Environment env ) {
+		if ( arg.isNone() ) {
 			return this;
 		}
-		char op = sel.charAt( 0 );
+		char op = arg.charAt( 0 );
 		if ( "+-*/".indexOf( op ) >= 0 ) {
-			if ( sel.length() == 1 ) {
-				if ( op == '-' ) {
-					return new IntegerFunctor( -value );
-				}
+			arg.skipNext( 1 );
+			if ( arg.isNone() ) {
+				return op == '-'
+					? env.invoke( Functoring.a( -value ), arg )
+					: env.invoke( Functor.NOTHING, arg );
 			}
-			int operand = sel.skip( 1 ).parseInt( 0 );
+			int operand = arg.integer( 0 );
 			switch ( op ) {
 				case '+':
-					return new IntegerFunctor( value + operand );
+					return env.invoke( Functoring.a( value + operand ), arg );
 				case '-':
-					return new IntegerFunctor( value - operand );
+					return env.invoke( Functoring.a( value - operand ), arg );
 				case '*':
-					return new IntegerFunctor( value * operand );
+					return env.invoke( Functoring.a( value * operand ), arg );
 				case '/':
-					return new IntegerFunctor( value / operand );
+					return env.invoke( Functoring.a( value / operand ), arg );
 			}
 		}
-		if ( sel.startsWithDigit() ) { // that is a test 
-			Range r = sel.parseRange( Integer.MIN_VALUE, Integer.MAX_VALUE );
-			if ( r.length() == 1 ) {
-				return new BooleanFunctor( value == r.min() );
+		if ( arg.after( '?' ) ) { // that is a test 
+			int min = arg.integer( Integer.MIN_VALUE );
+			if ( arg.after( ".." ) ) {
+				return env.invoke( Functoring.a( value >= min
+						&& value <= arg.integer( Integer.MAX_VALUE ) ), arg );
 			}
-			return new BooleanFunctor( value >= r.min() && value <= r.max() );
+			return env.invoke( Functoring.a( value == min ), arg );
 		}
-		return env.invoke( Functor.NOTHING, sel );
+		return env.invoke( Functor.NOTHING, arg );
 	}
 
 	@Override

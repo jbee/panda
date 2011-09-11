@@ -4,8 +4,8 @@ import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Selector;
 
-public final class StringFunctor
-		implements Functor {
+final class StringFunctor
+		extends ValueFunctor {
 
 	private final String value;
 
@@ -15,18 +15,24 @@ public final class StringFunctor
 	}
 
 	@Override
-	public Functor invoke( Selector sel, Environment env ) {
-		if ( sel.length() == 0 ) {
+	public Functor invoke( Selector arg, Environment env ) {
+		if ( arg.isNone() ) {
 			return this;
 		}
-		if ( sel.startsWith( "{" ) ) {
-			if ( sel.charAt( 1 ) == '.' ) {
-				return new StringFunctor( value.substring( 0, sel.skip( 2 ).parseInt(
-						value.length() ) ) );
-			}
-			//TODO others
+		if ( arg.after( '?' ) ) {
+			//TODO value comparison things
+			return Functor.TRUE;
 		}
-		return this;
+		if ( arg.after( '{' ) ) {
+			int start = arg.integer( 0 );
+			if ( arg.after( ".." ) ) {
+				int end = arg.integer( value.length() - 1 );
+				return env.invoke( Functoring.a( value.substring( start, end + 1 ) ),
+						arg.skip( '}' ) );
+			}
+			return env.invoke( Functoring.a( value.charAt( start ) ), arg.skip( '}' ) );
+		}
+		return env.invoke( Functor.NOTHING, arg );
 	}
 
 	@Override

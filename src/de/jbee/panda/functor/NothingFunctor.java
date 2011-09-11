@@ -8,8 +8,9 @@ import de.jbee.panda.ListNature;
 import de.jbee.panda.PredicateNature;
 import de.jbee.panda.Selector;
 
-public final class NothingFunctor
-		implements Functor, PredicateNature, IntegralNature, ListNature {
+final class NothingFunctor
+		extends ValueFunctor
+		implements PredicateNature, IntegralNature, ListNature {
 
 	public static final Functor INSTANCE = new NothingFunctor();
 
@@ -18,7 +19,7 @@ public final class NothingFunctor
 	}
 
 	@Override
-	public Functor invoke( Selector sel, Environment env ) {
+	public Functor invoke( Selector arg, Environment env ) {
 		// TODO tell env about invocation on nothing
 		return this;
 	}

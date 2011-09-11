@@ -6,8 +6,9 @@ import de.jbee.panda.Functor;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.Selector;
 
-public class ListFunctor
-		implements Functor, ListNature {
+final class ListFunctor
+		extends ValueFunctor
+		implements ListNature {
 
 	private final List<Functor> elems;
 
@@ -17,17 +18,21 @@ public class ListFunctor
 	}
 
 	@Override
-	public Functor invoke( Selector sel, Environment env ) {
-		if ( sel.isNone() ) {
+	public Functor invoke( Selector arg, Environment env ) {
+		if ( arg.isNone() ) {
 			return this;
 		}
-		if ( sel.startsWith( "[" ) ) {
-			//TODO handle range
+		if ( arg.after( '[' ) ) {
+			int start = arg.integer( 0 );
+			if ( arg.after( ".." ) ) {
+				return env.invoke( Functoring.a( List.which.takesFromTo( start,
+						arg.integer( elems.length() - 1 ) ).from( elems ) ), arg.skip( ']' ) );
+			}
+			return env.invoke( elems.at( start ), arg.skip( ']' ) );
 		}
 		//TODO support .1..4. notation for list as part of objects
 
-		// TODO Auto-generated method stub
-		return this;
+		return env.invoke( Functor.NOTHING, arg );
 	}
 
 	@Override
@@ -37,7 +42,6 @@ public class ListFunctor
 
 	@Override
 	public String text( Environment env ) {
-		//OPEN list the type names of the functors ?
 		return "[" + elems.length() + "]";
 	}
 }

@@ -6,20 +6,27 @@ import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
 import de.jbee.panda.Selector;
 
-public class BooleanFunctor
-		implements Functor, PredicateNature, IntegralNature {
+final class BooleanFunctor
+		extends ValueFunctor
+		implements PredicateNature, IntegralNature {
+
+	static final Functor TRUE_INSTANCE = new BooleanFunctor( true );
+	static final Functor FALSE_INSTANCE = new BooleanFunctor( false );
 
 	private final boolean value;
 
-	BooleanFunctor( boolean value ) {
+	private BooleanFunctor( boolean value ) {
 		super();
 		this.value = value;
 	}
 
 	@Override
-	public Functor invoke( Selector sel, Environment env ) {
-		// TODO Auto-generated method stub
-		return this;
+	public Functor invoke( Selector arg, Environment env ) {
+		if ( arg.after( '!' ) ) {
+			return env.invoke( Functoring.a( !value ), arg );
+		}
+		//TODO support more logic ops
+		return env.invoke( Functor.NOTHING, arg );
 	}
 
 	@Override

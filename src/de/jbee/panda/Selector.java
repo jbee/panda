@@ -6,7 +6,7 @@ public class Selector
 	public static final Selector NONE = new Selector( "", 0 );
 
 	private final String value;
-	private final int start;
+	private int start;
 
 	private Selector( String value, int start ) {
 		super();
@@ -18,16 +18,20 @@ public class Selector
 		return new Selector( value, 0 );
 	}
 
+	public Selector fork() {
+		return new Selector( value, start );
+	}
+
 	public boolean isNone() {
 		return length() < 0;
 	}
 
-	public boolean startsWith( String prefix ) {
-		return value.startsWith( prefix, start );
+	public boolean startsWith( char prefix ) {
+		return charAt( 0 ) == prefix;
 	}
 
-	public boolean startsWithDigit() {
-		return Character.isDigit( value.charAt( start ) );
+	public boolean startsWith( String prefix ) {
+		return value.startsWith( prefix, start );
 	}
 
 	public Selector skip( char c ) {
@@ -35,25 +39,18 @@ public class Selector
 			return this;
 		}
 		final int l = value.length();
-		int i = start;
-		while ( i < l && value.charAt( i ) == c ) {
-			i++;
+		while ( start < l && value.charAt( start ) == c ) {
+			start++;
 		}
-		if ( i == start ) {
-			return this;
-		}
-		return new Selector( value, i - 1 );
+		return this;
 	}
 
-	public Selector skip( int length ) {
-		return length < 0 || length() < 0
-			? this
-			: new Selector( value, start + length );
-	}
-
-	public Range parseRange( int minDefault, int maxDefault ) {
-
-		return new Range( minDefault, maxDefault );
+	public Selector skipNext( int length ) {
+		int l = length();
+		if ( length > 0 && l > 0 ) {
+			start = Math.min( l, start + length );
+		}
+		return this;
 	}
 
 	public String readPattern( String regex ) {
@@ -61,10 +58,11 @@ public class Selector
 		return "";
 	}
 
-	public int parseInt( int def ) {
-		if ( !startsWithDigit() ) {
+	public int integer( int def ) {
+		if ( !Character.isDigit( charAt( 0 ) ) ) {
 			return def;
 		}
+		//TODO parse
 		return def;
 	}
 
@@ -80,12 +78,26 @@ public class Selector
 
 	@Override
 	public CharSequence subSequence( int start, int end ) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Selector( value.substring( start + start, end ), 0 );
 	}
 
 	public static Selector elemAt( int index ) {
 		return of( "[" + index + "]" );
+	}
+
+	public boolean after( String prefix ) {
+		return incIf( prefix.length(), startsWith( prefix ) );
+	}
+
+	public boolean after( char c ) {
+		return incIf( 1, startsWith( c ) );
+	}
+
+	private boolean incIf( int inc, boolean cond ) {
+		if ( cond ) {
+			start += inc;
+		}
+		return cond;
 	}
 
 }

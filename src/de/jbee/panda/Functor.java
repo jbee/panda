@@ -1,11 +1,13 @@
 package de.jbee.panda;
 
-import de.jbee.panda.functor.NothingFunctor;
+import de.jbee.panda.functor.Functoring;
 
 public interface Functor
 		extends TextNature {
 
-	Functor NOTHING = NothingFunctor.INSTANCE;
+	Functor NOTHING = Functoring.NOTHING;
+	Functor TRUE = Functoring.TRUE;
+	Functor FALSE = Functoring.FALSE;
 
 	/**
 	 * This method is always called for a <code>let</code> expression even in case there is no
@@ -13,6 +15,7 @@ public interface Functor
 	 * selector. In such a case he can respond accordingly to the invocation with a none-
 	 * {@link Selector}.
 	 */
-	Functor invoke( Selector sel, Environment env );
+	Functor invoke( Selector arg, Environment env );
 
+	void bind( Var var, Environment env );
 }

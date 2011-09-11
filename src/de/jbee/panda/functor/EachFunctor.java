@@ -4,7 +4,7 @@ import static de.jbee.panda.Selector.elemAt;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Selector;
-import de.jbee.panda.TextNature;
+import de.jbee.panda.Var;
 
 public class EachFunctor
 		implements Functor {
@@ -19,32 +19,34 @@ public class EachFunctor
 	}
 
 	@Override
-	public Functor invoke( Selector sel, Environment env ) {
-		if ( sel.isNone() ) {
-			return currentElement( env );
+	public Functor invoke( Selector arg, Environment env ) {
+		if ( arg.isNone() ) {
+			return env.invoke( currentElement( env ), arg );
 		}
-		if ( sel.startsWith( "#" ) ) {
-			return env.invoke( new IntegerFunctor( index ), sel.skip( 1 ) );
+		if ( arg.after( '#' ) ) {
+			return env.invoke( Functoring.a( index ), arg );
 		}
-		if ( sel.startsWith( "[" ) ) {
+		if ( arg.after( '[' ) ) {
 			// if its a range build a sub-each functor
 
 			// if it is a single index delegate to the ListFunctor refered by this
 		}
-		//TODO warning about unknown selector
-		return this;
+		return env.invoke( currentElement( env ), arg );
 	}
 
 	@Override
 	public String text( Environment env ) {
-		Functor e = currentElement( env );
-		return e instanceof TextNature
-			? ( (TextNature) e ).text( env )
-			: "";
+		return currentElement( env ).text( env );
 	}
 
 	private Functor currentElement( Environment env ) {
 		return env.invoke( list, elemAt( index ) );
+	}
+
+	@Override
+	public void bind( Var var, Environment env ) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
