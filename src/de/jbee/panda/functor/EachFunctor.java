@@ -1,6 +1,7 @@
 package de.jbee.panda.functor;
 
 import static de.jbee.panda.Selector.elemAt;
+import static de.jbee.panda.functor.Functoring.a;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Selector;
@@ -24,12 +25,17 @@ public class EachFunctor
 			return env.invoke( currentElement( env ), arg );
 		}
 		if ( arg.after( '#' ) ) {
-			return env.invoke( Functoring.a( index ), arg );
+			return env.invoke( a( index ), arg );
 		}
 		if ( arg.after( '[' ) ) {
-			// if its a range build a sub-each functor
-
-			// if it is a single index delegate to the ListFunctor refered by this
+			int start = arg.integer( 0 );
+			if ( arg.after( ':' ) ) {
+				//OPEN Integer.MAX_VALUE ersetzen durch die abfrage des max-value vom list functor ?
+				Functor sublist = list.invoke( Selector.range( start,
+						arg.integer( Integer.MAX_VALUE ) ), env );
+				return env.invoke( new EachFunctor( sublist, index ), arg.skip( ']' ) );
+			}
+			return env.invoke( list, Selector.elemAt( start ).join( arg.skip( ']' ) ) );
 		}
 		return env.invoke( currentElement( env ), arg );
 	}

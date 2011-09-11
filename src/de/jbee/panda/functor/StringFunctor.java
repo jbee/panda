@@ -1,5 +1,6 @@
 package de.jbee.panda.functor;
 
+import static de.jbee.panda.functor.Functoring.a;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Selector;
@@ -21,18 +22,21 @@ final class StringFunctor
 		}
 		if ( arg.after( '?' ) ) {
 			//TODO value comparison things
+			//xyz* -> suffix
+			//*xyz -> prefix
+			//xyz -> equals/==
+			//'pattern' -> regex in ''
 			return Functor.TRUE;
 		}
 		if ( arg.after( '{' ) ) {
 			int start = arg.integer( 0 );
-			if ( arg.after( ".." ) ) {
+			if ( arg.after( ':' ) ) {
 				int end = arg.integer( value.length() - 1 );
-				return env.invoke( Functoring.a( value.substring( start, end + 1 ) ),
-						arg.skip( '}' ) );
+				return env.invoke( a( value.substring( start, end + 1 ) ), arg.skip( '}' ) );
 			}
-			return env.invoke( Functoring.a( value.charAt( start ) ), arg.skip( '}' ) );
+			return env.invoke( a( value.charAt( start ) ), arg.skip( '}' ) );
 		}
-		return env.invoke( Functor.NOTHING, arg );
+		return env.invoke( NOTHING, arg );
 	}
 
 	@Override

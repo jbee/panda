@@ -1,5 +1,6 @@
 package de.jbee.panda.functor;
 
+import static de.jbee.panda.functor.Functoring.a;
 import de.jbee.lang.List;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
@@ -24,15 +25,16 @@ final class ListFunctor
 		}
 		if ( arg.after( '[' ) ) {
 			int start = arg.integer( 0 );
-			if ( arg.after( ".." ) ) {
-				return env.invoke( Functoring.a( List.which.takesFromTo( start,
-						arg.integer( elems.length() - 1 ) ).from( elems ) ), arg.skip( ']' ) );
+			if ( arg.after( ':' ) ) {
+				List<Functor> sublist = List.which.takesFromTo( start,
+						arg.integer( elems.length() - 1 ) ).from( elems );
+				return env.invoke( a( sublist ), arg.skip( ']' ) );
 			}
 			return env.invoke( elems.at( start ), arg.skip( ']' ) );
 		}
 		//TODO support .1..4. notation for list as part of objects
 
-		return env.invoke( Functor.NOTHING, arg );
+		return env.invoke( NOTHING, arg );
 	}
 
 	@Override

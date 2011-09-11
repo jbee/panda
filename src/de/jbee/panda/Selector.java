@@ -14,6 +14,17 @@ public class Selector
 		this.start = Math.min( start, value.length() );
 	}
 
+	public Selector join( Selector sub ) {
+		return new Selector( value + sub.toString(), start );
+	}
+
+	@Override
+	public String toString() {
+		return isNone()
+			? ""
+			: value.substring( start );
+	}
+
 	public static Selector of( String value ) {
 		return new Selector( value, 0 );
 	}
@@ -98,6 +109,10 @@ public class Selector
 			start += inc;
 		}
 		return cond;
+	}
+
+	public static Selector range( int start, int end ) {
+		return of( "[" + start + ":" + end + "]" );
 	}
 
 }

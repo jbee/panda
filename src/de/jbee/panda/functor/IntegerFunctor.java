@@ -1,5 +1,6 @@
 package de.jbee.panda.functor;
 
+import static de.jbee.panda.functor.Functoring.a;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
 import de.jbee.panda.IntegralNature;
@@ -27,30 +28,30 @@ final class IntegerFunctor
 			arg.skipNext( 1 );
 			if ( arg.isNone() ) {
 				return op == '-'
-					? env.invoke( Functoring.a( -value ), arg )
-					: env.invoke( Functor.NOTHING, arg );
+					? env.invoke( a( -value ), arg )
+					: env.invoke( NOTHING, arg );
 			}
 			int operand = arg.integer( 0 );
 			switch ( op ) {
 				case '+':
-					return env.invoke( Functoring.a( value + operand ), arg );
+					return env.invoke( a( value + operand ), arg );
 				case '-':
-					return env.invoke( Functoring.a( value - operand ), arg );
+					return env.invoke( a( value - operand ), arg );
 				case '*':
-					return env.invoke( Functoring.a( value * operand ), arg );
+					return env.invoke( a( value * operand ), arg );
 				case '/':
-					return env.invoke( Functoring.a( value / operand ), arg );
+					return env.invoke( a( value / operand ), arg );
 			}
 		}
 		if ( arg.after( '?' ) ) { // that is a test 
 			int min = arg.integer( Integer.MIN_VALUE );
-			if ( arg.after( ".." ) ) {
-				return env.invoke( Functoring.a( value >= min
-						&& value <= arg.integer( Integer.MAX_VALUE ) ), arg );
+			if ( arg.after( ':' ) ) {
+				return env.invoke( a( value >= min && value <= arg.integer( Integer.MAX_VALUE ) ),
+						arg );
 			}
-			return env.invoke( Functoring.a( value == min ), arg );
+			return env.invoke( a( value == min ), arg );
 		}
-		return env.invoke( Functor.NOTHING, arg );
+		return env.invoke( NOTHING, arg );
 	}
 
 	@Override
