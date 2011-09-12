@@ -1,12 +1,12 @@
 package de.jbee.panda.functor;
 
-import static de.jbee.panda.Selector.elemAt;
-import static de.jbee.panda.functor.Functoring.a;
+import static de.jbee.panda.Accessor.elemAt;
+import static java.lang.Integer.MAX_VALUE;
 import de.jbee.lang.List;
+import de.jbee.panda.Accessor;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
 import de.jbee.panda.ListNature;
-import de.jbee.panda.Selector;
 import de.jbee.panda.Var;
 
 public class EachFunctor
@@ -15,31 +15,37 @@ public class EachFunctor
 	private final Functor list;
 	private final int index;
 
-	EachFunctor( Functor list, int index ) {
+	EachFunctor( Functor list ) {
+		this( list, 0 );
+	}
+
+	private EachFunctor( Functor list, int index ) {
 		super();
 		this.list = list;
 		this.index = index;
 	}
 
+	private Functor a( Functor list, int index ) {
+		return new EachFunctor( list, index );
+	}
+
 	@Override
-	public Functor invoke( Selector arg, Environment env ) {
-		if ( arg.isNone() ) {
-			return env.invoke( currentElement( env ), arg );
+	public Functor invoke( Accessor expr, Environment env ) {
+		if ( expr.isEmpty() ) {
+			return env.invoke( currentElement( env ), expr );
 		}
-		if ( arg.after( '#' ) ) {
-			return env.invoke( a( index ), arg );
+		if ( expr.after( '#' ) ) {
+			return env.invoke( env.functorize().value( index ), expr );
 		}
-		if ( arg.after( '[' ) ) {
-			int start = arg.integer( 0 );
-			if ( arg.after( ':' ) ) {
-				//OPEN Integer.MAX_VALUE ersetzen durch die abfrage des max-value vom list functor ?
-				Functor sublist = list.invoke( Selector.range( start,
-						arg.integer( Integer.MAX_VALUE ) ), env );
-				return env.invoke( new EachFunctor( sublist, index ), arg.skip( ']' ) );
+		if ( expr.after( '[' ) ) {
+			int start = expr.index( 0 );
+			if ( expr.after( ':' ) ) {
+				Functor sl = list.invoke( Accessor.range( start, expr.index( MAX_VALUE ) ), env );
+				return env.invoke( a( sl, index ), expr.gobble( ']' ) );
 			}
-			return env.invoke( list, Selector.elemAt( start ).join( arg.skip( ']' ) ) );
+			return env.invoke( list, Accessor.elemAt( start ).join( expr.gobble( ']' ) ) );
 		}
-		return env.invoke( currentElement( env ), arg );
+		return env.invoke( currentElement( env ), expr );
 	}
 
 	@Override

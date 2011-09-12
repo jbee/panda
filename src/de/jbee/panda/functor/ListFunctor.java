@@ -1,11 +1,12 @@
 package de.jbee.panda.functor;
 
-import static de.jbee.panda.functor.Functoring.a;
 import de.jbee.lang.List;
+import de.jbee.panda.Accessor;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
+import de.jbee.panda.Functorizer;
 import de.jbee.panda.ListNature;
-import de.jbee.panda.Selector;
+import de.jbee.panda.SuperFunctorizer;
 
 final class ListFunctor
 		extends ValueFunctor
@@ -18,23 +19,26 @@ final class ListFunctor
 		this.elems = elems;
 	}
 
+	private Functor a( List<Functor> elems ) {
+		return new ListFunctor( elems );
+	}
+
 	@Override
-	public Functor invoke( Selector arg, Environment env ) {
-		if ( arg.isNone() ) {
+	public Functor invoke( Accessor expr, Environment env ) {
+		if ( expr.isEmpty() ) {
 			return this;
 		}
-		if ( arg.after( '[' ) ) {
-			int start = arg.integer( 0 );
-			if ( arg.after( ':' ) ) {
-				List<Functor> sublist = List.which.takesFromTo( start,
-						arg.integer( elems.length() - 1 ) ).from( elems );
-				return env.invoke( a( sublist ), arg.skip( ']' ) );
+		if ( expr.after( '[' ) ) {
+			int start = expr.index( 0 );
+			if ( expr.after( ':' ) ) {
+				int end = expr.index( elems.length() - 1 );
+				List<Functor> sublist = List.which.takesFromTo( start, end ).from( elems );
+				return env.invoke( a( sublist ), expr.gobble( ']' ) );
 			}
-			return env.invoke( elems.at( start ), arg.skip( ']' ) );
+			return env.invoke( elems.at( start ), expr.gobble( ']' ) );
 		}
-		//TODO support .1..4. notation for list as part of objects
-
-		return env.invoke( JUST, arg );
+		//OPEN support .1..4. notation for list as part of objects
+		return env.invoke( JUST, expr );
 	}
 
 	@Override
@@ -45,5 +49,18 @@ final class ListFunctor
 	@Override
 	public String text( Environment env ) {
 		return "[" + elems.length() + "]";
+	}
+
+	static class ListFunctorizer
+			implements Functorizer {
+
+		@Override
+		public Functor functorize( Object value, SuperFunctorizer sf ) {
+			if ( value instanceof List<?> ) {
+
+			}
+			return NOTHING;
+		}
+
 	}
 }

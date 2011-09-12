@@ -1,4 +1,4 @@
-<pre style="font-size:6px">
+<pre>
                               _,add8ba,
                             ,d888888888b,
                            d8888888888888b                        _,ad8ba,_

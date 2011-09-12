@@ -8,7 +8,7 @@ import de.jbee.lang.Ordering;
 import de.jbee.lang.Set;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
-import de.jbee.panda.Selector;
+import de.jbee.panda.Accessor;
 
 public class ObjectFunctor
 		extends ValueFunctor {
@@ -23,11 +23,11 @@ public class ObjectFunctor
 	}
 
 	@Override
-	public Functor invoke( Selector arg, Environment env ) {
-		if ( arg.isNone() ) {
+	public Functor invoke( Accessor expr, Environment env ) {
+		if ( expr.isEmpty() ) {
 			return this;
 		}
-		String property = arg.readPattern( "\\w+(\\.\\w+)*" );
+		String property = expr.readPattern( "\\w+(\\.\\w+)*" );
 		//TODO replace with binary search index lookup
 		int index = Set.indexFor.elemBy( new Member( property( property ) ),
 				Equal.by( members.order() ) ).in( members );
@@ -41,7 +41,7 @@ public class ObjectFunctor
 		if ( m.path.startsWith( property ) ) {
 			return new ObjectFunctor( property, members );
 		}
-		return env.invoke( Functor.JUST, arg );
+		return env.invoke( Functor.JUST, expr );
 	}
 
 	@Override

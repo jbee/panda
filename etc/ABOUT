@@ -26,7 +26,7 @@ even		<alias>		match alle geraden indices
 <name>	<alias>		match über die funktion <name>
 else/otherwise			match wenn alle muster auf selber ebene vorher nicht gemacht haben
 	
-Accessor:	
+Functor useage in a case:	
 ::<alias>			der wert (String) den der alias aktuell hat (bei Listen der des aktuellen elements)
 ::<alias>#			der index des aktuellen elements (beginnend mit 1 [default])
 ::<alias>#0			der index (beginnend mit 0)

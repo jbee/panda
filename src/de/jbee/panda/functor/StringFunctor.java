@@ -1,12 +1,15 @@
 package de.jbee.panda.functor;
 
-import static de.jbee.panda.functor.Functoring.a;
+import de.jbee.panda.Accessor;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
-import de.jbee.panda.Selector;
+import de.jbee.panda.Functorizer;
+import de.jbee.panda.SuperFunctorizer;
 
 final class StringFunctor
 		extends ValueFunctor {
+
+	static final Functorizer FUNCTORIZER = new StringFunctorizer();
 
 	private final String value;
 
@@ -15,28 +18,35 @@ final class StringFunctor
 		this.value = value;
 	}
 
+	private Functor a( String value ) {
+		return new StringFunctor( value );
+	}
+
 	@Override
-	public Functor invoke( Selector arg, Environment env ) {
-		if ( arg.isNone() ) {
+	public Functor invoke( Accessor expr, Environment env ) {
+		if ( expr.isEmpty() ) {
 			return this;
 		}
-		if ( arg.after( '?' ) ) {
-			//TODO value comparison things
-			//xyz* -> suffix
-			//*xyz -> prefix
-			//xyz -> equals/==
-			//'pattern' -> regex in ''
-			return TRUE;
-		}
-		if ( arg.after( '{' ) ) {
-			int start = arg.integer( 0 );
-			if ( arg.after( ':' ) ) {
-				int end = arg.integer( value.length() - 1 );
-				return env.invoke( a( value.substring( start, end + 1 ) ), arg.skip( '}' ) );
+		if ( expr.after( '=' ) ) {
+			String operand = ""; //FIXME read until space
+			if ( operand.startsWith( "*" ) ) {
+				return env.invoke( a( value.endsWith( operand.substring( 1 ) ) ), expr );
 			}
-			return env.invoke( a( value.charAt( start ) ), arg.skip( '}' ) );
+			if ( operand.endsWith( "*" ) ) {
+				return env.invoke(
+						a( value.startsWith( operand.substring( 0, operand.length() - 1 ) ) ), expr );
+			}
+			return env.invoke( a( value.equalsIgnoreCase( operand ) ), expr );
 		}
-		return env.invoke( JUST, arg );
+		if ( expr.after( '{' ) ) {
+			int start = expr.index( 0 );
+			if ( expr.after( ':' ) ) {
+				int end = expr.index( value.length() - 1 );
+				return env.invoke( a( value.substring( start, end + 1 ) ), expr.gobbleAll( '}' ) );
+			}
+			return env.invoke( a( "" + value.charAt( start ) ), expr.gobbleAll( '}' ) );
+		}
+		return env.invoke( JUST, expr );
 	}
 
 	@Override
@@ -44,4 +54,20 @@ final class StringFunctor
 		return value;
 	}
 
+	private static final class StringFunctorizer
+			implements Functorizer {
+
+		StringFunctorizer() {
+			super(); //make visible
+		}
+
+		@Override
+		public Functor functorize( Object value, SuperFunctorizer sf ) {
+			if ( value instanceof String ) {
+				return new StringFunctor( String.valueOf( value ) );
+			}
+			return NOTHING;
+		}
+
+	}
 }

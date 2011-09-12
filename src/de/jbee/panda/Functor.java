@@ -14,9 +14,9 @@ public interface Functor
 	 * This method is always called for a <code>let</code> expression even in case there is no
 	 * selector expression present. The simple reason is that a {@link Functor} might expect a
 	 * selector. In such a case he can respond accordingly to the invocation with a none-
-	 * {@link Selector}.
+	 * {@link Accessor}.
 	 */
-	Functor invoke( Selector arg, Environment env );
+	Functor invoke( Accessor expr, Environment env );
 
 	void renderedAs( Var var, Environment env );
 }

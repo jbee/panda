@@ -6,7 +6,7 @@ import de.jbee.panda.Functor;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.PredicateNature;
-import de.jbee.panda.Selector;
+import de.jbee.panda.Accessor;
 
 final class NothingFunctor
 		extends ValueFunctor
@@ -19,9 +19,9 @@ final class NothingFunctor
 	}
 
 	@Override
-	public Functor invoke( Selector arg, Environment env ) {
-		if ( arg.after( '?' ) ) {
-			return env.invoke( FALSE, arg );
+	public Functor invoke( Accessor expr, Environment env ) {
+		if ( expr.after( '?' ) ) {
+			return env.invoke( FALSE, expr );
 		}
 		// TODO tell env about invocation on nothing
 		return this;

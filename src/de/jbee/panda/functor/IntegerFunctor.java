@@ -1,15 +1,20 @@
 package de.jbee.panda.functor;
 
-import static de.jbee.panda.functor.Functoring.a;
+import static java.lang.Integer.MAX_VALUE;
+import static java.lang.Integer.MIN_VALUE;
+import de.jbee.panda.Accessor;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
+import de.jbee.panda.SuperFunctorizer;
+import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
-import de.jbee.panda.Selector;
 
 final class IntegerFunctor
 		extends ValueFunctor
 		implements IntegralNature, PredicateNature {
+
+	static final Functorizer FUNCTORIZER = new IntegerFunctorizer();
 
 	private final int value;
 
@@ -18,40 +23,43 @@ final class IntegerFunctor
 		this.value = value;
 	}
 
+	private Functor a( int value ) {
+		return new IntegerFunctor( value );
+	}
+
 	@Override
-	public Functor invoke( Selector arg, Environment env ) {
-		if ( arg.isNone() ) {
+	public Functor invoke( Accessor expr, Environment env ) {
+		if ( expr.isEmpty() ) {
 			return this;
 		}
-		char op = arg.charAt( 0 );
+		char op = expr.charAt( 0 );
 		if ( "+-*/".indexOf( op ) >= 0 ) {
-			arg.skipNext( 1 );
-			if ( arg.isNone() ) {
+			expr.gobbleN( 1 );
+			if ( expr.isEmpty() ) {
 				return op == '-'
-					? env.invoke( a( -value ), arg )
-					: env.invoke( NOTHING, arg );
+					? env.invoke( a( -value ), expr )
+					: env.invoke( NOTHING, expr );
 			}
-			int operand = arg.integer( 0 );
+			int operand = expr.index( 0 );
 			switch ( op ) {
 				case '+':
-					return env.invoke( a( value + operand ), arg );
+					return env.invoke( a( value + operand ), expr );
 				case '-':
-					return env.invoke( a( value - operand ), arg );
+					return env.invoke( a( value - operand ), expr );
 				case '*':
-					return env.invoke( a( value * operand ), arg );
+					return env.invoke( a( value * operand ), expr );
 				case '/':
-					return env.invoke( a( value / operand ), arg );
+					return env.invoke( a( value / operand ), expr );
 			}
 		}
-		if ( arg.after( '?' ) ) { // that is a test 
-			int min = arg.integer( Integer.MIN_VALUE );
-			if ( arg.after( ':' ) ) {
-				return env.invoke( a( value >= min && value <= arg.integer( Integer.MAX_VALUE ) ),
-						arg );
+		if ( expr.after( '=' ) ) {
+			int min = expr.index( MIN_VALUE );
+			if ( expr.after( ':' ) ) {
+				return env.invoke( a( value >= min && value <= expr.index( MAX_VALUE ) ), expr );
 			}
-			return env.invoke( a( value == min ), arg );
+			return env.invoke( a( value == min ), expr );
 		}
-		return env.invoke( JUST, arg );
+		return env.invoke( JUST, expr );
 	}
 
 	@Override
@@ -66,6 +74,23 @@ final class IntegerFunctor
 
 	@Override
 	public boolean is( Environment env ) {
-		return value != 0;
+		return true;
+	}
+
+	private static final class IntegerFunctorizer
+			implements Functorizer {
+
+		IntegerFunctorizer() {
+			super(); //make visible
+		}
+
+		@Override
+		public Functor functorize( Object value, SuperFunctorizer sf ) {
+			if ( value instanceof Integer ) {
+				return new IntegerFunctor( (Integer) value );
+			}
+			return NOTHING;
+		}
+
 	}
 }

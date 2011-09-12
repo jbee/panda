@@ -4,7 +4,7 @@ import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
-import de.jbee.panda.Selector;
+import de.jbee.panda.Accessor;
 
 final class JustFunctor
 		extends ValueFunctor
@@ -22,11 +22,11 @@ final class JustFunctor
 	}
 
 	@Override
-	public Functor invoke( Selector arg, Environment env ) {
-		if ( arg.after( '?' ) ) {
-			return env.invoke( TRUE, arg );
+	public Functor invoke( Accessor expr, Environment env ) {
+		if ( expr.after( '?' ) ) {
+			return env.invoke( TRUE, expr );
 		}
-		return env.invoke( NOTHING, arg );
+		return env.invoke( NOTHING, expr );
 	}
 
 	@Override
