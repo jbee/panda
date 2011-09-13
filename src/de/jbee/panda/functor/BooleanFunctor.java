@@ -3,8 +3,8 @@ package de.jbee.panda.functor;
 import de.jbee.panda.Accessor;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
-import de.jbee.panda.SuperFunctorizer;
 import de.jbee.panda.Functorizer;
+import de.jbee.panda.TypeFunctorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
 
@@ -16,7 +16,7 @@ final class BooleanFunctor
 	static final Functor FALSE_INSTANCE = new BooleanFunctor( false );
 
 	// should be defined after true and false instance!
-	static final Functorizer FUNCTORIZER = new BooleanFunctorizer();
+	static final TypeFunctorizer FUNCTORIZER = new BooleanFunctorizer();
 
 	private final boolean value;
 
@@ -56,14 +56,14 @@ final class BooleanFunctor
 	}
 
 	private static final class BooleanFunctorizer
-			implements Functorizer {
+			implements TypeFunctorizer {
 
 		BooleanFunctorizer() {
 			super(); //make visible
 		}
 
 		@Override
-		public Functor functorize( Object value, SuperFunctorizer sf ) {
+		public Functor functorize( Object value, Functorizer f ) {
 			if ( value instanceof Boolean ) {
 				return ( (Boolean) value ).booleanValue()
 					? TRUE

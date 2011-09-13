@@ -6,11 +6,13 @@ import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.ListNature;
-import de.jbee.panda.SuperFunctorizer;
+import de.jbee.panda.TypeFunctorizer;
 
 final class ListFunctor
 		extends ValueFunctor
 		implements ListNature {
+
+	static final TypeFunctorizer FUNCTORIZER = new ListFunctorizer();
 
 	private final List<Functor> elems;
 
@@ -52,15 +54,19 @@ final class ListFunctor
 	}
 
 	static class ListFunctorizer
-			implements Functorizer {
+			implements TypeFunctorizer {
 
 		@Override
-		public Functor functorize( Object value, SuperFunctorizer sf ) {
+		public Functor functorize( Object value, Functorizer f ) {
 			if ( value instanceof List<?> ) {
-
+				List<?> l = (List<?>) value;
+				List<Functor> elems = List.with.noElements();
+				for ( Object e : List.iterate.backwards( l ) ) {
+					elems = elems.prepand( f.value( e ) );
+				}
+				return new ListFunctor( elems );
 			}
 			return NOTHING;
 		}
-
 	}
 }

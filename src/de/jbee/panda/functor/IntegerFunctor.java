@@ -5,16 +5,16 @@ import static java.lang.Integer.MIN_VALUE;
 import de.jbee.panda.Accessor;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
-import de.jbee.panda.SuperFunctorizer;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
+import de.jbee.panda.TypeFunctorizer;
 
 final class IntegerFunctor
 		extends ValueFunctor
 		implements IntegralNature, PredicateNature {
 
-	static final Functorizer FUNCTORIZER = new IntegerFunctorizer();
+	static final TypeFunctorizer FUNCTORIZER = new IntegerFunctorizer();
 
 	private final int value;
 
@@ -78,16 +78,25 @@ final class IntegerFunctor
 	}
 
 	private static final class IntegerFunctorizer
-			implements Functorizer {
+			implements TypeFunctorizer {
 
 		IntegerFunctorizer() {
 			super(); //make visible
 		}
 
 		@Override
-		public Functor functorize( Object value, SuperFunctorizer sf ) {
+		public Functor functorize( Object value, Functorizer f ) {
 			if ( value instanceof Integer ) {
 				return new IntegerFunctor( (Integer) value );
+			}
+			if ( value instanceof Long ) {
+				return new IntegerFunctor( ( (Long) value ).intValue() );
+			}
+			if ( value instanceof Short ) {
+				return new IntegerFunctor( (Short) value );
+			}
+			if ( value instanceof Byte ) {
+				return new IntegerFunctor( (Byte) value );
 			}
 			return NOTHING;
 		}

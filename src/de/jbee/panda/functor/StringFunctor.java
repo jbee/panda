@@ -3,13 +3,13 @@ package de.jbee.panda.functor;
 import de.jbee.panda.Accessor;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
+import de.jbee.panda.TypeFunctorizer;
 import de.jbee.panda.Functorizer;
-import de.jbee.panda.SuperFunctorizer;
 
 final class StringFunctor
 		extends ValueFunctor {
 
-	static final Functorizer FUNCTORIZER = new StringFunctorizer();
+	static final TypeFunctorizer FUNCTORIZER = new StringFunctorizer();
 
 	private final String value;
 
@@ -55,14 +55,14 @@ final class StringFunctor
 	}
 
 	private static final class StringFunctorizer
-			implements Functorizer {
+			implements TypeFunctorizer {
 
 		StringFunctorizer() {
 			super(); //make visible
 		}
 
 		@Override
-		public Functor functorize( Object value, SuperFunctorizer sf ) {
+		public Functor functorize( Object value, Functorizer f ) {
 			if ( value instanceof String ) {
 				return new StringFunctor( String.valueOf( value ) );
 			}

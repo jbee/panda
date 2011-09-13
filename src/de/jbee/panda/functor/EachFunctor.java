@@ -9,6 +9,13 @@ import de.jbee.panda.Functor;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.Var;
 
+/**
+ * It provides a iteration functionality for lists and object-properties and behaves transparent for
+ * all other values.
+ * 
+ * @author Jan Bernitt (jan.bernitt@gmx.de)
+ * 
+ */
 public class EachFunctor
 		implements Functor {
 

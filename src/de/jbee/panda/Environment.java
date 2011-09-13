@@ -7,5 +7,5 @@ public interface Environment
 
 	void renderFrom( int pos );
 
-	SuperFunctorizer functorize();
+	Functorizer functorize();
 }
