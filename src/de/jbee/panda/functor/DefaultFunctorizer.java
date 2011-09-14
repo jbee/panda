@@ -2,6 +2,7 @@ package de.jbee.panda.functor;
 
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
+import de.jbee.panda.TypeFunctorizer;
 
 public class DefaultFunctorizer
 		implements Functorizer {
@@ -10,8 +11,7 @@ public class DefaultFunctorizer
 
 	@Override
 	public Functor behaviour( String name, Functor f ) {
-		// lookup in map
-		return Functor.NOTHING;
+		return get( name, NothingFunctor.FUNCTORIZER ).functorize( f, this );
 	}
 
 	@Override
@@ -19,8 +19,17 @@ public class DefaultFunctorizer
 		if ( value instanceof Functor ) {
 			return (Functor) value;
 		}
-		// lookup in map
-		return Functor.JUST;
+		return get( value.getClass().getCanonicalName(), JustFunctor.FUNCTORIZER ).functorize(
+				value, this );
 	}
 
+	@Override
+	public Functor format( String name, Object value ) {
+		return get( name, JustFunctor.FUNCTORIZER ).functorize( value, this );
+	}
+
+	private TypeFunctorizer get( String name, TypeFunctorizer fallback ) {
+
+		return fallback;
+	}
 }

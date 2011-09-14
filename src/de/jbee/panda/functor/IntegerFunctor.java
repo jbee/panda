@@ -3,7 +3,8 @@ package de.jbee.panda.functor;
 import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Integer.MIN_VALUE;
 import de.jbee.panda.Accessor;
-import de.jbee.panda.Environment;
+import de.jbee.panda.EvaluationEnv;
+import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
@@ -28,7 +29,7 @@ final class IntegerFunctor
 	}
 
 	@Override
-	public Functor invoke( Accessor expr, Environment env ) {
+	public Functor invoke( Accessor expr, ProcessingEnv env ) {
 		if ( expr.isEmpty() ) {
 			return this;
 		}
@@ -63,17 +64,17 @@ final class IntegerFunctor
 	}
 
 	@Override
-	public String text( Environment env ) {
+	public String text( EvaluationEnv env ) {
 		return String.valueOf( value );
 	}
 
 	@Override
-	public int integer( Environment ent ) {
+	public int integer( EvaluationEnv env ) {
 		return value;
 	}
 
 	@Override
-	public boolean is( Environment env ) {
+	public boolean is( EvaluationEnv env ) {
 		return true;
 	}
 

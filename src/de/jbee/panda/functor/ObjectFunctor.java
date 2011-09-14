@@ -6,7 +6,8 @@ import de.jbee.lang.Ord;
 import de.jbee.lang.Order;
 import de.jbee.lang.Ordering;
 import de.jbee.lang.Set;
-import de.jbee.panda.Environment;
+import de.jbee.panda.EvaluationEnv;
+import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Accessor;
 
@@ -23,7 +24,7 @@ public class ObjectFunctor
 	}
 
 	@Override
-	public Functor invoke( Accessor expr, Environment env ) {
+	public Functor invoke( Accessor expr, ProcessingEnv env ) {
 		if ( expr.isEmpty() ) {
 			return this;
 		}
@@ -45,7 +46,7 @@ public class ObjectFunctor
 	}
 
 	@Override
-	public String text( Environment env ) {
+	public String text( EvaluationEnv env ) {
 		return "{" + name + "}";
 	}
 

@@ -14,4 +14,9 @@ public interface Functorizer {
 	 */
 	Functor value( Object value );
 
+	/**
+	 * Boxes the value by a formatting functor named <code>name</code>.
+	 */
+	Functor format( String name, Object value );
+
 }

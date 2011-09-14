@@ -1,6 +1,6 @@
 package de.jbee.panda.functor;
 
-import de.jbee.panda.Environment;
+import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Var;
 
@@ -14,7 +14,7 @@ public abstract class ValueFunctor
 	}
 
 	@Override
-	public final void renderedAs( Var var, Environment env ) {
+	public final void renderedAs( Var var, ProcessingEnv env ) {
 		// nothing to do
 	}
 }

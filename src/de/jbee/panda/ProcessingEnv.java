@@ -1,7 +1,7 @@
 package de.jbee.panda;
 
-public interface Environment
-		extends CaseEnv {
+public interface ProcessingEnv
+		extends EvaluationEnv {
 
 	void let( Var var, Functor f );
 

@@ -2,5 +2,5 @@ package de.jbee.panda;
 
 public interface Case {
 
-	boolean matchesIn( CaseEnv env );
+	boolean matchesIn( EvaluationEnv env );
 }

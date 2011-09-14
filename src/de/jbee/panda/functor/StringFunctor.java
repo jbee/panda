@@ -1,7 +1,8 @@
 package de.jbee.panda.functor;
 
 import de.jbee.panda.Accessor;
-import de.jbee.panda.Environment;
+import de.jbee.panda.EvaluationEnv;
+import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.TypeFunctorizer;
 import de.jbee.panda.Functorizer;
@@ -23,7 +24,7 @@ final class StringFunctor
 	}
 
 	@Override
-	public Functor invoke( Accessor expr, Environment env ) {
+	public Functor invoke( Accessor expr, ProcessingEnv env ) {
 		if ( expr.isEmpty() ) {
 			return this;
 		}
@@ -50,7 +51,7 @@ final class StringFunctor
 	}
 
 	@Override
-	public String text( Environment env ) {
+	public String text( EvaluationEnv env ) {
 		return value;
 	}
 

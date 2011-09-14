@@ -4,9 +4,12 @@ import static de.jbee.panda.Accessor.elemAt;
 import static java.lang.Integer.MAX_VALUE;
 import de.jbee.lang.List;
 import de.jbee.panda.Accessor;
-import de.jbee.panda.Environment;
+import de.jbee.panda.EvaluationEnv;
+import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.Functor;
+import de.jbee.panda.Functorizer;
 import de.jbee.panda.ListNature;
+import de.jbee.panda.TypeFunctorizer;
 import de.jbee.panda.Var;
 
 /**
@@ -18,6 +21,8 @@ import de.jbee.panda.Var;
  */
 public class EachFunctor
 		implements Functor {
+
+	static final TypeFunctorizer FUNCTORIZER = new EachFunctorizer();
 
 	private final Functor list;
 	private final int index;
@@ -37,7 +42,7 @@ public class EachFunctor
 	}
 
 	@Override
-	public Functor invoke( Accessor expr, Environment env ) {
+	public Functor invoke( Accessor expr, ProcessingEnv env ) {
 		if ( expr.isEmpty() ) {
 			return env.invoke( currentElement( env ), expr );
 		}
@@ -56,16 +61,16 @@ public class EachFunctor
 	}
 
 	@Override
-	public String text( Environment env ) {
+	public String text( EvaluationEnv env ) {
 		return currentElement( env ).text( env );
 	}
 
-	private Functor currentElement( Environment env ) {
+	private Functor currentElement( EvaluationEnv env ) {
 		return env.invoke( list, elemAt( index ) );
 	}
 
 	@Override
-	public void renderedAs( Var var, Environment env ) {
+	public void renderedAs( Var var, ProcessingEnv env ) {
 		if ( list instanceof ListNature ) {
 			ListNature l = (ListNature) list;
 			List<Functor> elems = l.elements( env );
@@ -75,6 +80,16 @@ public class EachFunctor
 				env.renderFrom( 0 ); // zero of the current block
 			}
 		}
+	}
+
+	static final class EachFunctorizer
+			implements TypeFunctorizer {
+
+		@Override
+		public Functor functorize( Object value, Functorizer f ) {
+			return new EachFunctor( f.value( value ) );
+		}
+
 	}
 
 }
