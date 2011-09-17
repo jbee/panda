@@ -2,19 +2,19 @@ package de.jbee.panda.functor;
 
 import de.jbee.panda.Accessor;
 import de.jbee.panda.EvaluationEnv;
-import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
-import de.jbee.panda.TypeFunctorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
+import de.jbee.panda.ProcessingEnv;
+import de.jbee.panda.TypeFunctorizer;
 
 final class BooleanFunctor
 		extends ValueFunctor
 		implements PredicateNature, IntegralNature {
 
-	static final Functor TRUE_INSTANCE = new BooleanFunctor( true );
-	static final Functor FALSE_INSTANCE = new BooleanFunctor( false );
+	private static final Functor TRUE_INSTANCE = new BooleanFunctor( true );
+	private static final Functor FALSE_INSTANCE = new BooleanFunctor( false );
 
 	// should be defined after true and false instance!
 	static final TypeFunctorizer FUNCTORIZER = new BooleanFunctorizer();
@@ -26,17 +26,23 @@ final class BooleanFunctor
 		this.value = value;
 	}
 
+	private Functor a( boolean value ) {
+		return value
+			? TRUE_INSTANCE
+			: FALSE_INSTANCE;
+	}
+
 	@Override
 	public Functor invoke( Accessor expr, ProcessingEnv env ) {
 		if ( expr.after( '!' ) ) {
-			return env.invoke( Functoring.a( !value ), expr );
+			return env.invoke( a( !value ), expr );
 		}
 		if ( expr.after( '=' ) ) {
 			return expr.startsWith( "true" )
-				? env.invoke( TRUE, expr.gobble( "true" ) )
-				: env.invoke( FALSE, expr.gobble( "false" ) );
+				? env.invoke( a( value == true ), expr.gobble( "true" ) )
+				: env.invoke( a( value == false ), expr.gobble( "false" ) );
 		}
-		return env.invoke( JUST, expr );
+		return env.invoke( just( value, env ), expr );
 	}
 
 	@Override
@@ -67,10 +73,10 @@ final class BooleanFunctor
 		public Functor functorize( Object value, Functorizer f ) {
 			if ( value instanceof Boolean ) {
 				return ( (Boolean) value ).booleanValue()
-					? TRUE
-					: FALSE;
+					? TRUE_INSTANCE
+					: FALSE_INSTANCE;
 			}
-			return NOTHING;
+			return f.function( MAYBE, value );
 		}
 
 	}

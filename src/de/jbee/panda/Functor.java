@@ -1,14 +1,13 @@
 package de.jbee.panda;
 
-import de.jbee.panda.functor.Functoring;
-
 public interface Functor
 		extends TextNature {
 
-	Functor NOTHING = Functoring.NOTHING;
-	Functor JUST = Functoring.JUST;
-	Functor TRUE = Functoring.TRUE;
-	Functor FALSE = Functoring.FALSE;
+	Object NOTHING = null;
+
+	String MAYBE = "maybe";
+	String TRUE = "true";
+	String FALSE = "false";
 
 	/**
 	 * This method is always called for a <code>let</code> expression even in case there is no

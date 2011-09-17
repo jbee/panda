@@ -6,10 +6,10 @@ import de.jbee.lang.Ord;
 import de.jbee.lang.Order;
 import de.jbee.lang.Ordering;
 import de.jbee.lang.Set;
-import de.jbee.panda.EvaluationEnv;
-import de.jbee.panda.ProcessingEnv;
-import de.jbee.panda.Functor;
 import de.jbee.panda.Accessor;
+import de.jbee.panda.EvaluationEnv;
+import de.jbee.panda.Functor;
+import de.jbee.panda.ProcessingEnv;
 
 public class ObjectFunctor
 		extends ValueFunctor {
@@ -42,7 +42,7 @@ public class ObjectFunctor
 		if ( m.path.startsWith( property ) ) {
 			return new ObjectFunctor( property, members );
 		}
-		return env.invoke( Functor.JUST, expr );
+		return env.invoke( just( name, env ), expr );
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class ObjectFunctor
 		final Functor functor;
 
 		Member( String path ) {
-			this( path, Functor.NOTHING );
+			this( path, MaybeFunctor.NOTHING );
 		}
 
 		Member( String path, Functor functor ) {

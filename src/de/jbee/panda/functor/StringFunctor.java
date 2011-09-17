@@ -2,10 +2,10 @@ package de.jbee.panda.functor;
 
 import de.jbee.panda.Accessor;
 import de.jbee.panda.EvaluationEnv;
-import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.Functor;
-import de.jbee.panda.TypeFunctorizer;
 import de.jbee.panda.Functorizer;
+import de.jbee.panda.ProcessingEnv;
+import de.jbee.panda.TypeFunctorizer;
 
 final class StringFunctor
 		extends ValueFunctor {
@@ -31,13 +31,14 @@ final class StringFunctor
 		if ( expr.after( '=' ) ) {
 			String operand = ""; //FIXME read until space
 			if ( operand.startsWith( "*" ) ) {
-				return env.invoke( a( value.endsWith( operand.substring( 1 ) ) ), expr );
+				return env.invoke( a( value.endsWith( operand.substring( 1 ) ), env ), expr );
 			}
 			if ( operand.endsWith( "*" ) ) {
-				return env.invoke(
-						a( value.startsWith( operand.substring( 0, operand.length() - 1 ) ) ), expr );
+				return env.invoke( a(
+						value.startsWith( operand.substring( 0, operand.length() - 1 ) ), env ),
+						expr );
 			}
-			return env.invoke( a( value.equalsIgnoreCase( operand ) ), expr );
+			return env.invoke( a( value.equalsIgnoreCase( operand ), env ), expr );
 		}
 		if ( expr.after( '{' ) ) {
 			int start = expr.index( 0 );
@@ -47,7 +48,7 @@ final class StringFunctor
 			}
 			return env.invoke( a( "" + value.charAt( start ) ), expr.gobbleAll( '}' ) );
 		}
-		return env.invoke( JUST, expr );
+		return env.invoke( just( value, env ), expr );
 	}
 
 	@Override
@@ -67,7 +68,7 @@ final class StringFunctor
 			if ( value instanceof String ) {
 				return new StringFunctor( String.valueOf( value ) );
 			}
-			return NOTHING;
+			return f.function( MAYBE, value );
 		}
 
 	}

@@ -11,7 +11,7 @@ public class DefaultFunctorizer
 
 	@Override
 	public Functor behaviour( String name, Functor f ) {
-		return get( name, NothingFunctor.FUNCTORIZER ).functorize( f, this );
+		return get( name, MaybeFunctor.FUNCTORIZER ).functorize( f, this );
 	}
 
 	@Override
@@ -19,13 +19,13 @@ public class DefaultFunctorizer
 		if ( value instanceof Functor ) {
 			return (Functor) value;
 		}
-		return get( value.getClass().getCanonicalName(), JustFunctor.FUNCTORIZER ).functorize(
+		return get( value.getClass().getCanonicalName(), MaybeFunctor.FUNCTORIZER ).functorize(
 				value, this );
 	}
 
 	@Override
-	public Functor format( String name, Object value ) {
-		return get( name, JustFunctor.FUNCTORIZER ).functorize( value, this );
+	public Functor function( String name, Object value ) {
+		return get( name, MaybeFunctor.FUNCTORIZER ).functorize( value, this );
 	}
 
 	private TypeFunctorizer get( String name, TypeFunctorizer fallback ) {

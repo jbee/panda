@@ -3,7 +3,9 @@ package de.jbee.panda;
 public interface Functorizer {
 
 	/**
-	 * Boxes the functor <code>f</code> into another behavioral functor named <code>name</code>.
+	 * Boxes the functor <code>f</code> into another behavioral functor identified by
+	 * <code>name</code>. It is used to resolve the {@linkplain Functor} bound to a new {@link Var}
+	 * inside a <code>let</code> expressions.
 	 * 
 	 * The <code>each</code> functor is an example.
 	 */
@@ -17,6 +19,6 @@ public interface Functorizer {
 	/**
 	 * Boxes the value by a formatting functor named <code>name</code>.
 	 */
-	Functor format( String name, Object value );
+	Functor function( String name, Object value );
 
 }

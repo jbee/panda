@@ -4,11 +4,11 @@ import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Integer.MIN_VALUE;
 import de.jbee.panda.Accessor;
 import de.jbee.panda.EvaluationEnv;
-import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
+import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.TypeFunctorizer;
 
 final class IntegerFunctor
@@ -39,7 +39,7 @@ final class IntegerFunctor
 			if ( expr.isEmpty() ) {
 				return op == '-'
 					? env.invoke( a( -value ), expr )
-					: env.invoke( NOTHING, expr );
+					: env.invoke( nothing( env ), expr );
 			}
 			int operand = expr.index( 0 );
 			switch ( op ) {
@@ -56,11 +56,11 @@ final class IntegerFunctor
 		if ( expr.after( '=' ) ) {
 			int min = expr.index( MIN_VALUE );
 			if ( expr.after( ':' ) ) {
-				return env.invoke( a( value >= min && value <= expr.index( MAX_VALUE ) ), expr );
+				return env.invoke( a( value >= min && value <= expr.index( MAX_VALUE ), env ), expr );
 			}
-			return env.invoke( a( value == min ), expr );
+			return env.invoke( a( value == min, env ), expr );
 		}
-		return env.invoke( JUST, expr );
+		return env.invoke( just( value, env ), expr );
 	}
 
 	@Override
@@ -99,7 +99,7 @@ final class IntegerFunctor
 			if ( value instanceof Byte ) {
 				return new IntegerFunctor( (Byte) value );
 			}
-			return NOTHING;
+			return f.function( MAYBE, value );
 		}
 
 	}

@@ -3,10 +3,10 @@ package de.jbee.panda.functor;
 import de.jbee.lang.List;
 import de.jbee.panda.Accessor;
 import de.jbee.panda.EvaluationEnv;
-import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.ListNature;
+import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.TypeFunctorizer;
 
 final class ListFunctor
@@ -41,7 +41,7 @@ final class ListFunctor
 			return env.invoke( elems.at( start ), expr.gobble( ']' ) );
 		}
 		//OPEN support .1..4. notation for list as part of objects
-		return env.invoke( JUST, expr );
+		return env.invoke( just( elems, env ), expr );
 	}
 
 	@Override
@@ -67,7 +67,7 @@ final class ListFunctor
 				}
 				return new ListFunctor( elems );
 			}
-			return NOTHING;
+			return f.function( MAYBE, value );
 		}
 	}
 }
