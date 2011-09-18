@@ -13,11 +13,10 @@ final class BooleanFunctor
 		extends ValueFunctor
 		implements PredicateNature, IntegralNature {
 
-	private static final Functor TRUE_INSTANCE = new BooleanFunctor( true );
-	private static final Functor FALSE_INSTANCE = new BooleanFunctor( false );
-
-	// should be defined after true and false instance!
 	static final TypeFunctorizer FUNCTORIZER = new BooleanFunctorizer();
+
+	static final Functor TRUE_INSTANCE = new BooleanFunctor( true );
+	static final Functor FALSE_INSTANCE = new BooleanFunctor( false );
 
 	private final boolean value;
 

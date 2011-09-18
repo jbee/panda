@@ -36,7 +36,7 @@ public class ObjectFunctor
 			return members.at( index ).functor;
 		}
 		// TODO does entries with the property prefix exists ?
-		// find insert position - there should be a property with other suffix or not
+		// find insert position - there should be a property with other prefix or not
 		index = List.indexFor.insertBy( new Member( property ), members.order() ).in( members );
 		Member m = members.at( index ); // FIXME the correct index has to be computed
 		if ( m.path.startsWith( property ) ) {
