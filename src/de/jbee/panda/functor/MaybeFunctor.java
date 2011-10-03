@@ -112,6 +112,7 @@ abstract class MaybeFunctor
 
 		@Override
 		public void install( SetupEnv env ) {
+			env.install( Void.class, this );
 			env.install( MAYBE, this );
 		}
 
