@@ -3,6 +3,8 @@ package de.jbee.panda;
 public class Accessor
 		implements CharSequence {
 
+	public static final char OBJECT = '~';
+
 	public static final Accessor EMPTY = new Accessor( "", 0 );
 
 	private final String value;

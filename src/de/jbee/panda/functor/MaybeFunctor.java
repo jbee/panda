@@ -11,14 +11,15 @@ import de.jbee.panda.PredicateNature;
 import de.jbee.panda.SetupEnv;
 import de.jbee.panda.TypeFunctorizer;
 
-final class MaybeFunctor {
+abstract class MaybeFunctor
+		extends ValueFunctor {
 
 	static final TypeFunctorizer FUNCTORIZER = new MaybeFunctorizer();
 
 	static final Functor NOTHING_INSTANCE = new NothingFunctor();
 
 	private static final class JustFunctor
-			extends ValueFunctor
+			extends MaybeFunctor
 			implements PredicateNature, IntegralNature {
 
 		private final Object value;
@@ -58,7 +59,7 @@ final class MaybeFunctor {
 	}
 
 	private static final class NothingFunctor
-			extends ValueFunctor
+			extends MaybeFunctor
 			implements PredicateNature, IntegralNature, ListNature {
 
 		NothingFunctor() {

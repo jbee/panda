@@ -49,11 +49,12 @@ public class TestFunctorizer {
 		ProcessingEnv env = new Environment();
 		Functor obj = env.functorize().value( new ObjectType() );
 		assertThat( obj, is( ObjectFunctor.class ) );
-		Functor e = obj.invoke( Accessor.of( ".0" ), env );
+		Functor e = obj.invoke( Accessor.of( "." + Accessor.OBJECT ), env );
 		assertThat( e, is( ObjectFunctor.class ) );
-		e = obj.invoke( Accessor.of( ".0.type" ), env );
+		assertThat( e.invoke( Accessor.of( ".type" ), env ), is( StringFunctor.class ) );
+		e = obj.invoke( Accessor.of( "." + Accessor.OBJECT + ".type" ), env );
 		assertThat( e, is( StringFunctor.class ) );
-		e = obj.invoke( Accessor.of( ".0.text" ), env );
+		e = obj.invoke( Accessor.of( "." + Accessor.OBJECT + ".text" ), env );
 		assertThat( e, is( StringFunctor.class ) );
 	}
 }

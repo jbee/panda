@@ -40,9 +40,9 @@ public class ObjectFunctor
 		}
 		if ( expr.after( '.' ) ) {
 			String property = expr.property( null );
-			if ( expr.startsWith( '0' ) ) {
+			if ( expr.startsWith( Accessor.OBJECT ) ) {
 				property = TypeFunctorizer.OBJECT;
-				expr.gobble( '0' );
+				expr.gobble( Accessor.OBJECT );
 			}
 			if ( property != null ) {
 				return invoke( expr, env, absoluteProperty( property ) );
@@ -120,16 +120,14 @@ public class ObjectFunctor
 
 		@Override
 		public Functor functorize( Object value, Functorizer f ) {
-			if ( value == null ) {
+			if ( value == NOTHING ) {
 				return f.behaviour( MAYBE, value );
 			}
-			// TODO Auto-generated method stub
-			if ( true ) {
-				return new ObjectFunctor( Set.with.elements( ORDER, List.with.elements( member(
-						OBJECT + ".type", value.getClass().getCanonicalName(), f ), member( OBJECT
-						+ ".text", String.valueOf( value ), f ) ) ) );
-			}
-			return f.behaviour( MAYBE, value );
+			// TODO real object functorization
+			Set<Member> elements = Set.with.elements( ORDER, List.with.elements( member( OBJECT
+					+ ".type", value.getClass().getCanonicalName(), f ), member( OBJECT + ".text",
+					String.valueOf( value ), f ) ) );
+			return new ObjectFunctor( elements );
 		}
 
 		private Member member( String path, String text, Functorizer f ) {
