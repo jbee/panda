@@ -9,16 +9,17 @@ public interface Functorizer {
 	 * 
 	 * The <code>each</code> functor is an example.
 	 */
-	Functor behaviour( String name, Functor f );
+	//Functor behaviour( String name, Functor f );
 
 	/**
-	 * Wraps the value into a functor. The {@link Functor} chosen is resolved by the values type.
+	 * Expands the <code>value</code> into a functor. The {@link Functor} chosen is resolved by the
+	 * value's type.
 	 */
 	Functor value( Object value );
 
 	/**
 	 * Boxes the value by a formatting functor named <code>name</code>.
 	 */
-	Functor function( String name, Object value );
+	Functor behaviour( String name, Object value );
 
 }

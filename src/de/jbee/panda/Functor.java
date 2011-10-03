@@ -3,11 +3,10 @@ package de.jbee.panda;
 public interface Functor
 		extends TextNature {
 
+	/**
+	 * The value that means nothing
+	 */
 	Object NOTHING = null;
-
-	String MAYBE = "maybe";
-	String TRUE = "true";
-	String FALSE = "false";
 
 	/**
 	 * This method is always called for a <code>let</code> expression even in case there is no

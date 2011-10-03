@@ -9,5 +9,22 @@ package de.jbee.panda;
  */
 public interface TypeFunctorizer {
 
+	/**
+	 * name of the default {@link TypeFunctorizer}. That is the one used when determination by type
+	 * or name failed.
+	 */
+	String DEFAULT = "__default__";
+
+	/**
+	 * name of the maybe {@link TypeFunctorizer}
+	 */
+	String MAYBE = "maybe";
+
+	String TRUE = "true";
+
+	String FALSE = "false";
+
 	Functor functorize( Object value, Functorizer f );
+
+	void install( SetupEnv env );
 }

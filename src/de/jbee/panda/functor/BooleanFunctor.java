@@ -6,6 +6,7 @@ import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
+import de.jbee.panda.SetupEnv;
 import de.jbee.panda.TypeFunctorizer;
 
 final class BooleanFunctor
@@ -74,7 +75,15 @@ final class BooleanFunctor
 					? TRUE_INSTANCE
 					: FALSE_INSTANCE;
 			}
-			return f.function( MAYBE, value );
+			return f.behaviour( TypeFunctorizer.MAYBE, value );
+		}
+
+		@Override
+		public void install( SetupEnv env ) {
+			env.install( boolean.class, this );
+			env.install( Boolean.class, this );
+			env.install( TypeFunctorizer.TRUE, new StaticTypeFunctorizer( TRUE_INSTANCE ) );
+			env.install( TypeFunctorizer.FALSE, new StaticTypeFunctorizer( FALSE_INSTANCE ) );
 		}
 
 	}

@@ -8,6 +8,7 @@ import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
+import de.jbee.panda.SetupEnv;
 import de.jbee.panda.TypeFunctorizer;
 
 final class IntegerFunctor
@@ -23,7 +24,7 @@ final class IntegerFunctor
 		this.value = value;
 	}
 
-	private Functor a( int value ) {
+	static Functor a( int value ) {
 		return new IntegerFunctor( value );
 	}
 
@@ -87,18 +88,28 @@ final class IntegerFunctor
 		@Override
 		public Functor functorize( Object value, Functorizer f ) {
 			if ( value instanceof Integer ) {
-				return new IntegerFunctor( (Integer) value );
+				return a( (Integer) value );
 			}
 			if ( value instanceof Long ) {
-				return new IntegerFunctor( ( (Long) value ).intValue() );
+				return a( ( (Long) value ).intValue() );
 			}
 			if ( value instanceof Short ) {
-				return new IntegerFunctor( (Short) value );
+				return a( (Short) value );
 			}
 			if ( value instanceof Byte ) {
-				return new IntegerFunctor( (Byte) value );
+				return a( (Byte) value );
 			}
-			return f.function( MAYBE, value );
+			return f.behaviour( TypeFunctorizer.MAYBE, value );
+		}
+
+		@Override
+		public void install( SetupEnv env ) {
+			env.install( int.class, this );
+			env.install( Integer.class, this );
+			env.install( long.class, this );
+			env.install( Long.class, this );
+			env.install( Short.class, this );
+			env.install( Byte.class, this );
 		}
 
 	}

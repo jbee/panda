@@ -5,10 +5,11 @@ import static java.lang.Integer.MAX_VALUE;
 import de.jbee.lang.List;
 import de.jbee.panda.Accessor;
 import de.jbee.panda.EvaluationEnv;
-import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
+import de.jbee.panda.SetupEnv;
 import de.jbee.panda.ListNature;
+import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.TypeFunctorizer;
 import de.jbee.panda.Var;
 
@@ -88,6 +89,11 @@ public class EachFunctor
 		@Override
 		public Functor functorize( Object value, Functorizer f ) {
 			return new EachFunctor( f.value( value ) );
+		}
+
+		@Override
+		public void install( SetupEnv env ) {
+			env.install( "each", this );
 		}
 
 	}

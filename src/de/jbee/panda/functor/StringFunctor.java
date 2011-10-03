@@ -4,6 +4,7 @@ import de.jbee.panda.Accessor;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
+import de.jbee.panda.SetupEnv;
 import de.jbee.panda.TypeFunctorizer;
 
 final class StringFunctor
@@ -67,7 +68,12 @@ final class StringFunctor
 			if ( value instanceof String ) {
 				return new StringFunctor( String.valueOf( value ) );
 			}
-			return f.function( MAYBE, value );
+			return f.behaviour( TypeFunctorizer.MAYBE, value );
+		}
+
+		@Override
+		public void install( SetupEnv env ) {
+			env.install( String.class, this );
 		}
 
 	}

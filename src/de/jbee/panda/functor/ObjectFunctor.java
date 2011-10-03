@@ -9,9 +9,14 @@ import de.jbee.lang.Set;
 import de.jbee.panda.Accessor;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
+import de.jbee.panda.Functorizer;
+import de.jbee.panda.SetupEnv;
+import de.jbee.panda.TypeFunctorizer;
 
 public class ObjectFunctor
 		extends ValueFunctor {
+
+	static final TypeFunctorizer FUNCTORIZER = new ObjectFunctorizer();
 
 	private final String name;
 	private final Set<Member> members;
@@ -96,4 +101,27 @@ public class ObjectFunctor
 
 	}
 
+	private static final class ObjectFunctorizer
+			implements TypeFunctorizer {
+
+		ObjectFunctorizer() {
+			// make visible
+		}
+
+		@Override
+		public Functor functorize( Object value, Functorizer f ) {
+			if ( value == null ) {
+				return f.behaviour( TypeFunctorizer.MAYBE, value );
+			}
+			// TODO Auto-generated method stub
+			return f.behaviour( TypeFunctorizer.MAYBE, value );
+		}
+
+		@Override
+		public void install( SetupEnv env ) {
+			env.install( DEFAULT, this );
+			env.install( Object.class, this );
+		}
+
+	}
 }

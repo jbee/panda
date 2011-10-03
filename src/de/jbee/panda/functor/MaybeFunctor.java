@@ -5,6 +5,7 @@ import de.jbee.panda.Accessor;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
+import de.jbee.panda.SetupEnv;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.PredicateNature;
@@ -106,6 +107,11 @@ final class MaybeFunctor {
 			return value == Functor.NOTHING
 				? NOTHING
 				: new JustFunctor( value );
+		}
+
+		@Override
+		public void install( SetupEnv env ) {
+			env.install( TypeFunctorizer.MAYBE, this );
 		}
 
 	}
