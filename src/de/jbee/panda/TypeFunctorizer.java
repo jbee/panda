@@ -23,6 +23,8 @@ public interface TypeFunctorizer {
 
 	String LIST = "__list__";
 
+	String NOTHING = "__null__";
+
 	/**
 	 * name of the maybe {@link TypeFunctorizer}
 	 */
