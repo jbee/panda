@@ -78,18 +78,19 @@ public class Accessor
 		return this;
 	}
 
-	@Deprecated
-	public String readPattern( String regex ) {
-
-		return "";
-	}
-
-	public int index( int def ) {
+	public int index( int defaultIndex ) {
 		if ( !Character.isDigit( charAt( 0 ) ) ) {
-			return def;
+			return defaultIndex;
 		}
-		//TODO parse
-		return def;
+		StringBuilder b = new StringBuilder();
+		int i = 0;
+		while ( Character.isDigit( charAt( i ) ) ) {
+			b.append( charAt( i ) );
+			i++;
+		}
+		final int l = b.length();
+		start += l;
+		return Integer.parseInt( value.substring( start - l, start ) );
 	}
 
 	@Override
@@ -128,6 +129,21 @@ public class Accessor
 
 	public static Accessor range( int start, int end ) {
 		return of( "[" + start + ":" + end + "]" );
+	}
+
+	public String property( String defaultProperty ) {
+		if ( !Character.isLetter( charAt( 0 ) ) ) {
+			return defaultProperty;
+		}
+		StringBuilder b = new StringBuilder();
+		int i = 0;
+		while ( Character.isLetter( charAt( i ) ) ) {
+			b.append( charAt( i ) );
+			i++;
+		}
+		final int l = b.length();
+		start += l;
+		return value.substring( start - l, start );
 	}
 
 }

@@ -27,20 +27,31 @@ public class ObjectFunctor
 		if ( expr.isEmpty() ) {
 			return this;
 		}
-		String property = expr.readPattern( "\\w+(\\.\\w+)*" );
-		//FIXME do one deref at a time than recall invoke through the env.
-		int index = members.indexFor( new Member( property( property ) ) );
-		if ( index != ListIndex.NOT_CONTAINED ) {
-			return members.at( index ).functor;
-		}
-		// TODO does entries with the property prefix exists ?
-		// find insert position - there should be a property with other prefix or not
-		index = List.indexFor.insertBy( new Member( property ), members.order() ).in( members );
-		Member m = members.at( index ); // FIXME the correct index has to be computed
-		if ( m.path.startsWith( property ) ) {
-			return new ObjectFunctor( property, members );
+		if ( expr.after( '.' ) ) {
+			String property = expr.property( null );
+			if ( property != null ) {
+				return invoke( expr, env, absoluteProperty( property ) );
+			}
+			return env.invoke( nothing( env ), expr );
 		}
 		return env.invoke( just( name, env ), expr );
+	}
+
+	private Functor invoke( Accessor expr, EvaluationEnv env, String property ) {
+		// access of a non (sub-) object member 
+		int index = members.indexFor( new Member( property ) );
+		if ( index != ListIndex.NOT_CONTAINED ) {
+			return env.invoke( members.at( index ).functor, expr );
+		}
+		// access of a (sub-) object member:
+		// is there a member with the property as a prefix ?
+		// find insert position - there should be a property with other prefix or not
+		index = List.indexFor.insertBy( new Member( property ), members.order() ).in( members );
+		Member m = members.at( index ); // FIXME corner case: insert would be append -> IOOBE
+		if ( m.path.startsWith( property ) ) {
+			return env.invoke( new ObjectFunctor( property, members ), expr );
+		}
+		return env.invoke( nothing( env ), expr );
 	}
 
 	@Override
@@ -48,7 +59,7 @@ public class ObjectFunctor
 		return "{" + name + "}";
 	}
 
-	private String property( String property ) {
+	private String absoluteProperty( String property ) {
 		return name.isEmpty()
 			? property
 			: name + "." + property;
