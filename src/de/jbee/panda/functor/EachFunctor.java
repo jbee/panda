@@ -42,7 +42,7 @@ public class EachFunctor
 	}
 
 	@Override
-	public Functor invoke( Accessor expr, ProcessingEnv env ) {
+	public Functor invoke( Accessor expr, EvaluationEnv env ) {
 		if ( expr.isEmpty() ) {
 			return env.invoke( currentElement( env ), expr );
 		}

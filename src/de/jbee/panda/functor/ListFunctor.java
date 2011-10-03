@@ -6,7 +6,6 @@ import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.ListNature;
-import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.TypeFunctorizer;
 
 final class ListFunctor
@@ -27,7 +26,7 @@ final class ListFunctor
 	}
 
 	@Override
-	public Functor invoke( Accessor expr, ProcessingEnv env ) {
+	public Functor invoke( Accessor expr, EvaluationEnv env ) {
 		if ( expr.isEmpty() ) {
 			return this;
 		}

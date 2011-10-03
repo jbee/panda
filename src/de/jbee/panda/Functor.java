@@ -15,7 +15,7 @@ public interface Functor
 	 * selector. In such a case he can respond accordingly to the invocation with a none-
 	 * {@link Accessor}.
 	 */
-	Functor invoke( Accessor expr, ProcessingEnv env );
+	Functor invoke( Accessor expr, EvaluationEnv env );
 
 	void renderedAs( Var var, ProcessingEnv env );
 }

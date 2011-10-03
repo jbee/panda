@@ -8,7 +8,6 @@ import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.PredicateNature;
-import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.TypeFunctorizer;
 
 final class MaybeFunctor {
@@ -36,7 +35,7 @@ final class MaybeFunctor {
 		}
 
 		@Override
-		public Functor invoke( Accessor expr, ProcessingEnv env ) {
+		public Functor invoke( Accessor expr, EvaluationEnv env ) {
 			if ( expr.after( '?' ) ) {
 				return env.invoke( a( true, env ), expr );
 			}
@@ -66,7 +65,7 @@ final class MaybeFunctor {
 		}
 
 		@Override
-		public Functor invoke( Accessor expr, ProcessingEnv env ) {
+		public Functor invoke( Accessor expr, EvaluationEnv env ) {
 			if ( expr.after( '?' ) ) {
 				return env.invoke( a( false, env ), expr );
 			}

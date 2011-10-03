@@ -6,7 +6,6 @@ import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
-import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.TypeFunctorizer;
 
 final class BooleanFunctor
@@ -32,7 +31,7 @@ final class BooleanFunctor
 	}
 
 	@Override
-	public Functor invoke( Accessor expr, ProcessingEnv env ) {
+	public Functor invoke( Accessor expr, EvaluationEnv env ) {
 		if ( expr.after( '!' ) ) {
 			return env.invoke( a( !value ), expr );
 		}

@@ -1,7 +1,7 @@
 package de.jbee.panda.functor;
 
-import de.jbee.lang.Equal;
 import de.jbee.lang.List;
+import de.jbee.lang.ListIndex;
 import de.jbee.lang.Ord;
 import de.jbee.lang.Order;
 import de.jbee.lang.Ordering;
@@ -9,7 +9,6 @@ import de.jbee.lang.Set;
 import de.jbee.panda.Accessor;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
-import de.jbee.panda.ProcessingEnv;
 
 public class ObjectFunctor
 		extends ValueFunctor {
@@ -24,15 +23,14 @@ public class ObjectFunctor
 	}
 
 	@Override
-	public Functor invoke( Accessor expr, ProcessingEnv env ) {
+	public Functor invoke( Accessor expr, EvaluationEnv env ) {
 		if ( expr.isEmpty() ) {
 			return this;
 		}
 		String property = expr.readPattern( "\\w+(\\.\\w+)*" );
-		//TODO replace with binary search index lookup
-		int index = Set.indexFor.elemBy( new Member( property( property ) ),
-				Equal.by( members.order() ) ).in( members );
-		if ( index >= 0 ) {
+		//FIXME do one deref at a time than recall invoke through the env.
+		int index = members.indexFor( new Member( property( property ) ) );
+		if ( index != ListIndex.NOT_CONTAINED ) {
 			return members.at( index ).functor;
 		}
 		// TODO does entries with the property prefix exists ?

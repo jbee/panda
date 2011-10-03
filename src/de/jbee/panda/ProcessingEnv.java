@@ -7,5 +7,4 @@ public interface ProcessingEnv
 
 	void renderFrom( int pos );
 
-	Functorizer functorize();
 }
