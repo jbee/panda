@@ -75,7 +75,7 @@ final class BooleanFunctor
 					? TRUE_INSTANCE
 					: FALSE_INSTANCE;
 			}
-			return f.behaviour( TypeFunctorizer.MAYBE, value );
+			return f.behaviour( MAYBE, value );
 		}
 
 		@Override

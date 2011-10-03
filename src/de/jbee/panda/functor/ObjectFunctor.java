@@ -76,7 +76,7 @@ public class ObjectFunctor
 		final Functor functor;
 
 		Member( String path ) {
-			this( path, MaybeFunctor.NOTHING );
+			this( path, MaybeFunctor.NOTHING_INSTANCE );
 		}
 
 		Member( String path, Functor functor ) {
@@ -111,10 +111,10 @@ public class ObjectFunctor
 		@Override
 		public Functor functorize( Object value, Functorizer f ) {
 			if ( value == null ) {
-				return f.behaviour( TypeFunctorizer.MAYBE, value );
+				return f.behaviour( MAYBE, value );
 			}
 			// TODO Auto-generated method stub
-			return f.behaviour( TypeFunctorizer.MAYBE, value );
+			return f.behaviour( MAYBE, value );
 		}
 
 		@Override

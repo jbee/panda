@@ -15,6 +15,12 @@ public interface TypeFunctorizer {
 	 */
 	String DEFAULT = "__default__";
 
+	String TEXT = "__text__";
+
+	String NUMBER = "__number__";
+
+	String LIST = "__list__";
+
 	/**
 	 * name of the maybe {@link TypeFunctorizer}
 	 */

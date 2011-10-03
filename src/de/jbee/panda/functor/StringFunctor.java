@@ -68,12 +68,20 @@ final class StringFunctor
 			if ( value instanceof String ) {
 				return new StringFunctor( String.valueOf( value ) );
 			}
-			return f.behaviour( TypeFunctorizer.MAYBE, value );
+			if ( value instanceof CharSequence ) {
+				return new StringFunctor( value.toString() );
+			}
+			if ( value instanceof char[] ) {
+				return new StringFunctor( String.valueOf( (char[]) value ) );
+			}
+			return f.behaviour( MAYBE, value );
 		}
 
 		@Override
 		public void install( SetupEnv env ) {
 			env.install( String.class, this );
+			env.install( char[].class, this );
+			env.install( TEXT, this );
 		}
 
 	}

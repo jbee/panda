@@ -5,8 +5,8 @@ import de.jbee.panda.Accessor;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
-import de.jbee.panda.SetupEnv;
 import de.jbee.panda.ListNature;
+import de.jbee.panda.SetupEnv;
 import de.jbee.panda.TypeFunctorizer;
 
 final class ListFunctor
@@ -67,12 +67,12 @@ final class ListFunctor
 				}
 				return new ListFunctor( elems );
 			}
-			return f.behaviour( TypeFunctorizer.MAYBE, value );
+			return f.behaviour( MAYBE, value );
 		}
 
 		@Override
 		public void install( SetupEnv env ) {
-			env.install( "list", this );
+			env.install( LIST, this );
 		}
 	}
 }

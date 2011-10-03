@@ -99,7 +99,7 @@ final class IntegerFunctor
 			if ( value instanceof Byte ) {
 				return a( (Byte) value );
 			}
-			return f.behaviour( TypeFunctorizer.MAYBE, value );
+			return f.behaviour( MAYBE, value );
 		}
 
 		@Override
@@ -110,6 +110,7 @@ final class IntegerFunctor
 			env.install( Long.class, this );
 			env.install( Short.class, this );
 			env.install( Byte.class, this );
+			env.install( NUMBER, this );
 		}
 
 	}

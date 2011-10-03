@@ -5,17 +5,17 @@ import de.jbee.panda.Accessor;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
-import de.jbee.panda.SetupEnv;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.PredicateNature;
+import de.jbee.panda.SetupEnv;
 import de.jbee.panda.TypeFunctorizer;
 
 final class MaybeFunctor {
 
 	static final TypeFunctorizer FUNCTORIZER = new MaybeFunctorizer();
 
-	static final Functor NOTHING = new NothingFunctor();
+	static final Functor NOTHING_INSTANCE = new NothingFunctor();
 
 	private static final class JustFunctor
 			extends ValueFunctor
@@ -105,13 +105,13 @@ final class MaybeFunctor {
 		@Override
 		public Functor functorize( Object value, Functorizer f ) {
 			return value == Functor.NOTHING
-				? NOTHING
+				? NOTHING_INSTANCE
 				: new JustFunctor( value );
 		}
 
 		@Override
 		public void install( SetupEnv env ) {
-			env.install( TypeFunctorizer.MAYBE, this );
+			env.install( MAYBE, this );
 		}
 
 	}
