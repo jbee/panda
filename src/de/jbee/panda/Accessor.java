@@ -84,7 +84,7 @@ public class Accessor
 		}
 		StringBuilder b = new StringBuilder();
 		int i = 0;
-		while ( Character.isDigit( charAt( i ) ) ) {
+		while ( i < length() && Character.isDigit( charAt( i ) ) ) {
 			b.append( charAt( i ) );
 			i++;
 		}
@@ -137,11 +137,41 @@ public class Accessor
 		}
 		StringBuilder b = new StringBuilder();
 		int i = 0;
-		while ( Character.isLetter( charAt( i ) ) ) {
+		while ( i < length() && Character.isLetter( charAt( i ) ) ) {
 			b.append( charAt( i ) );
 			i++;
 		}
 		final int l = b.length();
+		start += l;
+		return value.substring( start - l, start );
+	}
+
+	public String until( char c ) {
+		int i = 0;
+		while ( i < length() && charAt( i ) != c ) {
+			i++;
+		}
+		if ( i >= length() ) {
+			String res = value.substring( start );
+			start = value.length();
+			return res;
+		}
+		int l = i - 1;
+		start += l;
+		return value.substring( start - l, start );
+	}
+
+	public String untilWhitespace() {
+		int i = 0;
+		while ( i < length() && !Character.isWhitespace( charAt( i ) ) ) {
+			i++;
+		}
+		if ( i >= length() ) {
+			String res = value.substring( start );
+			start = value.length();
+			return res;
+		}
+		int l = i - 1;
 		start += l;
 		return value.substring( start - l, start );
 	}

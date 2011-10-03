@@ -29,7 +29,7 @@ final class StringFunctor
 			return this;
 		}
 		if ( expr.after( '=' ) ) {
-			String operand = ""; //FIXME read until space
+			String operand = expr.untilWhitespace();
 			if ( operand.startsWith( "*" ) ) {
 				return env.invoke( a( value.endsWith( operand.substring( 1 ) ), env ), expr );
 			}
