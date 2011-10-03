@@ -18,8 +18,14 @@ public class ObjectFunctor
 
 	static final TypeFunctorizer FUNCTORIZER = new ObjectFunctorizer();
 
+	static final Ord<Object> ORDER = Order.typeaware( new MemberOrd(), Member.class );
+
 	private final String name;
 	private final Set<Member> members;
+
+	ObjectFunctor( Set<Member> members ) {
+		this( "", members );
+	}
 
 	ObjectFunctor( String name, Set<Member> members ) {
 		super();
@@ -34,6 +40,10 @@ public class ObjectFunctor
 		}
 		if ( expr.after( '.' ) ) {
 			String property = expr.property( null );
+			if ( expr.startsWith( '0' ) ) {
+				property = TypeFunctorizer.OBJECT;
+				expr.gobble( '0' );
+			}
 			if ( property != null ) {
 				return invoke( expr, env, absoluteProperty( property ) );
 			}
@@ -114,7 +124,16 @@ public class ObjectFunctor
 				return f.behaviour( MAYBE, value );
 			}
 			// TODO Auto-generated method stub
+			if ( true ) {
+				return new ObjectFunctor( Set.with.elements( ORDER, List.with.elements( member(
+						OBJECT + ".type", value.getClass().getCanonicalName(), f ), member( OBJECT
+						+ ".text", String.valueOf( value ), f ) ) ) );
+			}
 			return f.behaviour( MAYBE, value );
+		}
+
+		private Member member( String path, String text, Functorizer f ) {
+			return new ObjectFunctor.Member( path, f.value( text ) );
 		}
 
 		@Override

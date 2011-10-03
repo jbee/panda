@@ -90,14 +90,8 @@ final class IntegerFunctor
 			if ( value instanceof Integer ) {
 				return a( (Integer) value );
 			}
-			if ( value instanceof Long ) {
-				return a( ( (Long) value ).intValue() );
-			}
-			if ( value instanceof Short ) {
-				return a( (Short) value );
-			}
-			if ( value instanceof Byte ) {
-				return a( (Byte) value );
+			if ( value instanceof Number ) {
+				return a( ( (Number) value ).intValue() );
 			}
 			return f.behaviour( MAYBE, value );
 		}

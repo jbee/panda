@@ -34,15 +34,19 @@ public class Accessor
 	}
 
 	public boolean isEmpty() {
-		return length() < 0;
+		return length() <= 0;
 	}
 
 	public boolean startsWith( char prefix ) {
-		return charAt( 0 ) == prefix;
+		return isEmpty()
+			? false
+			: charAt( 0 ) == prefix;
 	}
 
 	public boolean startsWith( String prefix ) {
-		return value.startsWith( prefix, start );
+		return isEmpty()
+			? false
+			: value.startsWith( prefix, start );
 	}
 
 	public Accessor gobble( String prefix ) {

@@ -15,6 +15,8 @@ public interface TypeFunctorizer {
 	 */
 	String DEFAULT = "__default__";
 
+	String OBJECT = "__obj__";
+
 	String TEXT = "__text__";
 
 	String NUMBER = "__number__";
