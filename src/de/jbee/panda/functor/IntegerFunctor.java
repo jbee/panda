@@ -2,7 +2,7 @@ package de.jbee.panda.functor;
 
 import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Integer.MIN_VALUE;
-import de.jbee.panda.Accessor;
+import de.jbee.panda.Selector;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
@@ -29,7 +29,7 @@ final class IntegerFunctor
 	}
 
 	@Override
-	public Functor invoke( Accessor expr, EvaluationEnv env ) {
+	public Functor invoke( Selector expr, EvaluationEnv env ) {
 		if ( expr.isEmpty() ) {
 			return this;
 		}

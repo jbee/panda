@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 import de.jbee.lang.List;
-import de.jbee.panda.Accessor;
+import de.jbee.panda.Selector;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
@@ -49,12 +49,12 @@ public class TestFunctorizer {
 		ProcessingEnv env = new Environment();
 		Functor obj = env.functorize().value( new ObjectType() );
 		assertThat( obj, is( ObjectFunctor.class ) );
-		Functor e = obj.invoke( Accessor.of( "." + Accessor.OBJECT ), env );
+		Functor e = obj.invoke( Selector.of( "." + Selector.OBJECT ), env );
 		assertThat( e, is( ObjectFunctor.class ) );
-		assertThat( e.invoke( Accessor.of( ".type" ), env ), is( StringFunctor.class ) );
-		e = obj.invoke( Accessor.of( "." + Accessor.OBJECT + ".type" ), env );
+		assertThat( e.invoke( Selector.of( ".type" ), env ), is( StringFunctor.class ) );
+		e = obj.invoke( Selector.of( "." + Selector.OBJECT + ".type" ), env );
 		assertThat( e, is( StringFunctor.class ) );
-		e = obj.invoke( Accessor.of( "." + Accessor.OBJECT + ".text" ), env );
+		e = obj.invoke( Selector.of( "." + Selector.OBJECT + ".text" ), env );
 		assertThat( e, is( StringFunctor.class ) );
 	}
 }

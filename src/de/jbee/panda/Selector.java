@@ -1,23 +1,23 @@
 package de.jbee.panda;
 
-public class Accessor
+public final class Selector
 		implements CharSequence {
 
 	public static final char OBJECT = '~';
 
-	public static final Accessor EMPTY = new Accessor( "", 0 );
+	public static final Selector EMPTY = new Selector( "", 0 );
 
 	private final String value;
 	private int start;
 
-	private Accessor( String value, int start ) {
+	private Selector( String value, int start ) {
 		super();
 		this.value = value;
 		this.start = Math.min( start, value.length() );
 	}
 
-	public Accessor join( Accessor sub ) {
-		return new Accessor( value + sub.toString(), start );
+	public Selector join( Selector sub ) {
+		return new Selector( value + sub.toString(), start );
 	}
 
 	@Override
@@ -27,12 +27,12 @@ public class Accessor
 			: value.substring( start );
 	}
 
-	public static Accessor of( String value ) {
-		return new Accessor( value, 0 );
+	public static Selector of( String value ) {
+		return new Selector( value, 0 );
 	}
 
-	public Accessor fork() {
-		return new Accessor( value, start );
+	public Selector fork() {
+		return new Selector( value, start );
 	}
 
 	public boolean isEmpty() {
@@ -51,21 +51,21 @@ public class Accessor
 			: value.startsWith( prefix, start );
 	}
 
-	public Accessor gobble( String prefix ) {
+	public Selector gobble( String prefix ) {
 		if ( startsWith( prefix ) ) {
 			start += prefix.length();
 		}
 		return this;
 	}
 
-	public Accessor gobble( char prefix ) {
+	public Selector gobble( char prefix ) {
 		if ( startsWith( prefix ) ) {
 			start++;
 		}
 		return this;
 	}
 
-	public Accessor gobbleAll( char c ) {
+	public Selector gobbleAll( char c ) {
 		if ( length() < 0 ) {
 			return this;
 		}
@@ -76,7 +76,7 @@ public class Accessor
 		return this;
 	}
 
-	public Accessor gobbleN( int length ) {
+	public Selector gobbleN( int length ) {
 		int l = length();
 		if ( length > 0 && l > 0 ) {
 			start = Math.min( l, start + length );
@@ -111,10 +111,10 @@ public class Accessor
 
 	@Override
 	public CharSequence subSequence( int start, int end ) {
-		return new Accessor( value.substring( start + start, end ), 0 );
+		return new Selector( value.substring( start + start, end ), 0 );
 	}
 
-	public static Accessor elemAt( int index ) {
+	public static Selector elemAt( int index ) {
 		return of( "[" + index + "]" );
 	}
 
@@ -133,7 +133,7 @@ public class Accessor
 		return cond;
 	}
 
-	public static Accessor range( int start, int end ) {
+	public static Selector range( int start, int end ) {
 		return of( "[" + start + ":" + end + "]" );
 	}
 

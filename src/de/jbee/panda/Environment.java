@@ -67,7 +67,7 @@ public class Environment
 	}
 
 	@Override
-	public Functor invoke( Functor f, Accessor expr ) {
+	public Functor invoke( Functor f, Selector expr ) {
 		return f.invoke( expr, this );
 	}
 
