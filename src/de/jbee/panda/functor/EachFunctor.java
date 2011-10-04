@@ -29,13 +29,13 @@ public class EachFunctor
 	private final Functor elements;
 	private final int index;
 
-	EachFunctor( Functor list ) {
-		this( list, 0 );
+	EachFunctor( Functor elements ) {
+		this( elements, 0 );
 	}
 
-	private EachFunctor( Functor list, int index ) {
+	private EachFunctor( Functor elements, int index ) {
 		super();
-		this.elements = list;
+		this.elements = elements;
 		this.index = index;
 	}
 
@@ -72,7 +72,7 @@ public class EachFunctor
 	}
 
 	@Override
-	public void processedAs( Var var, ProcessingEnv env ) {
+	public void unbind( Var var, ProcessingEnv env ) {
 		if ( elements instanceof ListNature ) {
 			ListNature l = (ListNature) elements;
 			List<? extends Functor> elems = l.elements( env );

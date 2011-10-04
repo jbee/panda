@@ -1,17 +1,20 @@
 package de.jbee.panda.functor;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
 import de.jbee.lang.List;
 import de.jbee.lang.ListIndex;
 import de.jbee.lang.Ord;
 import de.jbee.lang.Order;
 import de.jbee.lang.Ordering;
 import de.jbee.lang.Set;
-import de.jbee.panda.Selector;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.ProcessingEnv;
+import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
 import de.jbee.panda.TypeFunctorizer;
 import de.jbee.panda.Var;
@@ -20,7 +23,7 @@ public class ObjectFunctor
 		extends ValueFunctor
 		implements ListNature {
 
-	static final TypeFunctorizer FUNCTORIZER = new ObjectFunctorizer();
+	static final TypeFunctorizer FUNCTORIZER = new ReflectObjectFunctorizer();
 
 	static final Ord<Object> ORDER = Order.typeaware( new MemberOrder(), MemberFunctor.class );
 
@@ -121,8 +124,8 @@ public class ObjectFunctor
 		}
 
 		@Override
-		public void processedAs( Var var, ProcessingEnv env ) {
-			functor.processedAs( var, env );
+		public void unbind( Var var, ProcessingEnv env ) {
+			functor.unbind( var, env );
 		}
 
 		@Override
@@ -141,10 +144,10 @@ public class ObjectFunctor
 
 	}
 
-	private static final class ObjectFunctorizer
+	private static final class ReflectObjectFunctorizer
 			implements TypeFunctorizer {
 
-		ObjectFunctorizer() {
+		ReflectObjectFunctorizer() {
 			// make visible
 		}
 
@@ -153,15 +156,33 @@ public class ObjectFunctor
 			if ( value == NOTHING ) {
 				return f.behaviour( MAYBE, value );
 			}
-			// TODO real object functorization
-			Set<MemberFunctor> elements = Set.with.elements( ORDER, List.with.elements( member(
-					OBJECT + ".type", value.getClass().getCanonicalName(), f ), member( OBJECT
-					+ ".text", String.valueOf( value ), f ) ) );
-			return new ObjectFunctor( elements );
+
+			List<MemberFunctor> elements = List.with.noElements();
+			Class<?> type = value.getClass();
+			while ( type != null ) {
+				for ( Field field : type.getDeclaredFields() ) {
+					if ( !Modifier.isStatic( field.getModifiers() ) ) {
+						field.setAccessible( true );
+						try {
+							elements = elements.prepand( member(
+									field.getName().replace( "_", "" ),
+									f.value( field.get( value ) ) ) );
+						} catch ( Exception e ) {
+							e.printStackTrace();
+						}
+					}
+				}
+				type = type.getSuperclass();
+			}
+			return new ObjectFunctor( Set.with.elements( ORDER, elements ) );
 		}
 
 		private MemberFunctor member( String path, String text, Functorizer f ) {
-			return new ObjectFunctor.MemberFunctor( path, f.value( text ) );
+			return member( path, f.value( text ) );
+		}
+
+		private MemberFunctor member( String path, Functor f ) {
+			return new ObjectFunctor.MemberFunctor( path, f );
 		}
 
 		@Override

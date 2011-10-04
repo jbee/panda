@@ -16,5 +16,5 @@ public interface Functor
 	 */
 	Functor invoke( Selector expr, EvaluationEnv env );
 
-	void processedAs( Var var, ProcessingEnv env );
+	void unbind( Var var, ProcessingEnv env );
 }
