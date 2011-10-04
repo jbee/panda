@@ -5,5 +5,5 @@ import de.jbee.lang.List;
 public interface ListNature
 		extends Nature {
 
-	List<Functor> elements( EvaluationEnv env );
+	List<? extends Functor> elements( EvaluationEnv env );
 }

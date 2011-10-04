@@ -3,8 +3,10 @@ package de.jbee.panda;
 public interface ProcessingEnv
 		extends EvaluationEnv {
 
-	void let( Var var, Functor f );
+	ProcessContext context();
 
-	void renderFrom( int pos );
+	void open( ProcessContext context );
+
+	void close( ProcessContext context );
 
 }

@@ -16,5 +16,5 @@ public interface Functor
 	 */
 	Functor invoke( Accessor expr, EvaluationEnv env );
 
-	void renderedAs( Var var, ProcessingEnv env );
+	void processedAs( Var var, ProcessingEnv env );
 }

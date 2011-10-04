@@ -7,9 +7,10 @@ import de.jbee.panda.Accessor;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
-import de.jbee.panda.SetupEnv;
 import de.jbee.panda.ListNature;
+import de.jbee.panda.ProcessContext;
 import de.jbee.panda.ProcessingEnv;
+import de.jbee.panda.SetupEnv;
 import de.jbee.panda.TypeFunctorizer;
 import de.jbee.panda.Var;
 
@@ -25,7 +26,7 @@ public class EachFunctor
 
 	static final TypeFunctorizer FUNCTORIZER = new EachFunctorizer();
 
-	private final Functor list;
+	private final Functor elements;
 	private final int index;
 
 	EachFunctor( Functor list ) {
@@ -34,7 +35,7 @@ public class EachFunctor
 
 	private EachFunctor( Functor list, int index ) {
 		super();
-		this.list = list;
+		this.elements = list;
 		this.index = index;
 	}
 
@@ -53,10 +54,10 @@ public class EachFunctor
 		if ( expr.after( '[' ) ) {
 			int start = expr.index( 0 );
 			if ( expr.after( ':' ) ) {
-				Functor sl = list.invoke( Accessor.range( start, expr.index( MAX_VALUE ) ), env );
+				Functor sl = elements.invoke( Accessor.range( start, expr.index( MAX_VALUE ) ), env );
 				return env.invoke( a( sl, index ), expr.gobble( ']' ) );
 			}
-			return env.invoke( list, Accessor.elemAt( start ).join( expr.gobble( ']' ) ) );
+			return env.invoke( elements, Accessor.elemAt( start ).join( expr.gobble( ']' ) ) );
 		}
 		return env.invoke( currentElement( env ), expr );
 	}
@@ -67,18 +68,19 @@ public class EachFunctor
 	}
 
 	private Functor currentElement( EvaluationEnv env ) {
-		return env.invoke( list, elemAt( index ) );
+		return env.invoke( elements, elemAt( index ) );
 	}
 
 	@Override
-	public void renderedAs( Var var, ProcessingEnv env ) {
-		if ( list instanceof ListNature ) {
-			ListNature l = (ListNature) list;
-			List<Functor> elems = l.elements( env );
+	public void processedAs( Var var, ProcessingEnv env ) {
+		if ( elements instanceof ListNature ) {
+			ListNature l = (ListNature) elements;
+			List<? extends Functor> elems = l.elements( env );
 			int idx = index + 1;
 			if ( idx < elems.length() ) {
-				env.let( var, new EachFunctor( list, idx ) );
-				env.renderFrom( 0 ); // zero of the current block
+				ProcessContext context = env.context();
+				context.let( var, new EachFunctor( elements, idx ) );
+				context.renderFrom( 0 ); // start of the current block
 			}
 		}
 	}

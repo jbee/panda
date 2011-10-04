@@ -30,7 +30,7 @@ public abstract class ValueFunctor
 	}
 
 	@Override
-	public final void renderedAs( Var var, ProcessingEnv env ) {
-		// nothing to do
+	public void processedAs( Var var, ProcessingEnv env ) {
+		// default: nothing to do
 	}
 }
