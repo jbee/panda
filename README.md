@@ -1,4 +1,5 @@
 ## Conventions
+
 * `^` non data/value selector indicator
 * `#` formatting indicator (by now also the each current index - do cleanup)
 * `.` member-name or list-index indicator
@@ -6,6 +7,7 @@
 * `[` list element by index `[1]` or sublist by range `[1:3]`
 * `&` AND in case statements and after `?` (separated by whitespace)
 * `|` OR in case statements and after `?` (separated by whitespace)
+* `=`, `>` and `<` to compare with a constant or 2nd expr after `?` or in a case statement
 
 <pre>
                               _,add8ba,
