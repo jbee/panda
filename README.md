@@ -1,9 +1,9 @@
 ## Conventions
-`^` non data/value selector indicator
-`#` formatting indicator (by now also the each current index - do cleanup)
-`.` member-name or list-index indicator
-`?` test indicator (will result in a `Functor` that has `BooleanNature`) followed by the text expr
-`[` list element by index `[1]` or sublist by range `[1:3]`
+* `^` non data/value selector indicator
+* `#` formatting indicator (by now also the each current index - do cleanup)
+* `.` member-name or list-index indicator
+* `?` test indicator (will result in a `Functor` that has `BooleanNature`) followed by the text expr
+* `[` list element by index `[1]` or sublist by range `[1:3]`
 
 <pre>
                               _,add8ba,
