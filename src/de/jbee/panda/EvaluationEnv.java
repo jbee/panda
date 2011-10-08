@@ -12,7 +12,7 @@ package de.jbee.panda;
  */
 public interface EvaluationEnv {
 
-	Functor access( Var var );
+	Functor value( Var var );
 
 	Functor invoke( Functor f, Selector expr );
 

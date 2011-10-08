@@ -1,7 +1,7 @@
 package de.jbee.panda;
 
 public interface Functor
-		extends TextNature {
+		extends TextNature, PredicateNature {
 
 	/**
 	 * The value that means nothing
@@ -16,5 +16,4 @@ public interface Functor
 	 */
 	Functor invoke( Selector expr, EvaluationEnv env );
 
-	void unbind( Var var, ProcessingEnv env );
 }

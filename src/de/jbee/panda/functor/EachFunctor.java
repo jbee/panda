@@ -1,15 +1,17 @@
 package de.jbee.panda.functor;
 
+import static de.jbee.panda.Env.nothing;
 import static de.jbee.panda.Selector.elemAt;
 import static java.lang.Integer.MAX_VALUE;
 import de.jbee.lang.List;
-import de.jbee.panda.Selector;
+import de.jbee.panda.BehavioralFunctor;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.ProcessContext;
 import de.jbee.panda.ProcessingEnv;
+import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
 import de.jbee.panda.TypeFunctorizer;
 import de.jbee.panda.Var;
@@ -22,7 +24,7 @@ import de.jbee.panda.Var;
  * 
  */
 public class EachFunctor
-		implements Functor {
+		implements BehavioralFunctor {
 
 	static final TypeFunctorizer FUNCTORIZER = new EachFunctorizer();
 
@@ -35,6 +37,9 @@ public class EachFunctor
 
 	private EachFunctor( Functor elements, int index ) {
 		super();
+		if ( ! ( elements instanceof ListNature ) ) {
+			System.out.println( "warning " + elements );
+		}
 		this.elements = elements;
 		this.index = index;
 	}
@@ -72,15 +77,27 @@ public class EachFunctor
 	}
 
 	@Override
-	public void unbind( Var var, ProcessingEnv env ) {
+	public void bind( Var var, ProcessingEnv env ) {
+		if ( elements instanceof ListNature ) {
+			ListNature l = (ListNature) elements;
+			List<? extends Functor> elems = l.elements( env );
+			if ( !elems.isEmpty() ) {
+				env.context().addDependency( var );
+			}
+		}
+	}
+
+	@Override
+	public void rebind( Var var, ProcessingEnv env ) {
 		if ( elements instanceof ListNature ) {
 			ListNature l = (ListNature) elements;
 			List<? extends Functor> elems = l.elements( env );
 			int idx = index + 1;
+			ProcessContext context = env.context();
 			if ( idx < elems.length() ) {
-				ProcessContext context = env.context();
-				context.let( var, new EachFunctor( elements, idx ) );
-				context.renderFrom( 0 ); // start of the current block
+				context.bind( var, new EachFunctor( elements, idx ) );
+			} else {
+				context.bind( var, nothing( env ) );
 			}
 		}
 	}
@@ -100,4 +117,8 @@ public class EachFunctor
 
 	}
 
+	@Override
+	public boolean is( EvaluationEnv env ) {
+		return elements.is( env );
+	}
 }

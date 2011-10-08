@@ -1,17 +1,17 @@
 package de.jbee.panda.functor;
 
-import de.jbee.panda.Selector;
+import static de.jbee.panda.Env.just;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
+import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
 import de.jbee.panda.TypeFunctorizer;
 
 final class BooleanFunctor
-		extends ValueFunctor
-		implements PredicateNature, IntegralNature {
+		implements Functor, PredicateNature, IntegralNature {
 
 	static final TypeFunctorizer FUNCTORIZER = new BooleanFunctorizer();
 

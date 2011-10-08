@@ -68,3 +68,17 @@ Werte:
 
 
 OPEN datumsformate ?
+
+
+
+
+
+
+
+NEU
+
+
+
+
+def x is ---> boolean nach 'is' wie in case
+def x as ---> value

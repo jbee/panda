@@ -1,5 +1,8 @@
 package de.jbee.panda.functor;
 
+import static de.jbee.panda.Env.just;
+import static de.jbee.panda.Env.nothing;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
@@ -9,6 +12,8 @@ import de.jbee.lang.Ord;
 import de.jbee.lang.Order;
 import de.jbee.lang.Ordering;
 import de.jbee.lang.Set;
+import de.jbee.panda.BehavioralFunctor;
+import de.jbee.panda.Env;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
@@ -20,8 +25,7 @@ import de.jbee.panda.TypeFunctorizer;
 import de.jbee.panda.Var;
 
 public class ObjectFunctor
-		extends ValueFunctor
-		implements ListNature {
+		implements Functor, ListNature {
 
 	static final TypeFunctorizer FUNCTORIZER = new ReflectObjectFunctorizer();
 
@@ -89,7 +93,7 @@ public class ObjectFunctor
 	}
 
 	static final class MemberFunctor
-			extends ValueFunctor {
+			implements BehavioralFunctor {
 
 		final String path;
 		final Functor functor;
@@ -124,13 +128,23 @@ public class ObjectFunctor
 		}
 
 		@Override
-		public void unbind( Var var, ProcessingEnv env ) {
-			functor.unbind( var, env );
+		public void bind( Var var, ProcessingEnv env ) {
+			Env.bind( var, functor, env );
+		}
+
+		@Override
+		public void rebind( Var var, ProcessingEnv env ) {
+			Env.rebind( var, functor, env );
 		}
 
 		@Override
 		public String text( EvaluationEnv env ) {
 			return path;
+		}
+
+		@Override
+		public boolean is( EvaluationEnv env ) {
+			return functor.is( env );
 		}
 	}
 
@@ -177,10 +191,6 @@ public class ObjectFunctor
 			return new ObjectFunctor( Set.with.elements( ORDER, elements ) );
 		}
 
-		private MemberFunctor member( String path, String text, Functorizer f ) {
-			return member( path, f.value( text ) );
-		}
-
 		private MemberFunctor member( String path, Functor f ) {
 			return new ObjectFunctor.MemberFunctor( path, f );
 		}
@@ -196,5 +206,10 @@ public class ObjectFunctor
 	@Override
 	public List<? extends Functor> elements( EvaluationEnv env ) {
 		return members;
+	}
+
+	@Override
+	public boolean is( EvaluationEnv env ) {
+		return !members.isEmpty();
 	}
 }

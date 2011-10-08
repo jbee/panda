@@ -1,9 +1,7 @@
 package de.jbee.panda;
 
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 
 import de.jbee.panda.functor.DefaultFunctorizer;
 
@@ -12,37 +10,8 @@ public class Environment
 
 	private final Deque<ProcessContext> contextStack = new LinkedList<ProcessContext>();
 
-	static class Context
-			implements ProcessContext {
-
-		final Map<Var, Functor> vars = new HashMap<Var, Functor>();
-
-		@Override
-		public void let( Var var, Functor f ) {
-			vars.put( var, f );
-		}
-
-		@Override
-		public void renderFrom( int pos ) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public Functor assignedTo( Var var ) {
-			return vars.get( var );
-		}
-
-		@Override
-		public boolean isCompleted() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-	}
-
-	public Environment() {
-		contextStack.push( new Context() ); // the master context
+	public Environment( ProcessContext context ) {
+		contextStack.push( context ); // the master context
 	}
 
 	@Override
@@ -51,9 +20,9 @@ public class Environment
 	}
 
 	@Override
-	public Functor access( Var var ) {
+	public Functor value( Var var ) {
 		for ( ProcessContext c : contextStack ) {
-			Functor f = c.assignedTo( var );
+			Functor f = c.boundTo( var, null );
 			if ( f != null ) {
 				return f;
 			}

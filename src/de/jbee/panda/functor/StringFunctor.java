@@ -1,14 +1,17 @@
 package de.jbee.panda.functor;
 
-import de.jbee.panda.Selector;
+import static de.jbee.panda.Env.just;
+import de.jbee.panda.Env;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
+import de.jbee.panda.PredicateNature;
+import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
 import de.jbee.panda.TypeFunctorizer;
 
 final class StringFunctor
-		extends ValueFunctor {
+		implements Functor, PredicateNature {
 
 	static final TypeFunctorizer FUNCTORIZER = new StringFunctorizer();
 
@@ -31,14 +34,13 @@ final class StringFunctor
 		if ( expr.after( '=' ) ) {
 			String operand = expr.untilWhitespace();
 			if ( operand.startsWith( "*" ) ) {
-				return env.invoke( a( value.endsWith( operand.substring( 1 ) ), env ), expr );
+				return env.invoke( Env.a( value.endsWith( operand.substring( 1 ) ), env ), expr );
 			}
 			if ( operand.endsWith( "*" ) ) {
-				return env.invoke( a(
-						value.startsWith( operand.substring( 0, operand.length() - 1 ) ), env ),
-						expr );
+				return env.invoke( Env.a( value.startsWith( operand.substring( 0,
+						operand.length() - 1 ) ), env ), expr );
 			}
-			return env.invoke( a( value.equalsIgnoreCase( operand ), env ), expr );
+			return env.invoke( Env.a( value.equalsIgnoreCase( operand ), env ), expr );
 		}
 		if ( expr.after( '{' ) ) {
 			int start = expr.index( 0 );
@@ -84,5 +86,10 @@ final class StringFunctor
 			env.install( TEXT, this );
 		}
 
+	}
+
+	@Override
+	public boolean is( EvaluationEnv env ) {
+		return value != null && !value.isEmpty();
 	}
 }

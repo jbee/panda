@@ -8,6 +8,7 @@ import java.util.Date;
 import org.junit.Test;
 
 import de.jbee.lang.List;
+import de.jbee.panda.Context;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
@@ -52,7 +53,7 @@ public class TestFunctorizer {
 
 	@Test
 	public void testYieldObjectFunctor() {
-		ProcessingEnv env = new Environment();
+		ProcessingEnv env = new Environment( new Context() );
 		Functor obj = env.functorize().value( new ObjectType() );
 		assertThat( obj, is( ObjectFunctor.class ) );
 		Functor e = obj.invoke( Selector.of( ".height" ), env );

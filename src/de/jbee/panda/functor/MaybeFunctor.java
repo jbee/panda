@@ -1,18 +1,21 @@
 package de.jbee.panda.functor;
 
+import static de.jbee.panda.Env.no;
+import static de.jbee.panda.Env.nothing;
+import static de.jbee.panda.Env.yes;
 import de.jbee.lang.List;
-import de.jbee.panda.Selector;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.PredicateNature;
+import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
 import de.jbee.panda.TypeFunctorizer;
 
 abstract class MaybeFunctor
-		extends ValueFunctor {
+		implements Functor {
 
 	static final TypeFunctorizer FUNCTORIZER = new MaybeFunctorizer();
 
@@ -20,7 +23,7 @@ abstract class MaybeFunctor
 
 	private static final class JustFunctor
 			extends MaybeFunctor
-			implements PredicateNature, IntegralNature {
+			implements IntegralNature {
 
 		private final Object value;
 
@@ -33,13 +36,15 @@ abstract class MaybeFunctor
 		public boolean is( EvaluationEnv env ) {
 			return value instanceof Boolean
 				? value == Boolean.TRUE
-				: true;
+				: value instanceof PredicateNature
+					? ( (PredicateNature) value ).is( env )
+					: true;
 		}
 
 		@Override
 		public Functor invoke( Selector expr, EvaluationEnv env ) {
 			if ( expr.after( '?' ) ) {
-				return env.invoke( a( true, env ), expr );
+				return env.invoke( yes( env ), expr );
 			}
 			return env.invoke( nothing( env ), expr );
 		}
@@ -60,7 +65,7 @@ abstract class MaybeFunctor
 
 	private static final class NothingFunctor
 			extends MaybeFunctor
-			implements PredicateNature, IntegralNature, ListNature {
+			implements IntegralNature, ListNature {
 
 		NothingFunctor() {
 			// hide
@@ -69,7 +74,7 @@ abstract class MaybeFunctor
 		@Override
 		public Functor invoke( Selector expr, EvaluationEnv env ) {
 			if ( expr.after( '?' ) ) {
-				return env.invoke( a( false, env ), expr );
+				return env.invoke( no( env ), expr );
 			}
 			// OPEN tell env about invocation on nothing ?
 			return this;

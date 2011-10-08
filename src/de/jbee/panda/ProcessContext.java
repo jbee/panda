@@ -2,11 +2,18 @@ package de.jbee.panda;
 
 public interface ProcessContext {
 
-	void let( Var var, Functor f );
+	void bind( Var var, Functor f );
 
-	Functor assignedTo( Var var );
+	Functor boundTo( Var var, Functor unbound );
 
-	void renderFrom( int pos );
+	void rebind( ProcessingEnv env );
 
-	boolean isCompleted();
+	void bind( ProcessingEnv env );
+
+	void addDependency( Var var );
+
+	boolean independent( ProcessingEnv env );
+
+	//results of case evaluations has to be recognized here so that a context can tell how much
+	// successful case expressions has been matched before
 }

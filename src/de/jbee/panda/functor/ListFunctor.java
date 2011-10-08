@@ -1,17 +1,18 @@
 package de.jbee.panda.functor;
 
+import static de.jbee.panda.Env.just;
 import de.jbee.lang.List;
-import de.jbee.panda.Selector;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.ListNature;
+import de.jbee.panda.PredicateNature;
+import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
 import de.jbee.panda.TypeFunctorizer;
 
 final class ListFunctor
-		extends ValueFunctor
-		implements ListNature {
+		implements Functor, ListNature, PredicateNature {
 
 	static final TypeFunctorizer FUNCTORIZER = new ListFunctorizer();
 
@@ -60,19 +61,31 @@ final class ListFunctor
 		@Override
 		public Functor functorize( Object value, Functorizer f ) {
 			if ( value instanceof List<?> ) {
-				List<?> l = (List<?>) value;
-				List<Functor> elems = List.with.noElements();
-				for ( Object e : List.iterate.backwards( l ) ) {
-					elems = elems.prepand( f.value( e ) );
-				}
-				return new ListFunctor( elems );
+				return functorize( (List<?>) value, f );
+			}
+			if ( value instanceof String[] ) {
+				return functorize( List.with.elements( (String[]) value ), f );
 			}
 			return f.behaviour( MAYBE, value );
+		}
+
+		private Functor functorize( List<?> list, Functorizer f ) {
+			List<Functor> elems = List.with.noElements();
+			for ( Object e : List.iterate.backwards( list ) ) {
+				elems = elems.prepand( f.value( e ) );
+			}
+			return new ListFunctor( elems );
 		}
 
 		@Override
 		public void install( SetupEnv env ) {
 			env.install( LIST, this );
+			env.install( String[].class, this );
 		}
+	}
+
+	@Override
+	public boolean is( EvaluationEnv env ) {
+		return !elems.isEmpty();
 	}
 }
