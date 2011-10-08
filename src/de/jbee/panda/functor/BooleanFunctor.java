@@ -82,8 +82,9 @@ final class BooleanFunctor
 		public void install( SetupEnv env ) {
 			env.install( boolean.class, this );
 			env.install( Boolean.class, this );
-			env.install( TypeFunctorizer.TRUE, new StaticTypeFunctorizer( TRUE_INSTANCE ) );
-			env.install( TypeFunctorizer.FALSE, new StaticTypeFunctorizer( FALSE_INSTANCE ) );
+			// functions used as constants
+			env.install( TypeFunctorizer.TRUE, TRUE_INSTANCE );
+			env.install( TypeFunctorizer.FALSE, FALSE_INSTANCE );
 		}
 
 	}

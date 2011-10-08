@@ -23,8 +23,6 @@ public interface TypeFunctorizer {
 
 	String LIST = "__list__";
 
-	String NOTHING = "__null__";
-
 	/**
 	 * name of the maybe {@link TypeFunctorizer}
 	 */
@@ -33,6 +31,8 @@ public interface TypeFunctorizer {
 	String TRUE = "true";
 
 	String FALSE = "false";
+
+	String NOTHING = "nothing";
 
 	Functor functorize( Object value, Functorizer f );
 

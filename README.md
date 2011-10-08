@@ -7,6 +7,7 @@
 * `%`_name_ formatting indicator
 * `#` counter (current, e.g. index of each)
 * `[` list element by index `[1]` or sublist by range `[1:3]`
+* `@`_var-name_ reference a variable inside a `def` or `case` attribute
 
 ### Boolean Context
 * `?` test indicator (will result in a `Functor` that has `BooleanNature`) followed by the expr

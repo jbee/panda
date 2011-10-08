@@ -15,9 +15,10 @@ public class Context
 	private final Map<Var, Functor> vars = new HashMap<Var, Functor>();
 	private final Map<Var, Functor> used = new HashMap<Var, Functor>();
 	private final Set<Var> dependencies = new HashSet<Var>();
+	private boolean bound;
 
 	@Override
-	public void bind( Var var, Functor f ) {
+	public void define( Var var, Functor f ) {
 		vars.put( var, f );
 	}
 
@@ -27,36 +28,46 @@ public class Context
 	}
 
 	@Override
-	public Functor boundTo( Var var, Functor unbound ) {
+	public Functor definedAs( Var var, Functor undefined ) {
 		Functor res = vars.get( var );
 		if ( res != null ) {
 			used.put( var, res );
 			return res;
 		}
-		return unbound;
+		return undefined;
 	}
 
 	@Override
-	public boolean independent( ProcessingEnv env ) {
+	public boolean processed( ProcessingEnv env ) {
+		if ( !bound ) {
+			bind( env );
+			bound = true;
+			return dependencies.isEmpty()
+				? false
+				: noDependencies( env );
+		}
+		rebind( env );
+		return noDependencies( env );
+	}
+
+	private boolean noDependencies( ProcessingEnv env ) {
 		boolean res = true;
 		for ( Var d : dependencies ) {
-			Functor f = boundTo( d, null );
-			if ( f != null && f instanceof PredicateNature && ! ( (PredicateNature) f ).is( env ) ) {
+			Functor f = definedAs( d, null );
+			if ( f != null && f.is( env ) ) {
 				return false;
 			}
 		}
 		return res;
 	}
 
-	@Override
-	public void rebind( ProcessingEnv env ) {
+	private void rebind( ProcessingEnv env ) {
 		for ( Entry<Var, Functor> e : used.entrySet() ) {
 			Env.rebind( e.getKey(), e.getValue(), env );
 		}
 	}
 
-	@Override
-	public void bind( ProcessingEnv env ) {
+	private void bind( ProcessingEnv env ) {
 		for ( Entry<Var, Functor> e : vars.entrySet() ) {
 			Env.bind( e.getKey(), e.getValue(), env );
 		}

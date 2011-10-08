@@ -22,7 +22,7 @@ public class Environment
 	@Override
 	public Functor value( Var var ) {
 		for ( ProcessContext c : contextStack ) {
-			Functor f = c.boundTo( var, null );
+			Functor f = c.definedAs( var, null );
 			if ( f != null ) {
 				return f;
 			}

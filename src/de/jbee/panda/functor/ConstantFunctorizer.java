@@ -5,12 +5,12 @@ import de.jbee.panda.Functorizer;
 import de.jbee.panda.SetupEnv;
 import de.jbee.panda.TypeFunctorizer;
 
-public final class StaticTypeFunctorizer
+public final class ConstantFunctorizer
 		implements TypeFunctorizer {
 
 	private final Functor functor;
 
-	StaticTypeFunctorizer( Functor functor ) {
+	ConstantFunctorizer( Functor functor ) {
 		super();
 		this.functor = functor;
 	}

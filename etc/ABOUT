@@ -15,7 +15,7 @@ vs JSPs
 Matcher:
 Findet im 'case' attribut statt
 
-		<alias>?		leer/nicht definiert ?
+		<alias>?		leer/nicht definiert ? ---> predicate
 exists	<alias>		same as above - exists hat den operator '?'
 (indexIn)	<alias>#1..3	match elemente 1-3 einer Listen-Property - die funktion indexIn hat den operator '#'
 		<alias>#2		match element #2 
@@ -51,34 +51,35 @@ env is a predefined alias.
 Properties:
 Berechnete Werte werden im Java Properties zugeordnet. Diese sind ebenso global und unter 'data' vordefiniert. 
 
-Binds:
-Findet im 'let' attribut statt
+Define new Vars:
+Findet im 'def' attribut statt
 
 <alias> <functor> (<alias>|<property>)
-X each Y
-X each data.property
-X be data.propery
+def="x as each @y"
+def="x as each @data.property"
+def="x as @data.propery"
+def="x as 'a string'"
+def="x as 1.4"
+def="x is/as true"
+def="x as nothing"
 
+def="x is <case-expr>" ---> boolean nach 'is' wie in case
+def="x as ..." ---> assignment 
+
+- The var defined can be prefixed with an @ or not.
+- References to previous defined vars are done by @<var-name>
+- String-Constants are done with single quotes: 'a string'
+- Number constants are done by starting with a digit or dot ('.')
+- boolean constants are done by just true or false
+- nothing can be referenced by nothing (useful to override a var in an inner context)
+- Functions are all names different from true/false/nothing -> let them be functions to avoid special case! 
 
 Werte:
-1. einfache Strings
-2. Listen von Strings
+1. einfache Werte (direkt als String darstellbar)
+2. Listen von einfachen Werten
 3. objekte (bestehen wiederrum aus 1-3)
 
 
 
 OPEN datumsformate ?
 
-
-
-
-
-
-
-NEU
-
-
-
-
-def x is ---> boolean nach 'is' wie in case
-def x as ---> value

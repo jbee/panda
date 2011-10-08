@@ -13,16 +13,14 @@ public class TestProcessingEnv {
 		Functorizer func = env.functorize();
 		Var foo = Var.named( "foo" );
 		String[] values = new String[] { "a", "b", "c" };
-		env.context().bind( foo, func.behaviour( "each", func.value( values ) ) );
+		env.context().define( foo, func.behaviour( "each", func.value( values ) ) );
 		int i = 0;
-		env.context().bind( env );
-		while ( !env.context().independent( env ) && i < values.length ) {
+		while ( !env.context().processed( env ) && i < values.length ) {
 			Functor each = env.value( foo );
 			Functor e = each.invoke( Selector.EMPTY, env );
 			String value = e.text( env );
 			System.out.println( value );
 			assertThat( value, is( values[i] ) );
-			env.context().rebind( env );
 			i++;
 		}
 		assertThat( i, is( values.length ) );

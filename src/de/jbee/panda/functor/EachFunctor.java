@@ -95,9 +95,9 @@ public class EachFunctor
 			int idx = index + 1;
 			ProcessContext context = env.context();
 			if ( idx < elems.length() ) {
-				context.bind( var, new EachFunctor( elements, idx ) );
+				context.define( var, new EachFunctor( elements, idx ) );
 			} else {
-				context.bind( var, nothing( env ) );
+				context.define( var, nothing( env ) );
 			}
 		}
 	}

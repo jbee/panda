@@ -69,4 +69,9 @@ public class DefaultFunctorizer
 			? fallback
 			: tf;
 	}
+
+	@Override
+	public void install( String name, Functor constant ) {
+		install( name, new ConstantFunctorizer( constant ) );
+	}
 }

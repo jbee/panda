@@ -167,7 +167,7 @@ public class ObjectFunctor
 
 		@Override
 		public Functor functorize( Object value, Functorizer f ) {
-			if ( value == NOTHING ) {
+			if ( value == Functor.NOTHING ) {
 				return f.behaviour( MAYBE, value );
 			}
 
