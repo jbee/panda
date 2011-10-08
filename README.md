@@ -1,3 +1,19 @@
+# Panda
+
+### Basic Selectors
+
+* `.`_name/nr_ member-name or list-index indicator
+* `^`_name_ non data/value selector indicator
+* `%`_name_ formatting indicator
+* `#` counter (current, e.g. index of each)
+* `[` list element by index `[1]` or sublist by range `[1:3]`
+
+### Boolean Context
+* `?` test indicator (will result in a `Functor` that has `BooleanNature`) followed by the expr
+* `&` AND in case statements and after `?` (separated by whitespace)
+* `|` OR in case statements and after `?` (separated by whitespace)
+* `=`, `>` and `<` to compare with a constant or 2nd expr after `?` or in a case statement
+
 <pre>
                               _,add8ba,
                             ,d888888888b,
