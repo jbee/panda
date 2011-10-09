@@ -78,7 +78,7 @@ final class ListFunctor
 		}
 
 		@Override
-		public void install( SetupEnv env ) {
+		public void setup( SetupEnv env ) {
 			env.install( LIST, this );
 			env.install( String[].class, this );
 		}

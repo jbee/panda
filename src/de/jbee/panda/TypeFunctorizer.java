@@ -23,6 +23,20 @@ public interface TypeFunctorizer {
 
 	String LIST = "__list__";
 
+	/*
+	 * core flow control names
+	 */
+
+	String CASE = "__case__";
+
+	String DEF = "__def__";
+
+	String VAR = "__var__";
+
+	/*
+	 * core constants names
+	 */
+
 	/**
 	 * name of the maybe {@link TypeFunctorizer}
 	 */
@@ -36,5 +50,5 @@ public interface TypeFunctorizer {
 
 	Functor functorize( Object value, Functorizer f );
 
-	void install( SetupEnv env );
+	void setup( SetupEnv env );
 }

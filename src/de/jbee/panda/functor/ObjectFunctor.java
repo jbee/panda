@@ -12,7 +12,7 @@ import de.jbee.lang.Ord;
 import de.jbee.lang.Order;
 import de.jbee.lang.Ordering;
 import de.jbee.lang.Set;
-import de.jbee.panda.BehavioralFunctor;
+import de.jbee.panda.BehaviouralFunctor;
 import de.jbee.panda.Env;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
@@ -93,7 +93,7 @@ public class ObjectFunctor
 	}
 
 	static final class MemberFunctor
-			implements BehavioralFunctor {
+			implements BehaviouralFunctor {
 
 		final String path;
 		final Functor functor;
@@ -196,7 +196,7 @@ public class ObjectFunctor
 		}
 
 		@Override
-		public void install( SetupEnv env ) {
+		public void setup( SetupEnv env ) {
 			env.install( DEFAULT, this );
 			env.install( Object.class, this );
 		}

@@ -45,8 +45,8 @@ Functor useage in a case:
 
 Globals (Environment):
 env is a predefined alias.
-::env.now
-::env.today
+@env.now
+@env.today
 
 Properties:
 Berechnete Werte werden im Java Properties zugeordnet. Diese sind ebenso global und unter 'data' vordefiniert. 
@@ -59,6 +59,8 @@ def="x as each @y"
 def="x as each @data.property"
 def="x as @data.propery"
 def="x as 'a string'"
+def="x as ['a string', 'another']"
+def="x as [1->'Herr', 2->'Frau']"
 def="x as 1.4"
 def="x is/as true"
 def="x as nothing"
@@ -66,13 +68,23 @@ def="x as nothing"
 def="x is <case-expr>" ---> boolean nach 'is' wie in case
 def="x as ..." ---> assignment 
 
+!!!!man könnte auch mit einem functor anfangen - def nimmt nur den ersten string bis zu einem whitespace und alles weitere ist das argument dieses functors. --> genereller weg -> sehr flexibel
+def="var x = y" // var ist hier der name des funktors 'x = y' wird als argument übergeben -> nice!
+def="var x is each y"
+ 
+
+wie geht bis zum vorletzten ? 1:n-1 ??
+
 - The var defined can be prefixed with an @ or not.
 - References to previous defined vars are done by @<var-name>
 - String-Constants are done with single quotes: 'a string'
+- List use []- inside the list any other constant can be used- elements separated by ,
+- -> can be used to define key->value pairs - key is becomes varname.key, value becomes varname.value 
 - Number constants are done by starting with a digit or dot ('.')
 - boolean constants are done by just true or false
 - nothing can be referenced by nothing (useful to override a var in an inner context)
 - Functions are all names different from true/false/nothing -> let them be functions to avoid special case! 
+- Multiple definitions inside one def-attribute separated by ;
 
 Werte:
 1. einfache Werte (direkt als String darstellbar)

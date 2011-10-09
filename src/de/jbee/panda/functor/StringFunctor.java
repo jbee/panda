@@ -80,7 +80,7 @@ final class StringFunctor
 		}
 
 		@Override
-		public void install( SetupEnv env ) {
+		public void setup( SetupEnv env ) {
 			env.install( String.class, this );
 			env.install( char[].class, this );
 			env.install( TEXT, this );

@@ -4,7 +4,7 @@ import static de.jbee.panda.Env.nothing;
 import static de.jbee.panda.Selector.elemAt;
 import static java.lang.Integer.MAX_VALUE;
 import de.jbee.lang.List;
-import de.jbee.panda.BehavioralFunctor;
+import de.jbee.panda.BehaviouralFunctor;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
@@ -24,7 +24,7 @@ import de.jbee.panda.Var;
  * 
  */
 public class EachFunctor
-		implements BehavioralFunctor {
+		implements BehaviouralFunctor {
 
 	static final TypeFunctorizer FUNCTORIZER = new EachFunctorizer();
 
@@ -111,7 +111,7 @@ public class EachFunctor
 		}
 
 		@Override
-		public void install( SetupEnv env ) {
+		public void setup( SetupEnv env ) {
 			env.install( "each", this );
 		}
 

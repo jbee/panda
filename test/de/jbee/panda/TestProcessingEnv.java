@@ -13,7 +13,7 @@ public class TestProcessingEnv {
 		Functorizer func = env.functorize();
 		Var foo = Var.named( "foo" );
 		String[] values = new String[] { "a", "b", "c" };
-		env.context().define( foo, func.behaviour( "each", func.value( values ) ) );
+		env.context().define( foo, func.behaviour( "each", values ) );
 		int i = 0;
 		while ( !env.context().processed( env ) && i < values.length ) {
 			Functor each = env.value( foo );

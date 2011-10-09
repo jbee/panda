@@ -14,13 +14,16 @@ public class DefaultFunctorizer
 	private static DefaultFunctorizer instance = new DefaultFunctorizer();
 
 	static {
-		BooleanFunctor.FUNCTORIZER.install( instance );
-		IntegerFunctor.FUNCTORIZER.install( instance );
-		StringFunctor.FUNCTORIZER.install( instance );
-		ListFunctor.FUNCTORIZER.install( instance );
-		MaybeFunctor.FUNCTORIZER.install( instance );
-		EachFunctor.FUNCTORIZER.install( instance );
-		ObjectFunctor.FUNCTORIZER.install( instance );
+		BooleanFunctor.FUNCTORIZER.setup( instance );
+		IntegerFunctor.FUNCTORIZER.setup( instance );
+		StringFunctor.FUNCTORIZER.setup( instance );
+		ListFunctor.FUNCTORIZER.setup( instance );
+		MaybeFunctor.FUNCTORIZER.setup( instance );
+		EachFunctor.FUNCTORIZER.setup( instance );
+		ObjectFunctor.FUNCTORIZER.setup( instance );
+		CaseFunctor.FUNCTORIZER.setup( instance );
+		DefineFunctor.FUNCTORIZER.setup( instance );
+		VarFunctor.FUNCTORIZER.setup( instance );
 	}
 
 	public static Functorizer getInstance() {
@@ -72,6 +75,6 @@ public class DefaultFunctorizer
 
 	@Override
 	public void install( String name, Functor constant ) {
-		install( name, new ConstantFunctorizer( constant ) );
+		install( name, new ConstantFunctorizer( name, constant ) );
 	}
 }

@@ -100,7 +100,7 @@ final class IntegerFunctor
 		}
 
 		@Override
-		public void install( SetupEnv env ) {
+		public void setup( SetupEnv env ) {
 			env.install( int.class, this );
 			env.install( Integer.class, this );
 			env.install( long.class, this );

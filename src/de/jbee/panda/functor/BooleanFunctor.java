@@ -79,7 +79,7 @@ final class BooleanFunctor
 		}
 
 		@Override
-		public void install( SetupEnv env ) {
+		public void setup( SetupEnv env ) {
 			env.install( boolean.class, this );
 			env.install( Boolean.class, this );
 			// functions used as constants

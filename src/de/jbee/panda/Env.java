@@ -3,14 +3,14 @@ package de.jbee.panda;
 public class Env {
 
 	public static void bind( Var var, Functor functor, ProcessingEnv env ) {
-		if ( functor instanceof BehavioralFunctor ) {
-			( (BehavioralFunctor) functor ).bind( var, env );
+		if ( functor instanceof BehaviouralFunctor ) {
+			( (BehaviouralFunctor) functor ).bind( var, env );
 		}
 	}
 
 	public static void rebind( Var var, Functor functor, ProcessingEnv env ) {
-		if ( functor instanceof BehavioralFunctor ) {
-			( (BehavioralFunctor) functor ).rebind( var, env );
+		if ( functor instanceof BehaviouralFunctor ) {
+			( (BehaviouralFunctor) functor ).rebind( var, env );
 		}
 	}
 

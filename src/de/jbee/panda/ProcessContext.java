@@ -4,6 +4,8 @@ public interface ProcessContext {
 
 	void define( Var var, Functor f );
 
+	//OPEN add an undefine method ? 
+
 	Functor definedAs( Var var, Functor undefined );
 
 	void addDependency( Var var );

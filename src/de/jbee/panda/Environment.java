@@ -55,4 +55,9 @@ public class Environment
 		}
 	}
 
+	@Override
+	public void define( Var var, Functor f ) {
+		contextStack.peek().define( var, f );
+	}
+
 }

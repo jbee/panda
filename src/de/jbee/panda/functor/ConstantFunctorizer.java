@@ -8,10 +8,12 @@ import de.jbee.panda.TypeFunctorizer;
 public final class ConstantFunctorizer
 		implements TypeFunctorizer {
 
+	private final String name;
 	private final Functor functor;
 
-	ConstantFunctorizer( Functor functor ) {
+	ConstantFunctorizer( String name, Functor functor ) {
 		super();
+		this.name = name;
 		this.functor = functor;
 	}
 
@@ -21,8 +23,8 @@ public final class ConstantFunctorizer
 	}
 
 	@Override
-	public void install( SetupEnv env ) {
-		// installed elsewhere
+	public void setup( SetupEnv env ) {
+		env.install( name, this );
 	}
 
 }
