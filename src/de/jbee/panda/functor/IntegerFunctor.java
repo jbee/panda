@@ -67,18 +67,23 @@ final class IntegerFunctor
 	}
 
 	@Override
-	public String text( EvaluationEnv env ) {
+	public String text() {
 		return String.valueOf( value );
 	}
 
 	@Override
-	public int integer( EvaluationEnv env ) {
+	public int integer() {
 		return value;
 	}
 
 	@Override
-	public boolean is( EvaluationEnv env ) {
+	public boolean is() {
 		return value != 0;
+	}
+
+	@Override
+	public String toString() {
+		return String.valueOf( value );
 	}
 
 	private static final class IntegerFunctorizer

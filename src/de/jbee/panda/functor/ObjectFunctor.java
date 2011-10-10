@@ -82,7 +82,7 @@ public class ObjectFunctor
 	}
 
 	@Override
-	public String text( EvaluationEnv env ) {
+	public String text() {
 		return "{" + name + "}";
 	}
 
@@ -138,13 +138,13 @@ public class ObjectFunctor
 		}
 
 		@Override
-		public String text( EvaluationEnv env ) {
+		public String text() {
 			return path;
 		}
 
 		@Override
-		public boolean is( EvaluationEnv env ) {
-			return functor.is( env );
+		public boolean is() {
+			return functor.is();
 		}
 	}
 
@@ -204,12 +204,12 @@ public class ObjectFunctor
 	}
 
 	@Override
-	public List<? extends Functor> elements( EvaluationEnv env ) {
+	public List<? extends Functor> elements() {
 		return members;
 	}
 
 	@Override
-	public boolean is( EvaluationEnv env ) {
+	public boolean is() {
 		return !members.isEmpty();
 	}
 }

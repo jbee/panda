@@ -56,7 +56,7 @@ public class CaseFunctor
 	}
 
 	@Override
-	public String text( EvaluationEnv env ) {
+	public String text() {
 		return caseExpr;
 	}
 
@@ -66,10 +66,10 @@ public class CaseFunctor
 	 * It can be seen as some kind of lazy evaluation taking place when
 	 * {@link ProcessContext#processed(ProcessingEnv)} is being executed whereby
 	 * {@link #bind(Var, ProcessingEnv)} is called for all {@link Var} iables. For all dependencies
-	 * {@link #is(EvaluationEnv)} will be called to determine if the context is done.
+	 * {@link #is()} will be called to determine if the context is done.
 	 */
 	@Override
-	public boolean is( EvaluationEnv env ) {
+	public boolean is() {
 		// TODO eval expr
 		return false;
 	}

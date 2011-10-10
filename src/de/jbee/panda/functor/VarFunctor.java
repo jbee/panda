@@ -31,33 +31,18 @@ public class VarFunctor
 		expr.gobbleWhitespace();
 		if ( expr.after( "as" ) ) {
 			expr.gobbleWhitespace();
-			env.define( Var.named( name ), eval( expr, env ) );
+			env.define( Var.named( name ), env.eval( expr ) );
 		}
 		return this;
 	}
 
-	private Functor eval( Selector expr, EvaluationEnv env ) {
-		if ( expr.after( '@' ) ) {
-			return env.invoke( env.value( Var.named( expr.name( "" ) ) ), expr );
-		}
-		if ( expr.after( '\'' ) ) {
-			String constant = expr.until( '\'' );
-			return env.invoke( env.functorize().value( constant ), expr.gobble( '\'' ) );
-		}
-		//TODO numbers
-		if ( expr.after( '[' ) ) {
-			//TODO
-		}
-		return env.invoke( env.functorize().behaviour( expr.name( "" ), eval( expr, env ) ), expr );
-	}
-
 	@Override
-	public String text( EvaluationEnv env ) {
+	public String text() {
 		return TypeFunctorizer.VAR;
 	}
 
 	@Override
-	public boolean is( EvaluationEnv env ) {
+	public boolean is() {
 		return true;
 	}
 

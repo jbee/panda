@@ -62,4 +62,21 @@ public class Environment
 		contextStack.peek().define( var, f );
 	}
 
+	@Override
+	public Functor eval( Selector expr ) {
+		if ( expr.after( '@' ) ) {
+			return invoke( value( Var.named( expr.name( "" ) ) ), expr );
+		}
+		if ( expr.after( '\'' ) ) {
+			String constant = expr.until( '\'' );
+			return invoke( functorize().value( constant ), expr.gobble( '\'' ) );
+		}
+		//TODO numbers
+		if ( expr.after( '[' ) ) {
+			//TODO
+		}
+		return invoke( functorize().behaviour( expr.name( "" ), eval( expr ) ), expr );
+
+	}
+
 }

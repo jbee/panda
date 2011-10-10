@@ -20,4 +20,6 @@ public interface EvaluationEnv {
 
 	Functorizer functorize();
 
+	Functor eval( Selector expr );
+
 }

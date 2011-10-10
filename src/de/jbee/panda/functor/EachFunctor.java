@@ -68,8 +68,10 @@ public class EachFunctor
 	}
 
 	@Override
-	public String text( EvaluationEnv env ) {
-		return currentElement( env ).text( env );
+	public String text() {
+		return ( elements instanceof ListNature )
+			? ( (ListNature) elements ).elements().at( index ).text()
+			: elements.text();
 	}
 
 	private Functor currentElement( EvaluationEnv env ) {
@@ -77,10 +79,15 @@ public class EachFunctor
 	}
 
 	@Override
+	public String toString() {
+		return "each " + elements;
+	}
+
+	@Override
 	public void bind( Var var, ProcessingEnv env ) {
 		if ( elements instanceof ListNature ) {
 			ListNature l = (ListNature) elements;
-			List<? extends Functor> elems = l.elements( env );
+			List<? extends Functor> elems = l.elements();
 			if ( !elems.isEmpty() ) {
 				env.context().addDependency( var );
 			}
@@ -91,7 +98,7 @@ public class EachFunctor
 	public void rebind( Var var, ProcessingEnv env ) {
 		if ( elements instanceof ListNature ) {
 			ListNature l = (ListNature) elements;
-			List<? extends Functor> elems = l.elements( env );
+			List<? extends Functor> elems = l.elements();
 			int idx = index + 1;
 			ProcessContext context = env.context();
 			if ( idx < elems.length() ) {
@@ -118,7 +125,7 @@ public class EachFunctor
 	}
 
 	@Override
-	public boolean is( EvaluationEnv env ) {
-		return elements.is( env );
+	public boolean is() {
+		return elements.is();
 	}
 }

@@ -47,13 +47,18 @@ final class ListFunctor
 	}
 
 	@Override
-	public List<Functor> elements( EvaluationEnv env ) {
+	public List<Functor> elements() {
 		return elems;
 	}
 
 	@Override
-	public String text( EvaluationEnv env ) {
+	public String text() {
 		return "[" + elems.length() + "]";
+	}
+
+	@Override
+	public String toString() {
+		return elems.toString();
 	}
 
 	static class ListFunctorizer
@@ -86,7 +91,7 @@ final class ListFunctor
 	}
 
 	@Override
-	public boolean is( EvaluationEnv env ) {
+	public boolean is() {
 		return !elems.isEmpty();
 	}
 }

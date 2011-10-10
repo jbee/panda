@@ -33,11 +33,11 @@ abstract class MaybeFunctor
 		}
 
 		@Override
-		public boolean is( EvaluationEnv env ) {
+		public boolean is() {
 			return value instanceof Boolean
 				? value == Boolean.TRUE
 				: value instanceof PredicateNature
-					? ( (PredicateNature) value ).is( env )
+					? ( (PredicateNature) value ).is()
 					: true;
 		}
 
@@ -50,15 +50,20 @@ abstract class MaybeFunctor
 		}
 
 		@Override
-		public String text( EvaluationEnv env ) {
+		public String text() {
 			return String.valueOf( value );
 		}
 
 		@Override
-		public int integer( EvaluationEnv env ) {
+		public int integer() {
 			return value instanceof Number
 				? ( (Number) value ).intValue()
 				: 1;
+		}
+
+		@Override
+		public String toString() {
+			return String.valueOf( value ) + "?";
 		}
 
 	}
@@ -81,28 +86,74 @@ abstract class MaybeFunctor
 		}
 
 		@Override
-		public boolean is( EvaluationEnv env ) {
+		public boolean is() {
 			return false;
 		}
 
 		@Override
-		public int integer( EvaluationEnv env ) {
+		public int integer() {
 			return 0;
 		}
 
 		@Override
-		public String text( EvaluationEnv env ) {
+		public String text() {
 			return "";
 		}
 
 		@Override
-		public List<Functor> elements( EvaluationEnv env ) {
+		public List<Functor> elements() {
 			return List.with.noElements();
 		}
+
+		@Override
+		public String toString() {
+			return "";
+		}
+	}
+
+	private static final class ExistsFunctorizer
+			implements TypeFunctorizer {
+
+		@Override
+		public Functor functorize( Object value, Functorizer f ) {
+			return f.value( f.value( value ) != NOTHING_INSTANCE );
+		}
+
+		@Override
+		public void setup( SetupEnv env ) {
+			env.install( "exists", this );
+		}
+
+	}
+
+	private static final class NotFunctorizer
+			implements TypeFunctorizer {
+
+		NotFunctorizer() {
+			// make accessible
+		}
+
+		@Override
+		public Functor functorize( Object value, Functorizer f ) {
+			// very important: NOT nothing is  still nothing
+			Functor negated = f.value( value );
+			return negated == NOTHING_INSTANCE
+				? NOTHING_INSTANCE
+				: f.value( !negated.is() );
+		}
+
+		@Override
+		public void setup( SetupEnv env ) {
+			env.install( "not", this );
+		}
+
 	}
 
 	private static final class MaybeFunctorizer
 			implements TypeFunctorizer {
+
+		static final TypeFunctorizer NOT_FUNCTORIZER = new NotFunctorizer();
+		static final TypeFunctorizer EXISTS_FUNCTORIZER = new ExistsFunctorizer();
 
 		MaybeFunctorizer() {
 			// make accessible
@@ -121,6 +172,8 @@ abstract class MaybeFunctor
 			env.install( MAYBE, this );
 			// functions used as constants
 			env.install( NOTHING, NOTHING_INSTANCE );
+			NOT_FUNCTORIZER.setup( env );
+			EXISTS_FUNCTORIZER.setup( env );
 		}
 
 	}

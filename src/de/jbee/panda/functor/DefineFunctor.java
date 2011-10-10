@@ -31,12 +31,12 @@ public class DefineFunctor
 	}
 
 	@Override
-	public boolean is( EvaluationEnv env ) {
+	public boolean is() {
 		return true;
 	}
 
 	@Override
-	public String text( EvaluationEnv env ) {
+	public String text() {
 		return TypeFunctorizer.DEF;
 	}
 

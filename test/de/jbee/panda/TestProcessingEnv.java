@@ -18,7 +18,7 @@ public class TestProcessingEnv {
 		while ( !env.context().processed( env ) && i < values.length ) {
 			Functor each = env.value( foo );
 			Functor e = each.invoke( Selector.EMPTY, env );
-			String value = e.text( env );
+			String value = e.text();
 			System.out.println( value );
 			assertThat( value, is( values[i] ) );
 			i++;

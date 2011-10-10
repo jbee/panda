@@ -54,7 +54,7 @@ public class Context
 		boolean res = true;
 		for ( Var d : dependencies ) {
 			Functor f = definedAs( d, null );
-			if ( f != null && f.is( env ) ) {
+			if ( f != null && f.is() ) {
 				return false;
 			}
 		}

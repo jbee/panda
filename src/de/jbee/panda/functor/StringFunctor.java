@@ -54,7 +54,12 @@ final class StringFunctor
 	}
 
 	@Override
-	public String text( EvaluationEnv env ) {
+	public String text() {
+		return value;
+	}
+
+	@Override
+	public String toString() {
 		return value;
 	}
 
@@ -89,7 +94,7 @@ final class StringFunctor
 	}
 
 	@Override
-	public boolean is( EvaluationEnv env ) {
+	public boolean is() {
 		return value != null && !value.isEmpty();
 	}
 }
