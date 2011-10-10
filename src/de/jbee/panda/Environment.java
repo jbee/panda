@@ -21,10 +21,12 @@ public class Environment
 
 	@Override
 	public Functor value( Var var ) {
-		for ( ProcessContext c : contextStack ) {
-			Functor f = c.definedAs( var, null );
-			if ( f != null ) {
-				return f;
+		if ( !var.isUndefined() ) {
+			for ( ProcessContext c : contextStack ) {
+				Functor f = c.definedAs( var, null );
+				if ( f != null ) {
+					return f;
+				}
 			}
 		}
 		return functorize().value( Functor.NOTHING );

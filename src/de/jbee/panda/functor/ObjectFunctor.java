@@ -50,7 +50,7 @@ public class ObjectFunctor
 			return this;
 		}
 		if ( expr.after( '.' ) ) {
-			String property = expr.property( null );
+			String property = expr.name( null );
 			if ( expr.startsWith( Selector.OBJECT ) ) {
 				property = TypeFunctorizer.OBJECT;
 				expr.gobble( Selector.OBJECT );

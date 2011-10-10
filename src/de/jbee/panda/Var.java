@@ -5,11 +5,13 @@ import java.io.Serializable;
 public final class Var
 		implements Serializable {
 
+	public static final Var UNDEFINED = new Var( "" );
+
 	private final String name;
 
 	public static Var named( String name ) {
 		if ( name == null || name.isEmpty() ) {
-			throw new IllegalArgumentException( "A variable has to have a name." );
+			return UNDEFINED;
 		}
 		return new Var( name );
 	}
@@ -17,6 +19,10 @@ public final class Var
 	private Var( String name ) {
 		super();
 		this.name = name;
+	}
+
+	public boolean isUndefined() {
+		return name.equals( UNDEFINED.name );
 	}
 
 	@Override

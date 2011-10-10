@@ -68,9 +68,8 @@ def="x as nothing"
 def="x is <case-expr>" ---> boolean nach 'is' wie in case
 def="x as ..." ---> assignment 
 
-!!!!man könnte auch mit einem functor anfangen - def nimmt nur den ersten string bis zu einem whitespace und alles weitere ist das argument dieses functors. --> genereller weg -> sehr flexibel
 def="var x = y" // var ist hier der name des funktors 'x = y' wird als argument übergeben -> nice!
-def="var x is each y"
+def="var x as each @y"
  
 
 wie geht bis zum vorletzten ? 1:n-1 ??

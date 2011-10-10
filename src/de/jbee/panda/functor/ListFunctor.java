@@ -42,6 +42,7 @@ final class ListFunctor
 			return env.invoke( elems.at( start ), expr.gobble( ']' ) );
 		}
 		//OPEN support .1..4. notation for list as part of objects
+		//OPEN support concat
 		return env.invoke( just( elems, env ), expr );
 	}
 

@@ -18,7 +18,8 @@ public class VarFunctor
 
 	@Override
 	public Functor invoke( Selector expr, EvaluationEnv env ) {
-		String name = expr.property( null );
+		expr.gobble( '@' );
+		String name = expr.name( null );
 		if ( name == null ) {
 			//TODO warn about wrong useage of var functor expr
 			return this;
@@ -27,11 +28,27 @@ public class VarFunctor
 			//TODO warning about an attempt to redefine core concept - or is it up to the env to check that ? -> all names like __xyz__ are not allowed to be redefined !?
 			return this;
 		}
-		if ( expr.after( '=' ) ) {
-			String ref = expr.property( null );
-			env.define( Var.named( name ), env.invoke( env.value( Var.named( ref ) ), expr ) );
+		expr.gobbleWhitespace();
+		if ( expr.after( "as" ) ) {
+			expr.gobbleWhitespace();
+			env.define( Var.named( name ), eval( expr, env ) );
 		}
 		return this;
+	}
+
+	private Functor eval( Selector expr, EvaluationEnv env ) {
+		if ( expr.after( '@' ) ) {
+			return env.invoke( env.value( Var.named( expr.name( "" ) ) ), expr );
+		}
+		if ( expr.after( '\'' ) ) {
+			String constant = expr.until( '\'' );
+			return env.invoke( env.functorize().value( constant ), expr.gobble( '\'' ) );
+		}
+		//TODO numbers
+		if ( expr.after( '[' ) ) {
+			//TODO
+		}
+		return env.invoke( env.functorize().behaviour( expr.name( "" ), eval( expr, env ) ), expr );
 	}
 
 	@Override

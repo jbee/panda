@@ -137,19 +137,17 @@ public final class Selector
 		return of( "[" + start + ":" + end + "]" );
 	}
 
-	public String property( String defaultProperty ) {
-		if ( !Character.isLetter( charAt( 0 ) ) ) {
+	public String name( String defaultProperty ) {
+		if ( !Character.isJavaIdentifierPart( charAt( 0 ) ) ) {
 			return defaultProperty;
 		}
 		StringBuilder b = new StringBuilder();
 		int i = 0;
-		while ( i < length() && Character.isLetter( charAt( i ) ) ) {
+		while ( i < length() && Character.isJavaIdentifierPart( charAt( i ) ) ) {
 			b.append( charAt( i ) );
 			i++;
 		}
-		final int l = b.length();
-		start += l;
-		return value.substring( start - l, start );
+		return proceed( b.length() );
 	}
 
 	public String until( char c ) {
@@ -162,9 +160,7 @@ public final class Selector
 			start = value.length();
 			return res;
 		}
-		int l = i - 1;
-		start += l;
-		return value.substring( start - l, start );
+		return proceed( i - 1 );
 	}
 
 	public String untilWhitespace() {
@@ -177,9 +173,25 @@ public final class Selector
 			start = value.length();
 			return res;
 		}
-		int l = i - 1;
-		start += l;
-		return value.substring( start - l, start );
+		return proceed( i - 1 );
+	}
+
+	private String proceed( int n ) {
+		if ( n <= 0 ) {
+			return value.substring( start );
+		}
+		start += n;
+		return value.substring( start - n, start );
+	}
+
+	public void gobbleWhitespace() {
+		int i = 0;
+		while ( i < length() && Character.isWhitespace( charAt( i ) ) ) {
+			i++;
+		}
+		if ( i > 0 ) {
+			start += i - 1;
+		}
 	}
 
 }

@@ -3,7 +3,6 @@ package de.jbee.panda.functor;
 import static de.jbee.panda.TypeFunctorizer.DEF;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
-import de.jbee.panda.Functorizer;
 import de.jbee.panda.Selector;
 import de.jbee.panda.TypeFunctorizer;
 
@@ -27,9 +26,8 @@ public class DefineFunctor
 
 	@Override
 	public Functor invoke( Selector expr, EvaluationEnv env ) {
-		String name = expr.property( TypeFunctorizer.NOTHING );
-		Functorizer f = env.functorize();
-		return env.invoke( f.behaviour( name, NOTHING ), expr );
+		String name = expr.name( TypeFunctorizer.NOTHING );
+		return env.invoke( env.functorize().behaviour( name, NOTHING ), expr );
 	}
 
 	@Override
