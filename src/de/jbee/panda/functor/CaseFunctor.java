@@ -27,9 +27,10 @@ public class CaseFunctor
 	private final String expr;
 	private Functor result;
 
-	CaseFunctor( String expr ) {
+	CaseFunctor( String expr, Functor nothing ) {
 		super();
 		this.expr = expr;
+		this.result = nothing;
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public class CaseFunctor
 		@Override
 		public Functor functorize( Object value, FunctorizeEnv env ) {
 			if ( value instanceof String ) {
-				return new CaseFunctor( (String) value );
+				return new CaseFunctor( (String) value, env.behaviour( NOTHING, null ) );
 			}
 			return env.behaviour( MAYBE, value );
 		}

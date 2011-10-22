@@ -33,4 +33,8 @@ public class Env {
 	public static Functor false_( EvaluationEnv env ) {
 		return env.functorize().behaviour( Functorizer.FALSE, false );
 	}
+
+	public static String internal( String name ) {
+		return "__" + name + "__";
+	}
 }

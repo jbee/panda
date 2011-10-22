@@ -9,6 +9,14 @@ public final class Var
 
 	private final String name;
 
+	public static Var defined( int position ) {
+		return internal( position + "" );
+	}
+
+	public static Var internal( String name ) {
+		return named( Env.internal( name ) );
+	}
+
 	public static Var named( String name ) {
 		if ( name == null || name.isEmpty() ) {
 			return UNDEFINED;

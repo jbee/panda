@@ -1,5 +1,7 @@
 package de.jbee.panda.functor;
 
+import static de.jbee.panda.Env.internal;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,9 +95,8 @@ public class Functorize
 				String stmt = (String) value;
 				int pos = stmt.indexOf( ' ' );
 				return pos < 0
-					? env.behaviour( "__" + stmt + "__", "" )
-					: env.behaviour( "__" + stmt.substring( 0, pos ) + "__",
-							stmt.substring( pos + 1 ) );
+					? env.behaviour( internal( stmt ), "" )
+					: env.behaviour( internal( stmt.substring( 0, pos ) ), stmt.substring( pos + 1 ) );
 			}
 			return env.behaviour( MAYBE, value );
 		}
