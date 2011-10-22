@@ -14,7 +14,7 @@ public class Env {
 		}
 	}
 
-	public static Functor a( boolean value, EvaluationEnv env ) {
+	public static Functor bool( boolean value, EvaluationEnv env ) {
 		return env.functorize().value( Boolean.valueOf( value ) );
 	}
 
@@ -26,11 +26,11 @@ public class Env {
 		return env.functorize().behaviour( Functorizer.MAYBE, value );
 	}
 
-	public static Functor yes( EvaluationEnv env ) {
+	public static Functor true_( EvaluationEnv env ) {
 		return env.functorize().behaviour( Functorizer.TRUE, true );
 	}
 
-	public static Functor no( EvaluationEnv env ) {
+	public static Functor false_( EvaluationEnv env ) {
 		return env.functorize().behaviour( Functorizer.FALSE, false );
 	}
 }

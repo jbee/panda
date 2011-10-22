@@ -1,9 +1,11 @@
 package de.jbee.panda;
 
+import static de.jbee.panda.Env.nothing;
+
 import java.util.Deque;
 import java.util.LinkedList;
 
-import de.jbee.panda.functor.DefaultFunctorizer;
+import de.jbee.panda.functor.Functorize;
 
 public class Environment
 		implements ProcessingEnv {
@@ -34,7 +36,7 @@ public class Environment
 
 	@Override
 	public FunctorizeEnv functorize() {
-		return DefaultFunctorizer.getInstance();
+		return Functorize.getInstance();
 	}
 
 	@Override
@@ -64,14 +66,17 @@ public class Environment
 
 	@Override
 	public Functor eval( Selector expr ) {
+		if ( expr.isEmpty() ) {
+			return nothing( this );
+		}
 		if ( expr.after( '@' ) ) {
 			return invoke( value( Var.named( expr.name( "" ) ) ), expr );
 		}
-		if ( expr.after( '\'' ) ) {
+		if ( expr.after( '\'' ) ) { // string constants
 			return invoke( functorize().value( expr.until( '\'' ) ), expr.gobble( '\'' ) );
 		}
 		//TODO numbers
-		if ( expr.after( '[' ) ) {
+		if ( expr.after( '[' ) ) { // list constants
 			//TODO
 		}
 		return invoke( functorize().behaviour( expr.name( "" ), eval( expr ) ), expr );

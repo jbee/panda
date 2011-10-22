@@ -1,6 +1,6 @@
 package de.jbee.panda.functor;
 
-import static de.jbee.panda.Env.nothing;
+import static de.jbee.panda.Env.false_;
 import de.jbee.panda.BehaviouralFunctor;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
@@ -22,8 +22,6 @@ import de.jbee.panda.Var;
 public class CaseFunctor
 		implements BehaviouralFunctor {
 
-	private static final Var CASE_VAR = Var.named( "__case__" );
-
 	public static final Functorizer FUNCTORIZER = new CaseFunctorizer();
 
 	private final String expr;
@@ -37,18 +35,16 @@ public class CaseFunctor
 	@Override
 	public void bind( Var var, ProcessingEnv env ) {
 		result = env.eval( Selector.of( expr ) );
-		env.define( CASE_VAR, result );
-		env.context().addDependency( CASE_VAR );
+		env.context().addDependency( var );
 	}
 
 	@Override
 	public void rebind( Var var, ProcessingEnv env ) {
-		env.context().define( CASE_VAR, nothing( env ) ); // in any case just once
+		result = false_( env );
 	}
 
 	@Override
 	public Functor invoke( Selector expr, EvaluationEnv env ) {
-		// OPEN what does it mean when a case is invoked ? 
 		return env.invoke( result, expr );
 	}
 

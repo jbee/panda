@@ -4,11 +4,11 @@ import static de.jbee.panda.Env.just;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.FunctorizeEnv;
+import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
 import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
-import de.jbee.panda.Functorizer;
 
 final class BooleanFunctor
 		implements Functor, PredicateNature, IntegralNature {
@@ -33,6 +33,9 @@ final class BooleanFunctor
 
 	@Override
 	public Functor invoke( Selector expr, EvaluationEnv env ) {
+		if ( expr.isEmpty() ) {
+			return this;
+		}
 		if ( expr.after( '!' ) ) {
 			return env.invoke( a( !value ), expr );
 		}

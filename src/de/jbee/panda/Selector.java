@@ -138,6 +138,9 @@ public final class Selector
 	}
 
 	public String name( String defaultProperty ) {
+		if ( isEmpty() ) {
+			return defaultProperty;
+		}
 		if ( !Character.isJavaIdentifierPart( charAt( 0 ) ) ) {
 			return defaultProperty;
 		}
@@ -190,7 +193,7 @@ public final class Selector
 			i++;
 		}
 		if ( i > 0 ) {
-			start += i - 1;
+			start += i;
 		}
 	}
 

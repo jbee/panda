@@ -1,8 +1,8 @@
 package de.jbee.panda.functor;
 
-import static de.jbee.panda.Env.no;
+import static de.jbee.panda.Env.false_;
 import static de.jbee.panda.Env.nothing;
-import static de.jbee.panda.Env.yes;
+import static de.jbee.panda.Env.true_;
 import de.jbee.lang.List;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
@@ -44,7 +44,7 @@ abstract class MaybeFunctor
 		@Override
 		public Functor invoke( Selector expr, EvaluationEnv env ) {
 			if ( expr.after( '?' ) ) {
-				return env.invoke( yes( env ), expr );
+				return env.invoke( true_( env ), expr );
 			}
 			return env.invoke( nothing( env ), expr );
 		}
@@ -79,7 +79,7 @@ abstract class MaybeFunctor
 		@Override
 		public Functor invoke( Selector expr, EvaluationEnv env ) {
 			if ( expr.after( '?' ) ) {
-				return env.invoke( no( env ), expr );
+				return env.invoke( false_( env ), expr );
 			}
 			// OPEN tell env about invocation on nothing ?
 			return this;

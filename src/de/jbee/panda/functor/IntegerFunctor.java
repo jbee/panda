@@ -1,18 +1,18 @@
 package de.jbee.panda.functor;
 
+import static de.jbee.panda.Env.bool;
 import static de.jbee.panda.Env.just;
 import static de.jbee.panda.Env.nothing;
 import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Integer.MIN_VALUE;
-import de.jbee.panda.Env;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.FunctorizeEnv;
+import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
 import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
-import de.jbee.panda.Functorizer;
 
 final class IntegerFunctor
 		implements Functor, IntegralNature, PredicateNature {
@@ -58,10 +58,10 @@ final class IntegerFunctor
 		if ( expr.after( '=' ) ) {
 			int min = expr.index( MIN_VALUE );
 			if ( expr.after( ':' ) ) {
-				return env.invoke( Env.a( value >= min && value <= expr.index( MAX_VALUE ), env ),
+				return env.invoke( bool( value >= min && value <= expr.index( MAX_VALUE ), env ),
 						expr );
 			}
-			return env.invoke( Env.a( value == min, env ), expr );
+			return env.invoke( bool( value == min, env ), expr );
 		}
 		return env.invoke( just( value, env ), expr );
 	}

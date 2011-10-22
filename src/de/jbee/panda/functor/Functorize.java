@@ -8,12 +8,15 @@ import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.SetupEnv;
 
-public class DefaultFunctorizer
+public class Functorize
 		implements SetupEnv, FunctorizeEnv {
 
-	private static DefaultFunctorizer instance = new DefaultFunctorizer();
+	private static final Functorizer DEF_FUNCTORIZER = new DefineFunctorizer();
+
+	private static Functorize instance = new Functorize();
 
 	static {
+		DEF_FUNCTORIZER.setup( instance );
 		BooleanFunctor.FUNCTORIZER.setup( instance );
 		IntegerFunctor.FUNCTORIZER.setup( instance );
 		StringFunctor.FUNCTORIZER.setup( instance );
@@ -22,7 +25,6 @@ public class DefaultFunctorizer
 		EachFunctor.FUNCTORIZER.setup( instance );
 		ObjectFunctor.FUNCTORIZER.setup( instance );
 		CaseFunctor.FUNCTORIZER.setup( instance );
-		DefineFunctor.FUNCTORIZER.setup( instance );
 		VarFunctor.FUNCTORIZER.setup( instance );
 	}
 
@@ -76,5 +78,32 @@ public class DefaultFunctorizer
 		return name( value == null
 			? Void.class
 			: value.getClass() );
+	}
+
+	private static final class DefineFunctorizer
+			implements Functorizer {
+
+		DefineFunctorizer() {
+			// make visible
+		}
+
+		@Override
+		public Functor functorize( Object value, FunctorizeEnv env ) {
+			if ( value instanceof String ) {
+				String stmt = (String) value;
+				int pos = stmt.indexOf( ' ' );
+				return pos < 0
+					? env.behaviour( "__" + stmt + "__", "" )
+					: env.behaviour( "__" + stmt.substring( 0, pos ) + "__",
+							stmt.substring( pos + 1 ) );
+			}
+			return env.behaviour( MAYBE, value );
+		}
+
+		@Override
+		public void setup( SetupEnv env ) {
+			env.install( DEF, this );
+		}
+
 	}
 }
