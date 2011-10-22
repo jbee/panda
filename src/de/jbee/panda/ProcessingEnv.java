@@ -9,4 +9,8 @@ public interface ProcessingEnv
 
 	void close( ProcessContext context );
 
+	void define( Var var, Functor f );
+
+	Functor eval( Selector expr );
+
 }

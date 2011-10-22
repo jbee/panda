@@ -1,9 +1,14 @@
 package de.jbee.panda.functor;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
 
 import de.jbee.panda.Context;
 import de.jbee.panda.Environment;
+import de.jbee.panda.Functor;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.Var;
@@ -11,11 +16,13 @@ import de.jbee.panda.Var;
 public class TestDefine {
 
 	@Test
-	public void testDefineVarFunctor() {
+	public void testDefineVarAsTrueFunctor() {
 		ProcessingEnv env = new Environment( new Context() );
 		env.define( Var.named( "__1__" ), env.functorize().behaviour( Functorizer.DEF,
 				"var bar as true" ) );
 		env.context().processed( env );
-
+		Functor value = env.value( Var.named( "bar" ) );
+		assertThat( value, instanceOf( BooleanFunctor.class ) );
+		assertThat( value.is(), is( true ) );
 	}
 }

@@ -12,14 +12,10 @@ package de.jbee.panda;
  */
 public interface EvaluationEnv {
 
-	void define( Var var, Functor f );
-
 	Functor value( Var var );
 
 	Functor invoke( Functor f, Selector expr );
 
 	FunctorizeEnv functorize();
-
-	Functor eval( Selector expr ); //OPEN move eval to FunctorizeEnv ?
 
 }
