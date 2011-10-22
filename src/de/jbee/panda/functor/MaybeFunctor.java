@@ -7,12 +7,12 @@ import de.jbee.lang.List;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.FunctorizeEnv;
+import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.PredicateNature;
 import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
-import de.jbee.panda.Functorizer;
 
 abstract class MaybeFunctor
 		implements Functor {
@@ -113,6 +113,10 @@ abstract class MaybeFunctor
 
 	private static final class ExistsFunctorizer
 			implements Functorizer {
+
+		ExistsFunctorizer() {
+			// make accessible
+		}
 
 		@Override
 		public Functor functorize( Object value, FunctorizeEnv env ) {

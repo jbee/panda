@@ -66,6 +66,7 @@ public class Environment
 
 	@Override
 	public Functor eval( Selector expr ) {
+		expr.gobbleWhitespace();
 		if ( expr.isEmpty() ) {
 			return nothing( this );
 		}
@@ -80,7 +81,6 @@ public class Environment
 			//TODO
 		}
 		return invoke( functorize().behaviour( expr.name( "" ), eval( expr ) ), expr );
-
 	}
 
 }
