@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.jbee.panda.Functor;
+import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.SetupEnv;
-import de.jbee.panda.TypeFunctorizer;
 
 public class DefaultFunctorizer
-		implements SetupEnv, Functorizer {
+		implements SetupEnv, FunctorizeEnv {
 
 	private static DefaultFunctorizer instance = new DefaultFunctorizer();
 
@@ -26,20 +26,30 @@ public class DefaultFunctorizer
 		VarFunctor.FUNCTORIZER.setup( instance );
 	}
 
-	public static Functorizer getInstance() {
+	public static FunctorizeEnv getInstance() {
 		return instance;
 	}
 
-	public final Map<String, TypeFunctorizer> types = new HashMap<String, TypeFunctorizer>();
+	public final Map<String, Functorizer> types = new HashMap<String, Functorizer>();
 
 	@Override
-	public void install( String name, TypeFunctorizer functorizer ) {
-		types.put( name, functorizer );
+	public Functor behaviour( String name, Object value ) {
+		return get( name, MaybeFunctor.FUNCTORIZER ).functorize( value, this );
 	}
 
 	@Override
-	public void install( Class<?> type, TypeFunctorizer functorizer ) {
+	public void install( Class<?> type, Functorizer functorizer ) {
 		install( name( type ), functorizer );
+	}
+
+	@Override
+	public void install( String name, Functor constant ) {
+		install( name, new ConstantFunctorizer( name, constant ) );
+	}
+
+	@Override
+	public void install( String name, Functorizer functorizer ) {
+		types.put( name, functorizer );
 	}
 
 	@Override
@@ -47,34 +57,24 @@ public class DefaultFunctorizer
 		if ( value instanceof Functor ) {
 			return (Functor) value;
 		}
-		return get( name( value ), get( TypeFunctorizer.DEFAULT, MaybeFunctor.FUNCTORIZER ) ).functorize(
+		return get( name( value ), get( Functorizer.DEFAULT, MaybeFunctor.FUNCTORIZER ) ).functorize(
 				value, this );
+	}
+
+	private Functorizer get( String name, Functorizer fallback ) {
+		Functorizer tf = types.get( name );
+		return tf == null
+			? fallback
+			: tf;
+	}
+
+	private String name( Class<?> type ) {
+		return type.getCanonicalName();
 	}
 
 	private String name( Object value ) {
 		return name( value == null
 			? Void.class
 			: value.getClass() );
-	}
-
-	public String name( Class<?> type ) {
-		return type.getCanonicalName();
-	}
-
-	@Override
-	public Functor behaviour( String name, Object value ) {
-		return get( name, MaybeFunctor.FUNCTORIZER ).functorize( value, this );
-	}
-
-	private TypeFunctorizer get( String name, TypeFunctorizer fallback ) {
-		TypeFunctorizer tf = types.get( name );
-		return tf == null
-			? fallback
-			: tf;
-	}
-
-	@Override
-	public void install( String name, Functor constant ) {
-		install( name, new ConstantFunctorizer( name, constant ) );
 	}
 }

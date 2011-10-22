@@ -4,12 +4,11 @@ import static de.jbee.panda.Env.nothing;
 import de.jbee.panda.BehaviouralFunctor;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
+import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.Functorizer;
-import de.jbee.panda.ProcessContext;
 import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
-import de.jbee.panda.TypeFunctorizer;
 import de.jbee.panda.Var;
 
 /**
@@ -23,70 +22,59 @@ import de.jbee.panda.Var;
 public class CaseFunctor
 		implements BehaviouralFunctor {
 
-	public static final TypeFunctorizer FUNCTORIZER = new CaseFunctorizer();
+	private static final Var CASE_VAR = Var.named( "__case__" );
 
-	//OPEN create a CaseNature ? 
+	public static final Functorizer FUNCTORIZER = new CaseFunctorizer();
 
-	// hier vermischen sich noch 2 dinge: 
-	// 1. der state eines blocks hinsichtlich der case auswertungen seiner direkten kinder
-	// 2. der block mit dem case selbst um den block über dependency nicht darzustellen
-	// die fabrik oder 2. manipuliert 1. wenn ein case-ausdruck ausgewertet wird
-
-	private final String caseExpr;
+	private final String expr;
+	private Functor result;
 
 	CaseFunctor( String expr ) {
 		super();
-		this.caseExpr = expr;
+		this.expr = expr;
 	}
 
 	@Override
 	public void bind( Var var, ProcessingEnv env ) {
-		env.context().addDependency( var );
+		result = env.eval( Selector.of( expr ) );
+		env.define( CASE_VAR, result );
+		env.context().addDependency( CASE_VAR );
 	}
 
 	@Override
 	public void rebind( Var var, ProcessingEnv env ) {
-		env.context().define( var, nothing( env ) );
+		env.context().define( CASE_VAR, nothing( env ) ); // in any case just once
 	}
 
 	@Override
 	public Functor invoke( Selector expr, EvaluationEnv env ) {
 		// OPEN what does it mean when a case is invoked ? 
-		return env.invoke( env.functorize().value( caseExpr ), expr );
+		return env.invoke( result, expr );
 	}
 
 	@Override
 	public String text() {
-		return caseExpr;
+		return String.valueOf( result );
 	}
 
-	/**
-	 * This will evaluate the case expression.
-	 * 
-	 * It can be seen as some kind of lazy evaluation taking place when
-	 * {@link ProcessContext#processed(ProcessingEnv)} is being executed whereby
-	 * {@link #bind(Var, ProcessingEnv)} is called for all {@link Var} iables. For all dependencies
-	 * {@link #is()} will be called to determine if the context is done.
-	 */
 	@Override
 	public boolean is() {
-		// TODO eval expr
-		return false;
+		return result.is();
 	}
 
 	private static final class CaseFunctorizer
-			implements TypeFunctorizer {
+			implements Functorizer {
 
 		CaseFunctorizer() {
 			//make visible
 		}
 
 		@Override
-		public Functor functorize( Object value, Functorizer f ) {
+		public Functor functorize( Object value, FunctorizeEnv env ) {
 			if ( value instanceof String ) {
 				return new CaseFunctor( (String) value );
 			}
-			return f.behaviour( MAYBE, value );
+			return env.behaviour( MAYBE, value );
 		}
 
 		@Override

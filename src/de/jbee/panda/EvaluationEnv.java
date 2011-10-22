@@ -18,8 +18,8 @@ public interface EvaluationEnv {
 
 	Functor invoke( Functor f, Selector expr );
 
-	Functorizer functorize();
+	FunctorizeEnv functorize();
 
-	Functor eval( Selector expr );
+	Functor eval( Selector expr ); //OPEN move eval to FunctorizeEnv ?
 
 }

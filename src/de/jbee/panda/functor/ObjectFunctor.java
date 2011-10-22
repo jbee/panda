@@ -16,18 +16,18 @@ import de.jbee.panda.BehaviouralFunctor;
 import de.jbee.panda.Env;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
-import de.jbee.panda.Functorizer;
+import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
-import de.jbee.panda.TypeFunctorizer;
+import de.jbee.panda.Functorizer;
 import de.jbee.panda.Var;
 
 public class ObjectFunctor
 		implements Functor, ListNature {
 
-	static final TypeFunctorizer FUNCTORIZER = new ReflectObjectFunctorizer();
+	static final Functorizer FUNCTORIZER = new ReflectObjectFunctorizer();
 
 	static final Ord<Object> ORDER = Order.typeaware( new MemberOrder(), MemberFunctor.class );
 
@@ -52,7 +52,7 @@ public class ObjectFunctor
 		if ( expr.after( '.' ) ) {
 			String property = expr.name( null );
 			if ( expr.startsWith( Selector.OBJECT ) ) {
-				property = TypeFunctorizer.OBJECT;
+				property = Functorizer.OBJECT;
 				expr.gobble( Selector.OBJECT );
 			}
 			if ( property != null ) {
@@ -159,16 +159,16 @@ public class ObjectFunctor
 	}
 
 	private static final class ReflectObjectFunctorizer
-			implements TypeFunctorizer {
+			implements Functorizer {
 
 		ReflectObjectFunctorizer() {
 			// make visible
 		}
 
 		@Override
-		public Functor functorize( Object value, Functorizer f ) {
+		public Functor functorize( Object value, FunctorizeEnv env ) {
 			if ( value == Functor.NOTHING ) {
-				return f.behaviour( MAYBE, value );
+				return env.behaviour( MAYBE, value );
 			}
 
 			List<MemberFunctor> elements = List.with.noElements();
@@ -180,7 +180,7 @@ public class ObjectFunctor
 						try {
 							elements = elements.prepand( member(
 									field.getName().replace( "_", "" ),
-									f.value( field.get( value ) ) ) );
+									env.value( field.get( value ) ) ) );
 						} catch ( Exception e ) {
 							e.printStackTrace();
 						}

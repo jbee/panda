@@ -3,23 +3,62 @@
  */
 package de.jbee.panda;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
+
+import de.jbee.lang.List;
+import de.jbee.lang.Traversal;
 
 public class Context
 		implements ProcessContext {
 
-	private final Map<Var, Functor> vars = new HashMap<Var, Functor>();
-	private final Map<Var, Functor> used = new HashMap<Var, Functor>();
+	static final class Definition {
+
+		final Var name;
+		final Functor value;
+
+		boolean overridden = false;
+
+		Definition( Var name, Functor value ) {
+			super();
+			this.name = name;
+			this.value = value;
+		}
+
+		@Override
+		public String toString() {
+			final String res = name + " => " + value;
+			return overridden
+				? "(" + res + ")"
+				: res;
+		}
+
+	}
+
+	private List<Definition> defs = List.with.noElements();
 	private final Set<Var> dependencies = new HashSet<Var>();
 	private boolean bound;
 
 	@Override
 	public void define( Var var, Functor f ) {
-		vars.put( var, f );
+		// we don't replace - instead we prepand and take first during lookup 
+		// we get a history and allow calling define during bind and rebind 
+		defs = defs.prepand( new Definition( var, f ) );
+		override( var );
+	}
+
+	private void override( final Var var ) {
+		defs.traverse( 1, new Traversal<Definition>() {
+
+			@Override
+			public int incrementOn( Definition e ) {
+				if ( e.name.equalTo( var ) ) {
+					e.overridden = true;
+					return STOP_TRAVERSAL;
+				}
+				return 1;
+			}
+		} );
 	}
 
 	@Override
@@ -29,10 +68,15 @@ public class Context
 
 	@Override
 	public Functor definedAs( Var var, Functor undefined ) {
-		Functor res = vars.get( var );
-		if ( res != null ) {
-			used.put( var, res );
-			return res;
+		return definedAs( defs, var, undefined );
+	}
+
+	private Functor definedAs( List<Definition> vars, Var var, Functor undefined ) {
+		for ( int i = 0; i < vars.length(); i++ ) {
+			Definition def = vars.at( i );
+			if ( def.name.equalTo( var ) ) {
+				return def.value;
+			}
 		}
 		return undefined;
 	}
@@ -40,36 +84,41 @@ public class Context
 	@Override
 	public boolean processed( ProcessingEnv env ) {
 		if ( !bound ) {
-			bind( env );
+			bind( env, 0 );
 			bound = true;
 			return dependencies.isEmpty()
 				? false
-				: noDependencies( env );
+				: !hasOperativeDependencies();
 		}
-		rebind( env );
-		return noDependencies( env );
+		bind( env, defs.length() );
+		return !hasOperativeDependencies();
 	}
 
-	private boolean noDependencies( ProcessingEnv env ) {
-		boolean res = true;
+	private boolean hasOperativeDependencies() {
+		boolean res = false;
 		for ( Var d : dependencies ) {
 			Functor f = definedAs( d, null );
 			if ( f != null && f.is() ) {
-				return false;
+				return true;
 			}
 		}
 		return res;
 	}
 
-	private void rebind( ProcessingEnv env ) {
-		for ( Entry<Var, Functor> e : used.entrySet() ) {
-			Env.rebind( e.getKey(), e.getValue(), env );
-		}
-	}
-
-	private void bind( ProcessingEnv env ) {
-		for ( Entry<Var, Functor> e : vars.entrySet() ) {
-			Env.bind( e.getKey(), e.getValue(), env );
+	private void bind( ProcessingEnv env, int rebinds ) {
+		int bound = 0;
+		int pos = defs.length() - 1;
+		while ( pos >= 0 ) {
+			Definition def = defs.at( pos );
+			if ( !def.overridden ) {
+				if ( bound < rebinds ) {
+					Env.rebind( def.name, def.value, env );
+				} else {
+					Env.bind( def.name, def.value, env );
+				}
+			}
+			bound++;
+			pos = defs.length() - 1 - bound;
 		}
 	}
 

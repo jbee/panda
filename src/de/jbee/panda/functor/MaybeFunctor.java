@@ -6,18 +6,18 @@ import static de.jbee.panda.Env.yes;
 import de.jbee.lang.List;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
-import de.jbee.panda.Functorizer;
+import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.PredicateNature;
 import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
-import de.jbee.panda.TypeFunctorizer;
+import de.jbee.panda.Functorizer;
 
 abstract class MaybeFunctor
 		implements Functor {
 
-	static final TypeFunctorizer FUNCTORIZER = new MaybeFunctorizer();
+	static final Functorizer FUNCTORIZER = new MaybeFunctorizer();
 
 	static final Functor NOTHING_INSTANCE = new NothingFunctor();
 
@@ -112,11 +112,11 @@ abstract class MaybeFunctor
 	}
 
 	private static final class ExistsFunctorizer
-			implements TypeFunctorizer {
+			implements Functorizer {
 
 		@Override
-		public Functor functorize( Object value, Functorizer f ) {
-			return f.value( f.value( value ) != NOTHING_INSTANCE );
+		public Functor functorize( Object value, FunctorizeEnv env ) {
+			return env.value( env.value( value ) != NOTHING_INSTANCE );
 		}
 
 		@Override
@@ -127,19 +127,19 @@ abstract class MaybeFunctor
 	}
 
 	private static final class NotFunctorizer
-			implements TypeFunctorizer {
+			implements Functorizer {
 
 		NotFunctorizer() {
 			// make accessible
 		}
 
 		@Override
-		public Functor functorize( Object value, Functorizer f ) {
+		public Functor functorize( Object value, FunctorizeEnv env ) {
 			// very important: NOT nothing is  still nothing
-			Functor negated = f.value( value );
+			Functor negated = env.value( value );
 			return negated == NOTHING_INSTANCE
 				? NOTHING_INSTANCE
-				: f.value( !negated.is() );
+				: env.value( !negated.is() );
 		}
 
 		@Override
@@ -150,17 +150,17 @@ abstract class MaybeFunctor
 	}
 
 	private static final class MaybeFunctorizer
-			implements TypeFunctorizer {
+			implements Functorizer {
 
-		static final TypeFunctorizer NOT_FUNCTORIZER = new NotFunctorizer();
-		static final TypeFunctorizer EXISTS_FUNCTORIZER = new ExistsFunctorizer();
+		static final Functorizer NOT_FUNCTORIZER = new NotFunctorizer();
+		static final Functorizer EXISTS_FUNCTORIZER = new ExistsFunctorizer();
 
 		MaybeFunctorizer() {
 			// make accessible
 		}
 
 		@Override
-		public Functor functorize( Object value, Functorizer f ) {
+		public Functor functorize( Object value, FunctorizeEnv env ) {
 			return value == Functor.NOTHING
 				? NOTHING_INSTANCE
 				: new JustFunctor( value );

@@ -10,7 +10,7 @@ public class TestProcessingEnv {
 	@Test
 	public void testEnv() {
 		ProcessingEnv env = new Environment( new Context() );
-		Functorizer func = env.functorize();
+		FunctorizeEnv func = env.functorize();
 		Var foo = Var.named( "foo" );
 		String[] values = new String[] { "a", "b", "c" };
 		env.context().define( foo, func.behaviour( "each", values ) );

@@ -35,10 +35,14 @@ public final class Var
 		return name.hashCode();
 	}
 
+	public boolean equalTo( Var other ) {
+		return name.equals( other.name );
+	}
+
 	@Override
 	public boolean equals( Object obj ) {
 		if ( obj instanceof Var ) {
-			return ( (Var) obj ).name.equals( name );
+			return equalTo( (Var) obj );
 		}
 		return false;
 	}

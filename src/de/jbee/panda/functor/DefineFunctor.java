@@ -1,10 +1,10 @@
 package de.jbee.panda.functor;
 
-import static de.jbee.panda.TypeFunctorizer.DEF;
+import static de.jbee.panda.Functorizer.DEF;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
 import de.jbee.panda.Selector;
-import de.jbee.panda.TypeFunctorizer;
+import de.jbee.panda.Functorizer;
 
 /**
  * 
@@ -18,7 +18,7 @@ import de.jbee.panda.TypeFunctorizer;
 public class DefineFunctor
 		implements Functor {
 
-	static final TypeFunctorizer FUNCTORIZER = new ConstantFunctorizer( DEF, new DefineFunctor() );
+	static final Functorizer FUNCTORIZER = new ConstantFunctorizer( DEF, new DefineFunctor() );
 
 	private DefineFunctor() {
 		// hide
@@ -26,7 +26,7 @@ public class DefineFunctor
 
 	@Override
 	public Functor invoke( Selector expr, EvaluationEnv env ) {
-		String name = expr.name( TypeFunctorizer.NOTHING );
+		String name = expr.name( Functorizer.NOTHING );
 		return env.invoke( env.functorize().behaviour( name, NOTHING ), expr );
 	}
 
@@ -37,7 +37,7 @@ public class DefineFunctor
 
 	@Override
 	public String text() {
-		return TypeFunctorizer.DEF;
+		return Functorizer.DEF;
 	}
 
 }

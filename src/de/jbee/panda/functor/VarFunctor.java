@@ -1,16 +1,18 @@
 package de.jbee.panda.functor;
 
-import static de.jbee.panda.TypeFunctorizer.VAR;
+import static de.jbee.panda.Functorizer.VAR;
+import de.jbee.panda.BehaviouralFunctor;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
+import de.jbee.panda.Functorizer;
+import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.Selector;
-import de.jbee.panda.TypeFunctorizer;
 import de.jbee.panda.Var;
 
 public class VarFunctor
-		implements Functor {
+		implements BehaviouralFunctor {
 
-	static final TypeFunctorizer FUNCTORIZER = new ConstantFunctorizer( VAR, new VarFunctor() );
+	static final Functorizer FUNCTORIZER = new ConstantFunctorizer( VAR, new VarFunctor() );
 
 	private VarFunctor() {
 		// hide
@@ -38,12 +40,24 @@ public class VarFunctor
 
 	@Override
 	public String text() {
-		return TypeFunctorizer.VAR;
+		return Functorizer.VAR;
 	}
 
 	@Override
 	public boolean is() {
 		return true;
+	}
+
+	@Override
+	public void bind( Var var, ProcessingEnv env ) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void rebind( Var var, ProcessingEnv env ) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

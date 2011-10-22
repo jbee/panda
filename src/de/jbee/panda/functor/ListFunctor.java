@@ -4,17 +4,17 @@ import static de.jbee.panda.Env.just;
 import de.jbee.lang.List;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
-import de.jbee.panda.Functorizer;
+import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.PredicateNature;
 import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
-import de.jbee.panda.TypeFunctorizer;
+import de.jbee.panda.Functorizer;
 
 final class ListFunctor
 		implements Functor, ListNature, PredicateNature {
 
-	static final TypeFunctorizer FUNCTORIZER = new ListFunctorizer();
+	static final Functorizer FUNCTORIZER = new ListFunctorizer();
 
 	private final List<Functor> elems;
 
@@ -62,20 +62,20 @@ final class ListFunctor
 	}
 
 	static class ListFunctorizer
-			implements TypeFunctorizer {
+			implements Functorizer {
 
 		@Override
-		public Functor functorize( Object value, Functorizer f ) {
+		public Functor functorize( Object value, FunctorizeEnv env ) {
 			if ( value instanceof List<?> ) {
-				return functorize( (List<?>) value, f );
+				return functorize( (List<?>) value, env );
 			}
 			if ( value instanceof String[] ) {
-				return functorize( List.with.elements( (String[]) value ), f );
+				return functorize( List.with.elements( (String[]) value ), env );
 			}
-			return f.behaviour( MAYBE, value );
+			return env.behaviour( MAYBE, value );
 		}
 
-		private Functor functorize( List<?> list, Functorizer f ) {
+		private Functor functorize( List<?> list, FunctorizeEnv f ) {
 			List<Functor> elems = List.with.noElements();
 			for ( Object e : List.iterate.backwards( list ) ) {
 				elems = elems.prepand( f.value( e ) );

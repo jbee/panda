@@ -7,17 +7,17 @@ import static java.lang.Integer.MIN_VALUE;
 import de.jbee.panda.Env;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
-import de.jbee.panda.Functorizer;
+import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
 import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
-import de.jbee.panda.TypeFunctorizer;
+import de.jbee.panda.Functorizer;
 
 final class IntegerFunctor
 		implements Functor, IntegralNature, PredicateNature {
 
-	static final TypeFunctorizer FUNCTORIZER = new IntegerFunctorizer();
+	static final Functorizer FUNCTORIZER = new IntegerFunctorizer();
 
 	private final int value;
 
@@ -87,21 +87,21 @@ final class IntegerFunctor
 	}
 
 	private static final class IntegerFunctorizer
-			implements TypeFunctorizer {
+			implements Functorizer {
 
 		IntegerFunctorizer() {
 			super(); //make visible
 		}
 
 		@Override
-		public Functor functorize( Object value, Functorizer f ) {
+		public Functor functorize( Object value, FunctorizeEnv env ) {
 			if ( value instanceof Integer ) {
 				return a( (Integer) value );
 			}
 			if ( value instanceof Number ) {
 				return a( ( (Number) value ).intValue() );
 			}
-			return f.behaviour( MAYBE, value );
+			return env.behaviour( MAYBE, value );
 		}
 
 		@Override

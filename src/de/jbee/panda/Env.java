@@ -23,14 +23,14 @@ public class Env {
 	}
 
 	public static Functor just( Object value, EvaluationEnv env ) {
-		return env.functorize().behaviour( TypeFunctorizer.MAYBE, value );
+		return env.functorize().behaviour( Functorizer.MAYBE, value );
 	}
 
 	public static Functor yes( EvaluationEnv env ) {
-		return env.functorize().behaviour( TypeFunctorizer.TRUE, true );
+		return env.functorize().behaviour( Functorizer.TRUE, true );
 	}
 
 	public static Functor no( EvaluationEnv env ) {
-		return env.functorize().behaviour( TypeFunctorizer.FALSE, false );
+		return env.functorize().behaviour( Functorizer.FALSE, false );
 	}
 }

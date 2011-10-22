@@ -33,7 +33,7 @@ public class Environment
 	}
 
 	@Override
-	public Functorizer functorize() {
+	public FunctorizeEnv functorize() {
 		return DefaultFunctorizer.getInstance();
 	}
 
@@ -68,8 +68,7 @@ public class Environment
 			return invoke( value( Var.named( expr.name( "" ) ) ), expr );
 		}
 		if ( expr.after( '\'' ) ) {
-			String constant = expr.until( '\'' );
-			return invoke( functorize().value( constant ), expr.gobble( '\'' ) );
+			return invoke( functorize().value( expr.until( '\'' ) ), expr.gobble( '\'' ) );
 		}
 		//TODO numbers
 		if ( expr.after( '[' ) ) {

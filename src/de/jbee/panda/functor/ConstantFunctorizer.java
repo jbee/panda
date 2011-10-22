@@ -1,12 +1,12 @@
 package de.jbee.panda.functor;
 
 import de.jbee.panda.Functor;
-import de.jbee.panda.Functorizer;
+import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.SetupEnv;
-import de.jbee.panda.TypeFunctorizer;
+import de.jbee.panda.Functorizer;
 
 public final class ConstantFunctorizer
-		implements TypeFunctorizer {
+		implements Functorizer {
 
 	private final String name;
 	private final Functor functor;
@@ -18,7 +18,7 @@ public final class ConstantFunctorizer
 	}
 
 	@Override
-	public Functor functorize( Object value, Functorizer f ) {
+	public Functor functorize( Object value, FunctorizeEnv env ) {
 		return functor;
 	}
 

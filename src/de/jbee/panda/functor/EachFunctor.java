@@ -7,13 +7,13 @@ import de.jbee.lang.List;
 import de.jbee.panda.BehaviouralFunctor;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
+import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.ProcessContext;
 import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
-import de.jbee.panda.TypeFunctorizer;
 import de.jbee.panda.Var;
 
 /**
@@ -26,7 +26,7 @@ import de.jbee.panda.Var;
 public class EachFunctor
 		implements BehaviouralFunctor {
 
-	static final TypeFunctorizer FUNCTORIZER = new EachFunctorizer();
+	static final Functorizer FUNCTORIZER = new EachFunctorizer();
 
 	private final Functor elements;
 	private final int index;
@@ -80,7 +80,7 @@ public class EachFunctor
 
 	@Override
 	public String toString() {
-		return "each " + elements;
+		return "each[" + index + "] " + elements;
 	}
 
 	@Override
@@ -110,11 +110,11 @@ public class EachFunctor
 	}
 
 	static final class EachFunctorizer
-			implements TypeFunctorizer {
+			implements Functorizer {
 
 		@Override
-		public Functor functorize( Object value, Functorizer f ) {
-			return new EachFunctor( f.value( value ) );
+		public Functor functorize( Object value, FunctorizeEnv env ) {
+			return new EachFunctor( env.value( value ) );
 		}
 
 		@Override

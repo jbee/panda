@@ -4,16 +4,16 @@ import static de.jbee.panda.Env.just;
 import de.jbee.panda.Env;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
-import de.jbee.panda.Functorizer;
+import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.PredicateNature;
 import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
-import de.jbee.panda.TypeFunctorizer;
+import de.jbee.panda.Functorizer;
 
 final class StringFunctor
 		implements Functor, PredicateNature {
 
-	static final TypeFunctorizer FUNCTORIZER = new StringFunctorizer();
+	static final Functorizer FUNCTORIZER = new StringFunctorizer();
 
 	private final String value;
 
@@ -64,14 +64,14 @@ final class StringFunctor
 	}
 
 	private static final class StringFunctorizer
-			implements TypeFunctorizer {
+			implements Functorizer {
 
 		StringFunctorizer() {
 			super(); //make visible
 		}
 
 		@Override
-		public Functor functorize( Object value, Functorizer f ) {
+		public Functor functorize( Object value, FunctorizeEnv env ) {
 			if ( value instanceof String ) {
 				return new StringFunctor( String.valueOf( value ) );
 			}
@@ -81,7 +81,7 @@ final class StringFunctor
 			if ( value instanceof char[] ) {
 				return new StringFunctor( String.valueOf( (char[]) value ) );
 			}
-			return f.behaviour( MAYBE, value );
+			return env.behaviour( MAYBE, value );
 		}
 
 		@Override

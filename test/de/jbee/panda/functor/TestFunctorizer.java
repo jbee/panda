@@ -11,10 +11,10 @@ import de.jbee.lang.List;
 import de.jbee.panda.Context;
 import de.jbee.panda.Environment;
 import de.jbee.panda.Functor;
-import de.jbee.panda.Functorizer;
+import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.ProcessingEnv;
 import de.jbee.panda.Selector;
-import de.jbee.panda.TypeFunctorizer;
+import de.jbee.panda.Functorizer;
 
 public class TestFunctorizer {
 
@@ -28,26 +28,26 @@ public class TestFunctorizer {
 
 	@Test
 	public void testYieldIntegerFunctor() {
-		Functorizer f = DefaultFunctorizer.getInstance();
+		FunctorizeEnv f = DefaultFunctorizer.getInstance();
 		assertThat( f.value( 1 ), is( IntegerFunctor.class ) );
 		assertThat( f.value( 1L ), is( IntegerFunctor.class ) );
-		assertThat( f.behaviour( TypeFunctorizer.NUMBER, 2.3 ), is( IntegerFunctor.class ) );
+		assertThat( f.behaviour( Functorizer.NUMBER, 2.3 ), is( IntegerFunctor.class ) );
 	}
 
 	@Test
 	public void testYieldStringFunctor() {
-		Functorizer f = DefaultFunctorizer.getInstance();
+		FunctorizeEnv f = DefaultFunctorizer.getInstance();
 		assertThat( f.value( "test" ), is( StringFunctor.class ) );
 		assertThat( f.value( "test".toCharArray() ), is( StringFunctor.class ) );
-		assertThat( f.behaviour( TypeFunctorizer.TEXT, "abc" ), is( StringFunctor.class ) );
+		assertThat( f.behaviour( Functorizer.TEXT, "abc" ), is( StringFunctor.class ) );
 	}
 
 	@Test
 	public void testYieldListFunctor() {
-		Functorizer f = DefaultFunctorizer.getInstance();
-		assertThat( f.behaviour( TypeFunctorizer.LIST, List.with.noElements() ),
+		FunctorizeEnv f = DefaultFunctorizer.getInstance();
+		assertThat( f.behaviour( Functorizer.LIST, List.with.noElements() ),
 				is( ListFunctor.class ) );
-		assertThat( f.behaviour( TypeFunctorizer.LIST, List.with.elements( 1, 2 ) ),
+		assertThat( f.behaviour( Functorizer.LIST, List.with.elements( 1, 2 ) ),
 				is( ListFunctor.class ) );
 	}
 

@@ -3,17 +3,17 @@ package de.jbee.panda.functor;
 import static de.jbee.panda.Env.just;
 import de.jbee.panda.EvaluationEnv;
 import de.jbee.panda.Functor;
-import de.jbee.panda.Functorizer;
+import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
 import de.jbee.panda.Selector;
 import de.jbee.panda.SetupEnv;
-import de.jbee.panda.TypeFunctorizer;
+import de.jbee.panda.Functorizer;
 
 final class BooleanFunctor
 		implements Functor, PredicateNature, IntegralNature {
 
-	static final TypeFunctorizer FUNCTORIZER = new BooleanFunctorizer();
+	static final Functorizer FUNCTORIZER = new BooleanFunctorizer();
 
 	static final Functor TRUE_INSTANCE = new BooleanFunctor( true );
 	static final Functor FALSE_INSTANCE = new BooleanFunctor( false );
@@ -67,20 +67,20 @@ final class BooleanFunctor
 	}
 
 	private static final class BooleanFunctorizer
-			implements TypeFunctorizer {
+			implements Functorizer {
 
 		BooleanFunctorizer() {
 			super(); //make visible
 		}
 
 		@Override
-		public Functor functorize( Object value, Functorizer f ) {
+		public Functor functorize( Object value, FunctorizeEnv env ) {
 			if ( value instanceof Boolean ) {
 				return ( (Boolean) value ).booleanValue()
 					? TRUE_INSTANCE
 					: FALSE_INSTANCE;
 			}
-			return f.behaviour( MAYBE, value );
+			return env.behaviour( MAYBE, value );
 		}
 
 		@Override
@@ -88,8 +88,8 @@ final class BooleanFunctor
 			env.install( boolean.class, this );
 			env.install( Boolean.class, this );
 			// functions used as constants
-			env.install( TypeFunctorizer.TRUE, TRUE_INSTANCE );
-			env.install( TypeFunctorizer.FALSE, FALSE_INSTANCE );
+			env.install( Functorizer.TRUE, TRUE_INSTANCE );
+			env.install( Functorizer.FALSE, FALSE_INSTANCE );
 		}
 
 	}
