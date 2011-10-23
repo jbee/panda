@@ -6,7 +6,7 @@ import de.jbee.panda.Functor;
 import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.ProcessingEnv;
-import de.jbee.panda.Selector;
+import de.jbee.panda.Expr;
 import de.jbee.panda.SetupEnv;
 import de.jbee.panda.Var;
 
@@ -27,7 +27,7 @@ public class VarFunctor
 	}
 
 	@Override
-	public Functor invoke( Selector expr, EvaluationEnv env ) {
+	public Functor invoke( Expr expr, EvaluationEnv env ) {
 
 		return this;
 	}
@@ -44,7 +44,7 @@ public class VarFunctor
 
 	@Override
 	public void bind( Var var, ProcessingEnv env ) {
-		Selector expr = Selector.of( stmt );
+		Expr expr = Expr.valueOf( stmt );
 		expr.gobble( '@' );
 		String name = expr.name( null );
 		if ( name == null ) {

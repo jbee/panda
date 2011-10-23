@@ -40,7 +40,7 @@ public class Environment
 	}
 
 	@Override
-	public Functor invoke( Functor f, Selector expr ) {
+	public Functor invoke( Functor f, Expr expr ) {
 		return f.invoke( expr, this );
 	}
 
@@ -65,7 +65,7 @@ public class Environment
 	}
 
 	@Override
-	public Functor eval( Selector expr ) {
+	public Functor eval( Expr expr ) {
 		expr.gobbleWhitespace();
 		if ( expr.isEmpty() ) {
 			return nothing( this );

@@ -8,6 +8,7 @@ import java.util.Map;
 import de.jbee.panda.Functor;
 import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.Functorizer;
+import de.jbee.panda.Expr;
 import de.jbee.panda.SetupEnv;
 
 public class Functorize
@@ -92,11 +93,11 @@ public class Functorize
 		@Override
 		public Functor functorize( Object value, FunctorizeEnv env ) {
 			if ( value instanceof String ) {
-				String stmt = (String) value;
-				int pos = stmt.indexOf( ' ' );
-				return pos < 0
-					? env.behaviour( internal( stmt ), "" )
-					: env.behaviour( internal( stmt.substring( 0, pos ) ), stmt.substring( pos + 1 ) );
+				Expr expr = Expr.valueOf( (String) value );
+				String name = expr.name( "" );
+				if ( !name.isEmpty() ) {
+					return env.behaviour( internal( name ), expr.gobbleWhitespace().toString() );
+				}
 			}
 			return env.behaviour( MAYBE, value );
 		}

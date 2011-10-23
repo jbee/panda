@@ -11,7 +11,7 @@ import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.PredicateNature;
-import de.jbee.panda.Selector;
+import de.jbee.panda.Expr;
 import de.jbee.panda.SetupEnv;
 
 abstract class MaybeFunctor
@@ -42,7 +42,7 @@ abstract class MaybeFunctor
 		}
 
 		@Override
-		public Functor invoke( Selector expr, EvaluationEnv env ) {
+		public Functor invoke( Expr expr, EvaluationEnv env ) {
 			if ( expr.after( '?' ) ) {
 				return env.invoke( true_( env ), expr );
 			}
@@ -77,7 +77,7 @@ abstract class MaybeFunctor
 		}
 
 		@Override
-		public Functor invoke( Selector expr, EvaluationEnv env ) {
+		public Functor invoke( Expr expr, EvaluationEnv env ) {
 			if ( expr.after( '?' ) ) {
 				return env.invoke( false_( env ), expr );
 			}

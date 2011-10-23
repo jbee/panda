@@ -7,7 +7,7 @@ import de.jbee.panda.Functor;
 import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.PredicateNature;
-import de.jbee.panda.Selector;
+import de.jbee.panda.Expr;
 import de.jbee.panda.SetupEnv;
 import de.jbee.panda.Functorizer;
 
@@ -28,7 +28,7 @@ final class ListFunctor
 	}
 
 	@Override
-	public Functor invoke( Selector expr, EvaluationEnv env ) {
+	public Functor invoke( Expr expr, EvaluationEnv env ) {
 		if ( expr.isEmpty() ) {
 			return this;
 		}

@@ -11,7 +11,7 @@ import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.PredicateNature;
-import de.jbee.panda.Selector;
+import de.jbee.panda.Expr;
 import de.jbee.panda.SetupEnv;
 
 final class IntegerFunctor
@@ -31,7 +31,7 @@ final class IntegerFunctor
 	}
 
 	@Override
-	public Functor invoke( Selector expr, EvaluationEnv env ) {
+	public Functor invoke( Expr expr, EvaluationEnv env ) {
 		if ( expr.isEmpty() ) {
 			return this;
 		}

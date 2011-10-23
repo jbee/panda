@@ -7,7 +7,7 @@ import de.jbee.panda.Functor;
 import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.ProcessingEnv;
-import de.jbee.panda.Selector;
+import de.jbee.panda.Expr;
 import de.jbee.panda.SetupEnv;
 import de.jbee.panda.Var;
 
@@ -35,7 +35,7 @@ public class CaseFunctor
 
 	@Override
 	public void bind( Var var, ProcessingEnv env ) {
-		result = env.eval( Selector.of( expr ) );
+		result = env.eval( Expr.valueOf( expr ) );
 		env.context().addDependency( var );
 	}
 
@@ -45,7 +45,7 @@ public class CaseFunctor
 	}
 
 	@Override
-	public Functor invoke( Selector expr, EvaluationEnv env ) {
+	public Functor invoke( Expr expr, EvaluationEnv env ) {
 		return env.invoke( result, expr );
 	}
 

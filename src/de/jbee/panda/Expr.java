@@ -1,23 +1,23 @@
 package de.jbee.panda;
 
-public final class Selector
+public final class Expr
 		implements CharSequence {
 
 	public static final char OBJECT = '~';
 
-	public static final Selector EMPTY = new Selector( "", 0 );
+	public static final Expr EMPTY = new Expr( "", 0 );
 
 	private final String value;
 	private int start;
 
-	private Selector( String value, int start ) {
+	private Expr( String value, int start ) {
 		super();
 		this.value = value;
 		this.start = Math.min( start, value.length() );
 	}
 
-	public Selector join( Selector sub ) {
-		return new Selector( value + sub.toString(), start );
+	public Expr join( Expr sub ) {
+		return new Expr( value + sub.toString(), start );
 	}
 
 	@Override
@@ -27,12 +27,12 @@ public final class Selector
 			: value.substring( start );
 	}
 
-	public static Selector of( String value ) {
-		return new Selector( value, 0 );
+	public static Expr valueOf( String value ) {
+		return new Expr( value, 0 );
 	}
 
-	public Selector fork() {
-		return new Selector( value, start );
+	public Expr fork() {
+		return new Expr( value, start );
 	}
 
 	public boolean isEmpty() {
@@ -51,21 +51,21 @@ public final class Selector
 			: value.startsWith( prefix, start );
 	}
 
-	public Selector gobble( String prefix ) {
+	public Expr gobble( String prefix ) {
 		if ( startsWith( prefix ) ) {
 			start += prefix.length();
 		}
 		return this;
 	}
 
-	public Selector gobble( char prefix ) {
+	public Expr gobble( char prefix ) {
 		if ( startsWith( prefix ) ) {
 			start++;
 		}
 		return this;
 	}
 
-	public Selector gobbleAll( char c ) {
+	public Expr gobbleAll( char c ) {
 		if ( length() < 0 ) {
 			return this;
 		}
@@ -76,7 +76,7 @@ public final class Selector
 		return this;
 	}
 
-	public Selector gobbleN( int length ) {
+	public Expr gobbleN( int length ) {
 		int l = length();
 		if ( length > 0 && l > 0 ) {
 			start = Math.min( l, start + length );
@@ -111,11 +111,11 @@ public final class Selector
 
 	@Override
 	public CharSequence subSequence( int start, int end ) {
-		return new Selector( value.substring( start + start, end ), 0 );
+		return new Expr( value.substring( start + start, end ), 0 );
 	}
 
-	public static Selector elemAt( int index ) {
-		return of( "[" + index + "]" );
+	public static Expr elemAt( int index ) {
+		return valueOf( "[" + index + "]" );
 	}
 
 	public boolean after( String prefix ) {
@@ -133,8 +133,8 @@ public final class Selector
 		return cond;
 	}
 
-	public static Selector range( int start, int end ) {
-		return of( "[" + start + ":" + end + "]" );
+	public static Expr range( int start, int end ) {
+		return valueOf( "[" + start + ":" + end + "]" );
 	}
 
 	public String name( String defaultProperty ) {
@@ -187,7 +187,7 @@ public final class Selector
 		return value.substring( start - n, start );
 	}
 
-	public void gobbleWhitespace() {
+	public Expr gobbleWhitespace() {
 		int i = 0;
 		while ( i < length() && Character.isWhitespace( charAt( i ) ) ) {
 			i++;
@@ -195,6 +195,7 @@ public final class Selector
 		if ( i > 0 ) {
 			start += i;
 		}
+		return this; // chaining
 	}
 
 }

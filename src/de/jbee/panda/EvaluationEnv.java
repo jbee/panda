@@ -14,7 +14,7 @@ public interface EvaluationEnv {
 
 	Functor value( Var var );
 
-	Functor invoke( Functor f, Selector expr );
+	Functor invoke( Functor f, Expr expr );
 
 	FunctorizeEnv functorize();
 

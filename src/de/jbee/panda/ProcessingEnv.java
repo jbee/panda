@@ -11,6 +11,6 @@ public interface ProcessingEnv
 
 	void define( Var var, Functor f );
 
-	Functor eval( Selector expr );
+	Functor eval( Expr expr );
 
 }

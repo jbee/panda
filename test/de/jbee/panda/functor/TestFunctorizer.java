@@ -14,7 +14,7 @@ import de.jbee.panda.Functor;
 import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.ProcessingEnv;
-import de.jbee.panda.Selector;
+import de.jbee.panda.Expr;
 
 public class TestFunctorizer {
 
@@ -55,15 +55,15 @@ public class TestFunctorizer {
 		ProcessingEnv env = new Environment( new Context() );
 		Functor obj = env.functorize().value( new ObjectType() );
 		assertThat( obj, is( ObjectFunctor.class ) );
-		Functor e = obj.invoke( Selector.of( ".height" ), env );
+		Functor e = obj.invoke( Expr.valueOf( ".height" ), env );
 		assertThat( e, is( IntegerFunctor.class ) );
-		e = obj.invoke( Selector.of( ".width" ), env );
+		e = obj.invoke( Expr.valueOf( ".width" ), env );
 		assertThat( e, is( IntegerFunctor.class ) );
-		e = obj.invoke( Selector.of( ".name" ), env );
+		e = obj.invoke( Expr.valueOf( ".name" ), env );
 		assertThat( e, is( StringFunctor.class ) );
-		e = obj.invoke( Selector.of( ".moment" ), env );
+		e = obj.invoke( Expr.valueOf( ".moment" ), env );
 		assertThat( e, is( ObjectFunctor.class ) );
-		e = e.invoke( Selector.of( ".fastTime" ), env );
+		e = e.invoke( Expr.valueOf( ".fastTime" ), env );
 		assertThat( e, is( IntegerFunctor.class ) );
 	}
 

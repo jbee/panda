@@ -1,7 +1,7 @@
 package de.jbee.panda.functor;
 
 import static de.jbee.panda.Env.nothing;
-import static de.jbee.panda.Selector.elemAt;
+import static de.jbee.panda.Expr.elemAt;
 import static java.lang.Integer.MAX_VALUE;
 import de.jbee.lang.List;
 import de.jbee.panda.BehaviouralFunctor;
@@ -12,7 +12,7 @@ import de.jbee.panda.Functorizer;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.ProcessContext;
 import de.jbee.panda.ProcessingEnv;
-import de.jbee.panda.Selector;
+import de.jbee.panda.Expr;
 import de.jbee.panda.SetupEnv;
 import de.jbee.panda.Var;
 
@@ -49,7 +49,7 @@ public class EachFunctor
 	}
 
 	@Override
-	public Functor invoke( Selector expr, EvaluationEnv env ) {
+	public Functor invoke( Expr expr, EvaluationEnv env ) {
 		if ( expr.isEmpty() ) {
 			return env.invoke( currentElement( env ), expr );
 		}
@@ -59,10 +59,10 @@ public class EachFunctor
 		if ( expr.after( '[' ) ) {
 			int start = expr.index( 0 );
 			if ( expr.after( ':' ) ) {
-				Functor sl = elements.invoke( Selector.range( start, expr.index( MAX_VALUE ) ), env );
+				Functor sl = elements.invoke( Expr.range( start, expr.index( MAX_VALUE ) ), env );
 				return env.invoke( a( sl, index ), expr.gobble( ']' ) );
 			}
-			return env.invoke( elements, Selector.elemAt( start ).join( expr.gobble( ']' ) ) );
+			return env.invoke( elements, Expr.elemAt( start ).join( expr.gobble( ']' ) ) );
 		}
 		return env.invoke( currentElement( env ), expr );
 	}

@@ -19,7 +19,7 @@ import de.jbee.panda.Functor;
 import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.ProcessingEnv;
-import de.jbee.panda.Selector;
+import de.jbee.panda.Expr;
 import de.jbee.panda.SetupEnv;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.Var;
@@ -45,15 +45,15 @@ public class ObjectFunctor
 	}
 
 	@Override
-	public Functor invoke( Selector expr, EvaluationEnv env ) {
+	public Functor invoke( Expr expr, EvaluationEnv env ) {
 		if ( expr.isEmpty() ) {
 			return this;
 		}
 		if ( expr.after( '.' ) ) {
 			String property = expr.name( null );
-			if ( expr.startsWith( Selector.OBJECT ) ) {
+			if ( expr.startsWith( Expr.OBJECT ) ) {
 				property = Functorizer.OBJECT;
-				expr.gobble( Selector.OBJECT );
+				expr.gobble( Expr.OBJECT );
 			}
 			if ( property != null ) {
 				return invoke( expr, env, absoluteProperty( property ) );
@@ -63,7 +63,7 @@ public class ObjectFunctor
 		return env.invoke( just( name, env ), expr );
 	}
 
-	private Functor invoke( Selector expr, EvaluationEnv env, String property ) {
+	private Functor invoke( Expr expr, EvaluationEnv env, String property ) {
 		// access of a non (sub-) object member 
 		int index = members.indexFor( new MemberFunctor( property ) );
 		if ( index != ListIndex.NOT_CONTAINED ) {
@@ -114,7 +114,7 @@ public class ObjectFunctor
 		}
 
 		@Override
-		public Functor invoke( Selector expr, EvaluationEnv env ) {
+		public Functor invoke( Expr expr, EvaluationEnv env ) {
 			if ( expr.after( '.' ) ) {
 				if ( expr.after( "name" ) ) {
 					return env.invoke( env.functorize().value( path ), expr );
