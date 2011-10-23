@@ -1,6 +1,6 @@
 package de.jbee.panda;
 
-public interface NothingNature
+public interface UndefinedNature
 		extends Nature {
 
 	// this is just a marker interface

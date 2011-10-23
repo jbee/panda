@@ -33,7 +33,7 @@ public class TestEval {
 	@Test
 	public void testNonExistingVarReferenceCase() {
 		Functor value = env.eval( Expr.expr( "@foo" ) );
-		assertThat( value, instanceOf( NothingNature.class ) );
+		assertThat( value, instanceOf( UndefinedNature.class ) );
 		assertThat( value.is(), is( false ) );
 	}
 

@@ -1,6 +1,7 @@
 package de.jbee.panda.functor;
 
 import static de.jbee.panda.Env.internal;
+import static de.jbee.panda.Expr.expr;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -93,7 +94,7 @@ public class Functorize
 		@Override
 		public Functor functorize( Object value, FunctorizeEnv env ) {
 			if ( value instanceof String ) {
-				Expr expr = Expr.expr( (String) value );
+				Expr expr = expr( (String) value );
 				String name = expr.name( "" );
 				if ( !name.isEmpty() ) {
 					return env.behaviour( internal( name ), expr.gobbleWhitespace().plain() );

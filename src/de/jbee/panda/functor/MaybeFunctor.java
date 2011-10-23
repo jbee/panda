@@ -11,9 +11,9 @@ import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.ListNature;
-import de.jbee.panda.NothingNature;
 import de.jbee.panda.PredicateNature;
 import de.jbee.panda.SetupEnv;
+import de.jbee.panda.UndefinedNature;
 
 abstract class MaybeFunctor
 		implements Functor {
@@ -71,7 +71,7 @@ abstract class MaybeFunctor
 
 	private static final class NothingFunctor
 			extends MaybeFunctor
-			implements IntegralNature, ListNature, NothingNature {
+			implements IntegralNature, ListNature, UndefinedNature {
 
 		NothingFunctor() {
 			// hide
@@ -140,7 +140,7 @@ abstract class MaybeFunctor
 
 		@Override
 		public Functor functorize( Object value, FunctorizeEnv env ) {
-			// very important: NOT nothing is  still nothing
+			// very important: NOT nothing is still nothing
 			Functor negated = env.value( value );
 			return negated == NOTHING_INSTANCE
 				? NOTHING_INSTANCE

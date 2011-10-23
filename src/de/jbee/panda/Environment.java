@@ -85,6 +85,7 @@ public class Environment
 			return invoke( nothing( this ), expr );
 		}
 		Expr selector = expr.untilWhitespace();
+		//OPEN check here for binary ops ?
 		return invoke( functorize().behaviour( name, eval( expr ) ), selector );
 	}
 
