@@ -7,7 +7,8 @@ import de.jbee.panda.functor.TestDefine;
 import de.jbee.panda.functor.TestFunctorizer;
 
 @RunWith ( Suite.class )
-@Suite.SuiteClasses ( { TestProcessingEnv.class, TestDefine.class, TestFunctorizer.class } )
+@Suite.SuiteClasses ( { TestProcessingEnv.class, TestDefine.class, TestFunctorizer.class,
+		TestEval.class, TestExpr.class } )
 public class PandaTestSuite {
 	//nothing
 }

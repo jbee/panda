@@ -5,13 +5,14 @@ import static de.jbee.panda.Env.nothing;
 import static de.jbee.panda.Env.true_;
 import de.jbee.lang.List;
 import de.jbee.panda.EvaluationEnv;
+import de.jbee.panda.Expr;
 import de.jbee.panda.Functor;
 import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.IntegralNature;
 import de.jbee.panda.ListNature;
+import de.jbee.panda.NothingNature;
 import de.jbee.panda.PredicateNature;
-import de.jbee.panda.Expr;
 import de.jbee.panda.SetupEnv;
 
 abstract class MaybeFunctor
@@ -70,7 +71,7 @@ abstract class MaybeFunctor
 
 	private static final class NothingFunctor
 			extends MaybeFunctor
-			implements IntegralNature, ListNature {
+			implements IntegralNature, ListNature, NothingNature {
 
 		NothingFunctor() {
 			// hide

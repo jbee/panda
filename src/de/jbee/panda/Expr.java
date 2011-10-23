@@ -18,6 +18,10 @@ public final class Expr
 		this.end = Math.min( end, value.length() - start );
 	}
 
+	public static Expr ref( String var ) {
+		return expr( "@" + var );
+	}
+
 	public Expr join( Expr sub ) {
 		return new Expr( plain() + sub.plain(), 0, 0 );
 	}
