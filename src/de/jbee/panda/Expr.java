@@ -5,34 +5,40 @@ public final class Expr
 
 	public static final char OBJECT = '~';
 
-	public static final Expr EMPTY = new Expr( "", 0 );
+	public static final Expr EMPTY = new Expr( "", 0, 0 );
 
 	private final String value;
 	private int start;
+	private int end;
 
-	private Expr( String value, int start ) {
+	private Expr( String value, int start, int end ) {
 		super();
 		this.value = value;
 		this.start = Math.min( start, value.length() );
+		this.end = Math.min( end, value.length() - start );
 	}
 
 	public Expr join( Expr sub ) {
-		return new Expr( value + sub.toString(), start );
+		return new Expr( plain() + sub.plain(), 0, 0 );
 	}
 
 	@Override
 	public String toString() {
+		return plain();
+	}
+
+	public String plain() {
 		return isEmpty()
 			? ""
 			: value.substring( start );
 	}
 
-	public static Expr valueOf( String value ) {
-		return new Expr( value, 0 );
+	public static Expr expr( String value ) {
+		return new Expr( value, 0, 0 );
 	}
 
 	public Expr fork() {
-		return new Expr( value, start );
+		return new Expr( value, start, end );
 	}
 
 	public boolean isEmpty() {
@@ -101,21 +107,23 @@ public final class Expr
 
 	@Override
 	public char charAt( int index ) {
-		return value.charAt( start + index );
+		return index < 0
+			? value.charAt( value.length() - index - end )
+			: value.charAt( start + index );
 	}
 
 	@Override
 	public int length() {
-		return value.length() - start;
+		return value.length() - start - end;
 	}
 
 	@Override
 	public CharSequence subSequence( int start, int end ) {
-		return new Expr( value.substring( start + start, end ), 0 );
+		return new Expr( value.substring( start + start, end ), 0, 0 );
 	}
 
 	public static Expr elemAt( int index ) {
-		return valueOf( "[" + index + "]" );
+		return expr( "[" + index + "]" );
 	}
 
 	public boolean after( String prefix ) {
@@ -126,6 +134,14 @@ public final class Expr
 		return incIf( 1, startsWith( c ) );
 	}
 
+	public boolean before( char c ) {
+		if ( charAt( -1 ) == c ) {
+			end++;
+			return true;
+		}
+		return false;
+	}
+
 	private boolean incIf( int inc, boolean cond ) {
 		if ( cond ) {
 			start += inc;
@@ -134,7 +150,7 @@ public final class Expr
 	}
 
 	public static Expr range( int start, int end ) {
-		return valueOf( "[" + start + ":" + end + "]" );
+		return expr( "[" + start + ":" + end + "]" );
 	}
 
 	public String name( String defaultProperty ) {
@@ -153,6 +169,19 @@ public final class Expr
 		return proceed( b.length() );
 	}
 
+	@Override
+	public int hashCode() {
+		return plain().hashCode();
+	}
+
+	@Override
+	public boolean equals( Object obj ) {
+		if ( obj instanceof Expr ) {
+			return ( (Expr) obj ).plain().equals( plain() );
+		}
+		return false;
+	}
+
 	public String until( char c ) {
 		int i = 0;
 		while ( i < length() && charAt( i ) != c ) {
@@ -166,17 +195,20 @@ public final class Expr
 		return proceed( i - 1 );
 	}
 
-	public String untilWhitespace() {
+	public Expr untilWhitespace() {
 		int i = 0;
 		while ( i < length() && !Character.isWhitespace( charAt( i ) ) ) {
 			i++;
 		}
+		if ( i == 0 ) {
+			return EMPTY;
+		}
 		if ( i >= length() ) {
-			String res = value.substring( start );
-			start = value.length();
+			Expr res = fork();
+			start += length();
 			return res;
 		}
-		return proceed( i - 1 );
+		return expr( proceed( i ) );
 	}
 
 	private String proceed( int n ) {

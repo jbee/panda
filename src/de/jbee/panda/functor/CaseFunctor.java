@@ -3,11 +3,11 @@ package de.jbee.panda.functor;
 import static de.jbee.panda.Env.false_;
 import de.jbee.panda.BehaviouralFunctor;
 import de.jbee.panda.EvaluationEnv;
+import de.jbee.panda.Expr;
 import de.jbee.panda.Functor;
 import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.ProcessingEnv;
-import de.jbee.panda.Expr;
 import de.jbee.panda.SetupEnv;
 import de.jbee.panda.Var;
 
@@ -35,7 +35,7 @@ public class CaseFunctor
 
 	@Override
 	public void bind( Var var, ProcessingEnv env ) {
-		result = env.eval( Expr.valueOf( expr ) );
+		result = env.eval( Expr.expr( expr ) );
 		env.context().addDependency( var );
 	}
 

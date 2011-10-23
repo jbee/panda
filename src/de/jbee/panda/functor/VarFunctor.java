@@ -44,7 +44,7 @@ public class VarFunctor
 
 	@Override
 	public void bind( Var var, ProcessingEnv env ) {
-		Expr expr = Expr.valueOf( stmt );
+		Expr expr = Expr.expr( stmt );
 		expr.gobble( '@' );
 		String name = expr.name( null );
 		if ( name == null ) {

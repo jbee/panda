@@ -55,15 +55,15 @@ public class TestFunctorizer {
 		ProcessingEnv env = new Environment( new Context() );
 		Functor obj = env.functorize().value( new ObjectType() );
 		assertThat( obj, is( ObjectFunctor.class ) );
-		Functor e = obj.invoke( Expr.valueOf( ".height" ), env );
+		Functor e = obj.invoke( Expr.expr( ".height" ), env );
 		assertThat( e, is( IntegerFunctor.class ) );
-		e = obj.invoke( Expr.valueOf( ".width" ), env );
+		e = obj.invoke( Expr.expr( ".width" ), env );
 		assertThat( e, is( IntegerFunctor.class ) );
-		e = obj.invoke( Expr.valueOf( ".name" ), env );
+		e = obj.invoke( Expr.expr( ".name" ), env );
 		assertThat( e, is( StringFunctor.class ) );
-		e = obj.invoke( Expr.valueOf( ".moment" ), env );
+		e = obj.invoke( Expr.expr( ".moment" ), env );
 		assertThat( e, is( ObjectFunctor.class ) );
-		e = e.invoke( Expr.valueOf( ".fastTime" ), env );
+		e = e.invoke( Expr.expr( ".fastTime" ), env );
 		assertThat( e, is( IntegerFunctor.class ) );
 	}
 

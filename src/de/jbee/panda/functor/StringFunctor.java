@@ -3,11 +3,11 @@ package de.jbee.panda.functor;
 import static de.jbee.panda.Env.bool;
 import static de.jbee.panda.Env.just;
 import de.jbee.panda.EvaluationEnv;
+import de.jbee.panda.Expr;
 import de.jbee.panda.Functor;
 import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.PredicateNature;
-import de.jbee.panda.Expr;
 import de.jbee.panda.SetupEnv;
 
 final class StringFunctor
@@ -32,15 +32,14 @@ final class StringFunctor
 			return this;
 		}
 		if ( expr.after( '=' ) ) {
-			String operand = expr.untilWhitespace();
-			if ( operand.startsWith( "*" ) ) {
-				return env.invoke( bool( value.endsWith( operand.substring( 1 ) ), env ), expr );
+			Expr operand = expr.untilWhitespace();
+			if ( operand.after( '*' ) ) {
+				return env.invoke( bool( value.endsWith( operand.plain() ), env ), expr );
 			}
-			if ( operand.endsWith( "*" ) ) {
-				return env.invoke( bool( value.startsWith( operand.substring( 0,
-						operand.length() - 1 ) ), env ), expr );
+			if ( operand.before( '*' ) ) {
+				return env.invoke( bool( value.startsWith( operand.plain() ), env ), expr );
 			}
-			return env.invoke( bool( value.equalsIgnoreCase( operand ), env ), expr );
+			return env.invoke( bool( value.equalsIgnoreCase( operand.plain() ), env ), expr );
 		}
 		if ( expr.after( '{' ) ) {
 			int start = expr.index( 0 );

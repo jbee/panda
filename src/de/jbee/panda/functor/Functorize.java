@@ -5,10 +5,10 @@ import static de.jbee.panda.Env.internal;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.jbee.panda.Expr;
 import de.jbee.panda.Functor;
 import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.Functorizer;
-import de.jbee.panda.Expr;
 import de.jbee.panda.SetupEnv;
 
 public class Functorize
@@ -93,10 +93,10 @@ public class Functorize
 		@Override
 		public Functor functorize( Object value, FunctorizeEnv env ) {
 			if ( value instanceof String ) {
-				Expr expr = Expr.valueOf( (String) value );
+				Expr expr = Expr.expr( (String) value );
 				String name = expr.name( "" );
 				if ( !name.isEmpty() ) {
-					return env.behaviour( internal( name ), expr.gobbleWhitespace().toString() );
+					return env.behaviour( internal( name ), expr.gobbleWhitespace().plain() );
 				}
 			}
 			return env.behaviour( MAYBE, value );

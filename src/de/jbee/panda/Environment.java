@@ -80,7 +80,12 @@ public class Environment
 		if ( expr.after( '[' ) ) { // list constants
 			//TODO
 		}
-		return invoke( functorize().behaviour( expr.name( "" ), eval( expr ) ), expr );
+		String name = expr.name( "" );
+		if ( name.isEmpty() ) {
+			return invoke( nothing( this ), expr );
+		}
+		Expr selector = expr.untilWhitespace();
+		return invoke( functorize().behaviour( name, eval( expr ) ), selector );
 	}
 
 }

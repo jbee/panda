@@ -2,17 +2,18 @@ package de.jbee.panda.functor;
 
 import static de.jbee.panda.Env.nothing;
 import static de.jbee.panda.Expr.elemAt;
+import static de.jbee.panda.Expr.range;
 import static java.lang.Integer.MAX_VALUE;
 import de.jbee.lang.List;
 import de.jbee.panda.BehaviouralFunctor;
 import de.jbee.panda.EvaluationEnv;
+import de.jbee.panda.Expr;
 import de.jbee.panda.Functor;
 import de.jbee.panda.FunctorizeEnv;
 import de.jbee.panda.Functorizer;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.ProcessContext;
 import de.jbee.panda.ProcessingEnv;
-import de.jbee.panda.Expr;
 import de.jbee.panda.SetupEnv;
 import de.jbee.panda.Var;
 
@@ -59,10 +60,10 @@ public class EachFunctor
 		if ( expr.after( '[' ) ) {
 			int start = expr.index( 0 );
 			if ( expr.after( ':' ) ) {
-				Functor sl = elements.invoke( Expr.range( start, expr.index( MAX_VALUE ) ), env );
+				Functor sl = elements.invoke( range( start, expr.index( MAX_VALUE ) ), env );
 				return env.invoke( a( sl, index ), expr.gobble( ']' ) );
 			}
-			return env.invoke( elements, Expr.elemAt( start ).join( expr.gobble( ']' ) ) );
+			return env.invoke( elements, elemAt( start ).join( expr.gobble( ']' ) ) );
 		}
 		return env.invoke( currentElement( env ), expr );
 	}
@@ -80,7 +81,7 @@ public class EachFunctor
 
 	@Override
 	public String toString() {
-		return "each[" + index + "] " + elements;
+		return index + ". each " + elements;
 	}
 
 	@Override
