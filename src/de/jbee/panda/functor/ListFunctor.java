@@ -36,7 +36,7 @@ final class ListFunctor
 			int start = expr.index( 0 );
 			if ( expr.after( ':' ) ) {
 				int end = expr.index( elems.length() - 1 );
-				List<Functor> sublist = List.which.takesFromTo( start, end ).from( elems );
+				List<Functor> sublist = List.alterBy.takeFromTo( start, end ).in( elems );
 				return env.invoke( a( sublist ), expr.gobble( ']' ) );
 			}
 			return env.invoke( elems.at( start ), expr.gobble( ']' ) );
