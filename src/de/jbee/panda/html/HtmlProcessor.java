@@ -20,10 +20,10 @@ public class HtmlProcessor {
 		StringBuilder openTag = new StringBuilder( 50 );
 		StringBuilder attrName = new StringBuilder( 15 );
 		StringBuilder attrValue = new StringBuilder( 100 );
-		int code = in.read();
 		State state = State.TAG_EXPECTANT;
 		boolean emptyTag = false;
 		boolean closeTag = true;
+		int code = in.read();
 		while ( code > 0 ) {
 			char ch = (char) code;
 			switch ( state ) {
@@ -68,9 +68,7 @@ public class HtmlProcessor {
 						attrName.append( ch );
 					} else {
 						if ( ch == '=' ) {
-							if ( attrName.toString().equals( "are" ) ) {
-								System.out.println( "We are" );
-							}
+							// TODO tell about the attribute with attrName
 							state = State.ATTR_VALUE;
 							attrValue.setLength( 0 );
 						}
@@ -94,7 +92,7 @@ public class HtmlProcessor {
 	public static void main( String[] args ) {
 		HtmlProcessor p = new HtmlProcessor();
 		try {
-			p.render( new StringReader( "<we are='so cool'></we>" ), System.out );
+			p.render( new StringReader( "<html><we are='so cool'></we></html>" ), System.out );
 		} catch ( Exception e ) {
 			e.printStackTrace();
 		}

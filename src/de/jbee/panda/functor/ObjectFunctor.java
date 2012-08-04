@@ -1,5 +1,7 @@
 package de.jbee.panda.functor;
 
+import static de.jbee.lang.seq.IndexFor.exists;
+import static de.jbee.lang.seq.Sequences.key;
 import static de.jbee.panda.Env.just;
 import static de.jbee.panda.Env.nothing;
 
@@ -7,21 +9,18 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import de.jbee.lang.List;
-import de.jbee.lang.ListIndex;
-import de.jbee.lang.Ord;
-import de.jbee.lang.Order;
-import de.jbee.lang.Ordering;
-import de.jbee.lang.Set;
+import de.jbee.lang.Map;
+import de.jbee.lang.seq.Sequences;
 import de.jbee.panda.BehaviouralFunctor;
 import de.jbee.panda.Env;
 import de.jbee.panda.EvaluationEnv;
+import de.jbee.panda.Expr;
 import de.jbee.panda.Functor;
 import de.jbee.panda.FunctorizeEnv;
+import de.jbee.panda.Functorizer;
 import de.jbee.panda.ListNature;
 import de.jbee.panda.ProcessingEnv;
-import de.jbee.panda.Expr;
 import de.jbee.panda.SetupEnv;
-import de.jbee.panda.Functorizer;
 import de.jbee.panda.Var;
 
 public class ObjectFunctor
@@ -29,16 +28,14 @@ public class ObjectFunctor
 
 	static final Functorizer FUNCTORIZER = new ReflectObjectFunctorizer();
 
-	static final Ord<Object> ORDER = Order.typeaware( new MemberOrder(), MemberFunctor.class );
-
 	private final String name;
-	private final Set<MemberFunctor> members;
+	private final Map<MemberFunctor> members;
 
-	ObjectFunctor( Set<MemberFunctor> members ) {
+	ObjectFunctor( Map<MemberFunctor> members ) {
 		this( "", members );
 	}
 
-	ObjectFunctor( String name, Set<MemberFunctor> members ) {
+	ObjectFunctor( String name, Map<MemberFunctor> members ) {
 		super();
 		this.name = name;
 		this.members = members;
@@ -65,18 +62,19 @@ public class ObjectFunctor
 
 	private Functor invoke( Expr expr, EvaluationEnv env, String property ) {
 		// access of a non (sub-) object member 
-		int index = members.indexFor( new MemberFunctor( property ) );
-		if ( index != ListIndex.NOT_CONTAINED ) {
-			return env.invoke( members.at( index ).functor, expr );
+		int index = members.indexFor( key( property ) );
+		if ( exists( index ) ) {
+			return env.invoke( members.at( index ).value().functor, expr );
 		}
 		// access of a (sub-) object member:
 		// is there a member with the property as a prefix ?
 		// find insert position - there should be a property with other prefix or not
-		index = List.indexFor.insertBy( new MemberFunctor( property ), members.order() ).in(
-				members );
-		MemberFunctor m = members.at( index ); // FIXME corner case: insert would be append -> IOOBE
-		if ( m.path.startsWith( property ) ) {
-			return env.invoke( new ObjectFunctor( property, members ), expr );
+		index = members.indexFor( Sequences.keyFirstStartsWith( property ) );
+		if ( exists( index ) ) {
+			MemberFunctor m = members.at( index ).value();
+			if ( m.path.startsWith( property ) ) {
+				return env.invoke( new ObjectFunctor( property, members ), expr );
+			}
 		}
 		return env.invoke( nothing( env ), expr );
 	}
@@ -92,7 +90,7 @@ public class ObjectFunctor
 			: name + "." + property;
 	}
 
-	static final class MemberFunctor
+	private static final class MemberFunctor
 			implements BehaviouralFunctor {
 
 		final String path;
@@ -148,16 +146,6 @@ public class ObjectFunctor
 		}
 	}
 
-	static final class MemberOrder
-			implements Ord<MemberFunctor> {
-
-		@Override
-		public Ordering ord( MemberFunctor left, MemberFunctor right ) {
-			return Order.alphabetical.ord( left.path, right.path );
-		}
-
-	}
-
 	private static final class ReflectObjectFunctorizer
 			implements Functorizer {
 
@@ -171,15 +159,15 @@ public class ObjectFunctor
 				return env.behaviour( MAYBE, value );
 			}
 
-			List<MemberFunctor> elements = List.with.noElements();
+			Map<MemberFunctor> members = Map.with.noEntries( Map.Entry.ORDER );
 			Class<?> type = value.getClass();
 			while ( type != null ) {
 				for ( Field field : type.getDeclaredFields() ) {
 					if ( !Modifier.isStatic( field.getModifiers() ) ) {
 						field.setAccessible( true );
 						try {
-							elements = elements.prepand( member(
-									field.getName().replace( "_", "" ),
+							String property = field.getName().replace( "_", "" );
+							members = members.insert( key( property ), member( property,
 									env.value( field.get( value ) ) ) );
 						} catch ( Exception e ) {
 							e.printStackTrace();
@@ -188,7 +176,7 @@ public class ObjectFunctor
 				}
 				type = type.getSuperclass();
 			}
-			return new ObjectFunctor( Set.with.elements( ORDER, elements ) );
+			return new ObjectFunctor( members );
 		}
 
 		private MemberFunctor member( String path, Functor f ) {
@@ -205,7 +193,7 @@ public class ObjectFunctor
 
 	@Override
 	public List<? extends Functor> elements() {
-		return members;
+		return members.values();
 	}
 
 	@Override

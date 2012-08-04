@@ -8,7 +8,7 @@ import org.junit.Test;
 public class TestProcessingEnv {
 
 	@Test
-	public void testEnv() {
+	public void testEnv_EachCase() {
 		ProcessingEnv env = new Environment( new Context() );
 		FunctorizeEnv func = env.functorize();
 		Var foo = Var.named( "foo" );

@@ -1,30 +1,27 @@
 package de.jbee.panda;
 
 import static de.jbee.panda.Env.nothing;
-
-import java.util.Deque;
-import java.util.LinkedList;
-
+import de.jbee.lang.List;
 import de.jbee.panda.functor.Functorize;
 
 public class Environment
 		implements ProcessingEnv {
 
-	private final Deque<ProcessContext> contextStack = new LinkedList<ProcessContext>();
+	private List<ProcessContext> contextStack = List.with.noElements();
 
 	public Environment( ProcessContext context ) {
-		contextStack.push( context ); // the master context
+		contextStack = contextStack.prepand( context ); // the master context
 	}
 
 	@Override
 	public ProcessContext context() {
-		return contextStack.peek();
+		return contextStack.at( 0 );
 	}
 
 	@Override
 	public Functor value( Var var ) {
 		if ( !var.isUndefined() ) {
-			for ( ProcessContext c : contextStack ) {
+			for ( ProcessContext c : List.iterate.forwards( contextStack ) ) {
 				Functor f = c.definedAs( var, null );
 				if ( f != null ) {
 					return f;
@@ -46,22 +43,22 @@ public class Environment
 
 	@Override
 	public void open( ProcessContext context ) {
-		contextStack.push( context );
+		contextStack = contextStack.prepand( context );
 	}
 
 	@Override
 	public void close( ProcessContext context ) {
-		while ( contextStack.size() > 1 && contextStack.peek() != context ) {
-			contextStack.pop();
+		while ( contextStack.length() > 1 && contextStack.at( 0 ) != context ) {
+			contextStack = contextStack.drop( 1 );
 		}
-		if ( contextStack.size() > 1 && contextStack.peek() == context ) {
-			contextStack.pop();
+		if ( contextStack.length() > 1 && contextStack.at( 0 ) == context ) {
+			contextStack = contextStack.drop( 1 );
 		}
 	}
 
 	@Override
 	public void define( Var var, Functor f ) {
-		contextStack.peek().define( var, f );
+		context().define( var, f );
 	}
 
 	@Override
