@@ -1,5 +1,7 @@
 package de.jbee.panda.html;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.Reader;
 import java.io.StringReader;
 
@@ -68,6 +70,7 @@ public class HtmlProcessor {
 						attrName.append( ch );
 					} else {
 						if ( ch == '=' ) {
+							System.out.println( attrName );
 							// TODO tell about the attribute with attrName
 							state = State.ATTR_VALUE;
 							attrValue.setLength( 0 );
@@ -93,6 +96,9 @@ public class HtmlProcessor {
 		HtmlProcessor p = new HtmlProcessor();
 		try {
 			p.render( new StringReader( "<html><we are='so cool'></we></html>" ), System.out );
+			String file = "/home/jan/Desktop/dict.leo.org - Ergebnisse für  EXPECTANT .html";
+			file = "etc/example.html";
+			p.render( new BufferedReader( new FileReader( file ) ), System.out );
 		} catch ( Exception e ) {
 			e.printStackTrace();
 		}
